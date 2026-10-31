@@ -9,7 +9,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24
 MANAGER_CHAT_ID = os.getenv("MANAGER_CHAT_ID", "414194396")
 
 # URL where the WebApp is hosted (e.g. GitHub Pages, Vercel, ngrok, or Cloudflare Pages)
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://ivansergeevich23.github.io/davines-shop/")
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://ivansergeevich23.github.io/davines-shop/webapp/")
 
 # Database path
 DB_PATH = os.path.join(os.path.dirname(__file__), "davines_orders.db")

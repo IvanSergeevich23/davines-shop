@@ -202,6 +202,14 @@
   };
 
   // 6. Formatting Utilities
+  function getCleanProductName(fullName) {
+    if (!fullName) return "";
+    if (fullName.includes(" - ")) {
+      return fullName.split(" - ")[0].trim();
+    }
+    return fullName.trim();
+  }
+
   function formatMoney(amount) {
     return new Intl.NumberFormat('sr-RS', {
       minimumFractionDigits: 0,
@@ -550,13 +558,14 @@
     dom.btnSendOrder.style.pointerEvents = 'auto';
 
     orderedList.forEach(({ product, qty, subtotalMP }) => {
+      const cleanTitle = getCleanProductName(product.name);
       const row = document.createElement('div');
       row.className = 'cart-item-row';
       row.innerHTML = `
         <div class="cart-item-info">
-          <div class="cart-item-title">${product.name}</div>
+          <div class="cart-item-title">${cleanTitle}</div>
           <div class="cart-item-meta">
-            ${product.volume} • #${product.code} • ${formatMoney(product.mp_price)} / kom
+            ${product.volume} • #${product.code}
           </div>
         </div>
         <div class="qty-control">
@@ -601,7 +610,8 @@
     lines.push(`📦 *Artikli / Товары (${totalItems} kom):*`);
 
     orderedList.forEach(({ product, qty, subtotalMP }, idx) => {
-      lines.push(`${idx + 1}. [${product.code}] ${product.name} (${product.volume})`);
+      const cleanTitle = getCleanProductName(product.name);
+      lines.push(`${idx + 1}. [${product.code}] ${cleanTitle} (${product.volume})`);
       lines.push(`   └ ${qty} kom x ${formatMoney(product.mp_price)} = *${formatMoney(subtotalMP)}*`);
     });
 
@@ -611,8 +621,8 @@
     return lines.join('\n');
   }
 
-  // 14. Send Order Handler
-  function handleSendOrder() {
+  // 14. Send Order Handler (Direct Telegram Bot API Delivery + WebApp fallback)
+  async function handleSendOrder() {
     const t = I18N[state.lang];
     if (!state.salonName.trim()) {
       showToast(t.salonRequiredAlert);
@@ -623,37 +633,81 @@
     const { totalItems, totalPriceMP, orderedList } = getCartSummary();
     if (totalItems === 0) return;
 
-    const orderPayload = {
-      action: "davines_order",
-      salon_name: state.salonName,
-      user_id: tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null,
-      username: tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.username : null,
-      total_items: totalItems,
-      total_price_mp: totalPriceMP,
-      items: orderedList.map(({ product, qty, subtotalMP }) => ({
-        code: product.code,
-        name: product.name,
-        category: product.category,
-        sub_category: product.sub_category,
-        volume: product.volume,
-        price_mp: product.mp_price,
-        qty: qty,
-        subtotal_mp: subtotalMP
-      })),
-      formatted_text: generateOrderMessageText()
-    };
+    dom.btnSendOrder.disabled = true;
+    dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Отправка заказа...' : 'Slanje porudžbine...'}`;
 
-    triggerHaptic('success');
+    const orderText = generateOrderMessageText();
+    const botToken = "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24nU";
+    const managerChatId = "414194396";
+    const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+    const clientChatId = clientUser ? clientUser.id : null;
 
-    if (tg && tg.sendData) {
-      // Send directly via Telegram WebApp channel
-      tg.sendData(JSON.stringify(orderPayload));
+    try {
+      // 1. Direct API delivery to Sales Representative (Ivan)
+      const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: managerChatId,
+          text: orderText,
+          parse_mode: "Markdown"
+        })
+      });
+      const data = await res.json();
+      console.log("Order dispatch result:", data);
+
+      // 2. Send confirmation to client if different from manager
+      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: clientChatId,
+            text: `✅ *Vaša porudžbina je uspešno poslata! / Заказ отправлен!*\n\n💈 Salon: *${state.salonName}*\n📦 Artikala: *${totalItems} kom*\n💰 Ukupno: *${formatMoney(totalPriceMP)}*\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`,
+            parse_mode: "Markdown"
+          })
+        }).catch(e => console.log("Client note error:", e));
+      }
+
+      // 3. Trigger sendData if context supports it
+      if (tg && tg.sendData) {
+        try {
+          tg.sendData(JSON.stringify({
+            action: "davines_order",
+            salon_name: state.salonName,
+            total_items: totalItems,
+            total_price_mp: totalPriceMP
+          }));
+        } catch(e) {
+          console.log("sendData ignored:", e);
+        }
+      }
+
+      triggerHaptic('success');
       showToast(t.orderSuccess);
-      closeCartDrawer();
-    } else {
-      // Fallback in browser: copy formatted order and show success alert
-      copyToClipboard(orderPayload.formatted_text);
+      dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ успешно отправлен!' : 'Porudžbina poslata!'}`;
+
+      // Reset cart
+      state.cart = {};
+      localStorage.removeItem('davines_cart');
+      renderProducts();
+      renderCartFloatingBar();
+
+      setTimeout(() => {
+        closeCartDrawer();
+        dom.btnSendOrder.disabled = false;
+        dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
+        if (tg && tg.close) {
+          try { tg.close(); } catch(e) {}
+        }
+      }, 1400);
+
+    } catch (err) {
+      console.error("Failed to send order via API:", err);
+      copyToClipboard(orderText);
       showToast(t.orderCopied);
+      dom.btnSendOrder.disabled = false;
+      dom.btnSendOrder.innerHTML = `<span>📋</span> ${t.copyOrder}`;
     }
   }
 
