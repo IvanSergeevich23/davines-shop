@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Davines Srbija • Porudžbine</title>
+  
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Fixed Header -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand-mark">
+        <div class="brand-title">DAVINES</div>
+        <div class="brand-tagline">sustainable beauty</div>
+      </div>
+      <div class="header-actions">
+        <button id="langBtn" class="lang-btn" title="Сменить язык / Promeni jezik">🇷🇺 RU</button>
+      </div>
+    </div>
+    <div id="salonPill" class="salon-pill" title="Нажмите, чтобы изменить название салона">
+      <span class="salon-icon">💈</span>
+      <span id="salonPillName" class="salon-name">Укажите название вашего салона</span>
+      <span class="salon-edit">✎</span>
+    </div>
+  </header>
+
+  <!-- Instant Search Bar -->
+  <section class="search-container">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" class="search-input" placeholder="Поиск по коду или названию (70031, nounou, oi)..." autocomplete="off">
+      <button id="clearSearchBtn" class="clear-search-btn" title="Очистить">✕</button>
+    </div>
+  </section>
+
+  <!-- Major Product Lines Scroll Tabs -->
+  <nav class="lines-container">
+    <div id="linesScroll" class="lines-scroll">
+      <!-- Generated via JS -->
+    </div>
+  </nav>
+
+  <!-- Subcategories Pills (Visible when family has sublines) -->
+  <nav id="subcatContainer" class="subcat-container">
+    <div id="subcatScroll" class="subcat-scroll">
+      <!-- Generated via JS -->
+    </div>
+  </nav>
+
+  <!-- Products Count & Filter Info -->
+  <div class="catalog-meta">
+    <span id="catalogCount">Загрузка каталога...</span>
+    <span class="catalog-vat-hint">Цены с НДС (sa PDV)</span>
+  </div>
+
+  <!-- Product List Grid -->
+  <main id="catalogList" class="catalog-list">
+    <!-- Generated via JS -->
+  </main>
+
+  <!-- Floating Sticky Cart Bar at Bottom -->
+  <aside id="cartFloatingBar" class="cart-floating-bar">
+    <div class="cart-bar-left">
+      <span class="cart-bar-icon">🛒</span>
+      <div class="cart-bar-info">
+        <span id="cartBarCount" class="cart-bar-count">0 товаров</span>
+        <span id="cartBarTotal" class="cart-bar-total">0 RSD</span>
+      </div>
+    </div>
+    <div class="cart-bar-right">
+      <span>Оформить</span>
+      <span>→</span>
+    </div>
+  </aside>
+
+  <!-- Modal Overlay Backdrop -->
+  <div id="modalOverlay" class="modal-overlay"></div>
+
+  <!-- Cart Bottom Sheet Drawer -->
+  <div id="cartDrawer" class="cart-drawer">
+    <div class="drawer-drag-handle"></div>
+    <div class="drawer-header">
+      <div class="drawer-title-group">
+        <div id="drawerTitle" class="drawer-title">Корзина</div>
+        <div class="drawer-subtitle">Davines Serbia Master Catalog</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button id="btnClearCart" class="drawer-subtitle" style="background: none; border: none; cursor: pointer; color: var(--accent-clay); font-weight: 600;">Очистить</button>
+        <button id="drawerCloseBtn" class="drawer-close-btn">✕</button>
+      </div>
+    </div>
+
+    <!-- Salon Indicator in Drawer -->
+    <div class="cart-salon-banner">
+      <div>
+        <div id="cartSalonLabel" class="cart-salon-label">Салон:</div>
+        <div id="cartDrawerSalonVal" class="cart-salon-val">—</div>
+      </div>
+      <button id="cartDrawerSalonEdit" class="cart-salon-btn">Изменить</button>
+    </div>
+
+    <!-- Scrollable Items List in Cart -->
+    <div id="cartItemsScroll" class="cart-items-scroll">
+      <!-- Generated via JS -->
+    </div>
+
+    <!-- Cart Footer & Actions -->
+    <div class="drawer-footer">
+      <div class="summary-row">
+        <div>
+          <span id="summaryLabel" class="summary-label">Итого к оплате:</span>
+          <div id="cartDrawerVatNote" style="font-size: 11px; color: var(--text-dim);">с НДС (sa PDV)</div>
+        </div>
+        <span id="cartDrawerTotal" class="summary-val-main">0 RSD</span>
+      </div>
+      <button id="btnSendOrder" class="btn-primary-send">
+        <span>✈️</span> Отправить заказ торговому представителю
+      </button>
+      <button id="btnCopyOrder" class="btn-secondary-copy">
+        Скопировать список заказа
+      </button>
+    </div>
+  </div>
+
+  <!-- Salon Name Setup / Edit Dialog -->
+  <div id="salonModal" class="dialog-modal">
+    <div id="dialogTitle" class="dialog-title">Название салона</div>
+    <div id="dialogDesc" class="dialog-desc">
+      Укажите название вашего салона красоты или имя мастера для оформления заказов:
+    </div>
+    <input type="text" id="salonModalInput" class="dialog-input" placeholder="например: Studio Elegance, Мастер Анна..." maxlength="60">
+    <button id="salonModalSave" class="dialog-save-btn">Сохранить</button>
+  </div>
+
+  <!-- Toast Message -->
+  <div id="toastMsg" class="toast-msg"></div>
+
+  <!-- Catalog Data & Main App Scripts -->
+  <script src="catalog_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
