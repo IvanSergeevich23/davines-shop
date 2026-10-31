@@ -179,8 +179,22 @@
   };
 
   // 3. Application State & Discount Initializer
-  const savedDiscount = parseInt(localStorage.getItem('davines_discount') || '0', 10);
-  const savedSalon = localStorage.getItem('davines_salon_name') || '';
+  // Check if reset is requested via URL (?reset=1 or #reset)
+  let isResetRequested = false;
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('reset') === '1' || window.location.hash.includes('reset')) {
+      isResetRequested = true;
+      localStorage.removeItem('davines_salon_name');
+      localStorage.removeItem('davines_discount');
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+  } catch (e) {}
+
+  const savedDiscount = isResetRequested ? 0 : parseInt(localStorage.getItem('davines_discount') || '0', 10);
+  const savedSalon = isResetRequested ? '' : (localStorage.getItem('davines_salon_name') || '');
 
   // For users who already entered a salon, auto-set default 20% discount so they are never blocked
   let initialDiscount = 0;
@@ -1309,8 +1323,30 @@
       renderCartDrawerContent();
     });
 
-    // Salon pill click (only triggers setup if not configured yet; otherwise notifies user that it is locked)
+    // Salon pill click:
+    // Single tap: if already configured, notifies user that it is locked.
+    // 3 rapid taps (within 1.2s): confirms and allows changing salon name and discount!
+    let pillTapCount = 0;
+    let pillTapTimer = null;
+
     dom.salonPill.addEventListener('click', () => {
+      pillTapCount++;
+      clearTimeout(pillTapTimer);
+      pillTapTimer = setTimeout(() => {
+        pillTapCount = 0;
+      }, 1200);
+
+      if (pillTapCount >= 3) {
+        pillTapCount = 0;
+        const confirmMsg = state.lang === 'ru'
+          ? 'Хотите изменить название салона и скидку?'
+          : 'Želite li da promenite naziv salona i popust?';
+        if (confirm(confirmMsg)) {
+          openSalonModal(true);
+        }
+        return;
+      }
+
       if (state.salonName && (state.discount === 20 || state.discount === 30)) {
         showToast(I18N[state.lang].salonLockedToast);
       } else {

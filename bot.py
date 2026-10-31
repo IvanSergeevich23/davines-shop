@@ -236,12 +236,44 @@ def handle_message(msg):
             send_message(chat_id, greeting)
         return
 
-    # C) Command /salon notice
+    # C) Command /salon and /reset
+    if text.startswith("/reset"):
+        # Reset in database
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM salons WHERE chat_id = ?", (chat_id,))
+        conn.commit()
+        conn.close()
+
+        reset_webapp_url = WEBAPP_URL + ("&" if "?" in WEBAPP_URL else "?") + "reset=1"
+        reset_keyboard = {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "🔄 Сбросить салон и скидку / Resetuj",
+                        "web_app": {"url": reset_webapp_url}
+                    }
+                ]
+            ]
+        }
+        send_message(
+            chat_id,
+            "🔄 *Сброс данных салона и скидки:*\n\n"
+            "Нажмите на кнопку ниже, чтобы заново указать название салона и выбрать скидку (20% или 30%):\n\n"
+            "──────────────────────\n\n"
+            "🔄 *Resetovanje podataka salona i popusta:*\n\n"
+            "Pritisnite dugme ispod da ponovo unesete naziv vašeg salona i izaberete popust (20% ili 30%):",
+            reply_markup=reset_keyboard
+        )
+        return
+
     if text.startswith("/salon") or "Promeni salon" in text or "Сменить салон" in text:
         send_message(
             chat_id,
-            "ℹ️ Naziv salona i popust (20% ili 30%) se unose jednom prilikom prvog ulaska u katalog i ne mogu se naknadno menjati.\n\n"
-            "ℹ️ Название студии/салона и скидка (20% или 30%) фиксируются при первом входе в каталог и не подлежат изменению.",
+            "ℹ️ Naziv salona i popust se unose prilikom prvog ulaska u katalog.\n"
+            "Ako želite da resetujete i promenite podatke, pošaljite komandu /reset.\n\n"
+            "ℹ️ Название студии/салона и скидка фиксируются при первом входе в каталог.\n"
+            "Если вы хотите сбросить и ввести заново, отправьте команду /reset.",
             reply_markup=get_main_keyboard()
         )
         return
