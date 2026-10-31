@@ -343,7 +343,27 @@
 
     const def = CATEGORY_MAP[state.activeLine];
     const items = state.catalog.filter(def.filter);
-    const subcats = Array.from(new Set(items.map(i => i.sub_category))).sort();
+    let subcats = Array.from(new Set(items.map(i => i.sub_category)));
+
+    if (state.activeLine === 'COLORING') {
+      const coloringOrder = [
+        'Красители (Mask, View, TPT)',
+        'Century of Light (Пудры)',
+        'Activator (Окислители)',
+        'Balance & Boucle (Завивка)',
+        'Finest Pigments'
+      ];
+      subcats.sort((a, b) => {
+        const ia = coloringOrder.indexOf(a);
+        const ib = coloringOrder.indexOf(b);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.localeCompare(b);
+      });
+    } else {
+      subcats.sort();
+    }
 
     if (subcats.length <= 1) {
       dom.subcatContainer.style.display = 'none';

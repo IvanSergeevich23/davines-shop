@@ -19,15 +19,6 @@
   },
   {
     "category": "BOJE",
-    "code": "DAV-BOJE-03",
-    "mp_price": 4500,
-    "name": "VIEW COLOR GLOSS polupermanentna boja sa kiselim pH vrednostima - za dodatni sjaj ili u kombinaciji sa različitim nijansama radi smanjenja intenziteta boje",
-    "sub_category": "Красители (Mask, View, TPT)",
-    "volume": "500ml",
-    "vp_price": 3750
-  },
-  {
-    "category": "BOJE",
     "code": "DAV-BOJE-04",
     "mp_price": 1850,
     "name": "THE PRESENT TIME demi-permanentna boja, bez amonijaka - koristi revolucionarnu biomimetičku tehnologiju koja je dizajnirana da obnavlja i štiti lipide u kosi. Može podići nivo boje za jedan ton i sadrži 88-93% sastojaka prirodnog porekla",
@@ -37,12 +28,183 @@
   },
   {
     "category": "BOJE",
+    "code": "DAV-BOJE-03",
+    "mp_price": 4500,
+    "name": "VIEW COLOR GLOSS polupermanentna boja sa kiselim pH vrednostima - za dodatni sjaj ili u kombinaciji sa različitim nijansama radi smanjenja intenziteta boje",
+    "sub_category": "Красители (Mask, View, TPT)",
+    "volume": "500ml",
+    "vp_price": 3750
+  },
+  {
+    "category": "BOJE",
     "code": "DAV-BOJE-05",
     "mp_price": 2095,
     "name": "PROTECTION PROVIDER 200ML- zastita za teme i skalp prilkom bojenja",
     "sub_category": "Красители (Mask, View, TPT)",
     "volume": "200ml",
     "vp_price": 1745.83
+  },
+  {
+    "category": "THE CENTURY OF LIGHT",
+    "code": "63096",
+    "mp_price": 5320,
+    "name": "MASK BLEACHING POWDER - blanš sa zaštitnim efektom",
+    "sub_category": "Century of Light (Пудры)",
+    "volume": "500g",
+    "vp_price": 4433.33
+  },
+  {
+    "category": "THE CENTURY OF LIGHT",
+    "code": "66062",
+    "mp_price": 6900,
+    "name": "THE CENTURY OF LIGHT LIBERTY POWDER - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
+    "sub_category": "Century of Light (Пудры)",
+    "volume": "450g",
+    "vp_price": 5750
+  },
+  {
+    "category": "THE CENTURY OF LIGHT",
+    "code": "66063",
+    "mp_price": 6900,
+    "name": "THE CENTURY OF LIGHT - TOLERANCE GEL LIGHTENING",
+    "sub_category": "Century of Light (Пудры)",
+    "volume": "900ml",
+    "vp_price": 5750
+  },
+  {
+    "category": "THE CENTURY OF LIGHT",
+    "code": "66074",
+    "mp_price": 9230,
+    "name": "THE CENTURY OF LIGHT PROGRESS POWDER - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
+    "sub_category": "Century of Light (Пудры)",
+    "volume": "800g",
+    "vp_price": 7691.67
+  },
+  {
+    "category": "THE CENTURY OF LIGHT",
+    "code": "66080",
+    "mp_price": 27500,
+    "name": "TCL PROGRESS REFILL KIT24 - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
+    "sub_category": "Century of Light (Пудры)",
+    "volume": "3x800g",
+    "vp_price": 22916.67
+  },
+  {
+    "category": "ACTIVATOR",
+    "code": "66046",
+    "mp_price": 1680,
+    "name": "Activator 10vol -hidrogen 3%",
+    "sub_category": "Activator (Окислители)",
+    "volume": "900 ml",
+    "vp_price": 1400
+  },
+  {
+    "category": "ACTIVATOR",
+    "code": "66047",
+    "mp_price": 1680,
+    "name": "Activator 20vol - hidrogen 6%",
+    "sub_category": "Activator (Окислители)",
+    "volume": "900 ml",
+    "vp_price": 1400
+  },
+  {
+    "category": "ACTIVATOR",
+    "code": "66048",
+    "mp_price": 1680,
+    "name": "Activator 30vol - hidrogen 9%",
+    "sub_category": "Activator (Окислители)",
+    "volume": "900 ml",
+    "vp_price": 1400
+  },
+  {
+    "category": "ACTIVATOR",
+    "code": "66049",
+    "mp_price": 1680,
+    "name": "Activator 40vol - hidrogen 12%",
+    "sub_category": "Activator (Окислители)",
+    "volume": "900 ml",
+    "vp_price": 1400
+  },
+  {
+    "category": "ACTIVATOR",
+    "code": "66054",
+    "mp_price": 1680,
+    "name": "Activator 5vol - hidrogen 1.5%",
+    "sub_category": "Activator (Окислители)",
+    "volume": "900 ml",
+    "vp_price": 1400
+  },
+  {
+    "category": "ACTIVATOR",
+    "code": "66076",
+    "mp_price": 1850,
+    "name": "Activator 7vol - hidrogen 1.5% (The Present Time)",
+    "sub_category": "Activator (Окислители)",
+    "volume": "1000 ml",
+    "vp_price": 1541.67
+  },
+  {
+    "category": "ACTIVATOR",
+    "code": "66077",
+    "mp_price": 1850,
+    "name": "Activator 15vol - hidrogen 1.5% (The Present Time)",
+    "sub_category": "Activator (Окислители)",
+    "volume": "1000 ml",
+    "vp_price": 1541.67
+  },
+  {
+    "category": "BALANCE & BOUCLE",
+    "code": "80034",
+    "mp_price": 2000,
+    "name": "Balance #1",
+    "sub_category": "Balance & Boucle (Завивка)",
+    "volume": "500ml",
+    "vp_price": 1666.67
+  },
+  {
+    "category": "BALANCE & BOUCLE",
+    "code": "80035",
+    "mp_price": 2000,
+    "name": "Balance #2",
+    "sub_category": "Balance & Boucle (Завивка)",
+    "volume": "500ml",
+    "vp_price": 1666.67
+  },
+  {
+    "category": "BALANCE & BOUCLE",
+    "code": "80031",
+    "mp_price": 1790,
+    "name": "Balance Neutralizer",
+    "sub_category": "Balance & Boucle (Завивка)",
+    "volume": "1000ml",
+    "vp_price": 1491.67
+  },
+  {
+    "category": "BALANCE & BOUCLE",
+    "code": "80018",
+    "mp_price": 1330,
+    "name": "Boucle #1",
+    "sub_category": "Balance & Boucle (Завивка)",
+    "volume": "100ml",
+    "vp_price": 1108.33
+  },
+  {
+    "category": "BALANCE & BOUCLE",
+    "code": "80019",
+    "mp_price": 1330,
+    "name": "Boucle #2",
+    "sub_category": "Balance & Boucle (Завивка)",
+    "volume": "100ml",
+    "vp_price": 1108.33
+  },
+  {
+    "category": "BALANCE & BOUCLE",
+    "code": "80030",
+    "mp_price": 950,
+    "name": "Boucle Neutralizer",
+    "sub_category": "Balance & Boucle (Завивка)",
+    "volume": "100ml",
+    "vp_price": 791.67
   },
   {
     "category": "FINEST PIGMENTS",
@@ -142,168 +304,6 @@
     "sub_category": "Finest Pigments",
     "volume": "280ml",
     "vp_price": 4725
-  },
-  {
-    "category": "ACTIVATOR",
-    "code": "66046",
-    "mp_price": 1680,
-    "name": "Activator 10vol -hidrogen 3%",
-    "sub_category": "Activator (Окислители)",
-    "volume": "900 ml",
-    "vp_price": 1400
-  },
-  {
-    "category": "ACTIVATOR",
-    "code": "66047",
-    "mp_price": 1680,
-    "name": "Activator 20vol - hidrogen 6%",
-    "sub_category": "Activator (Окислители)",
-    "volume": "900 ml",
-    "vp_price": 1400
-  },
-  {
-    "category": "ACTIVATOR",
-    "code": "66048",
-    "mp_price": 1680,
-    "name": "Activator 30vol - hidrogen 9%",
-    "sub_category": "Activator (Окислители)",
-    "volume": "900 ml",
-    "vp_price": 1400
-  },
-  {
-    "category": "ACTIVATOR",
-    "code": "66049",
-    "mp_price": 1680,
-    "name": "Activator 40vol - hidrogen 12%",
-    "sub_category": "Activator (Окислители)",
-    "volume": "900 ml",
-    "vp_price": 1400
-  },
-  {
-    "category": "ACTIVATOR",
-    "code": "66054",
-    "mp_price": 1680,
-    "name": "Activator 5vol - hidrogen 1.5%",
-    "sub_category": "Activator (Окислители)",
-    "volume": "900 ml",
-    "vp_price": 1400
-  },
-  {
-    "category": "ACTIVATOR",
-    "code": "66076",
-    "mp_price": 1850,
-    "name": "Activator 7vol - hidrogen 1.5% (The Present Time)",
-    "sub_category": "Activator (Окислители)",
-    "volume": "1000 ml",
-    "vp_price": 1541.67
-  },
-  {
-    "category": "ACTIVATOR",
-    "code": "66077",
-    "mp_price": 1850,
-    "name": "Activator 15vol - hidrogen 1.5% (The Present Time)",
-    "sub_category": "Activator (Окислители)",
-    "volume": "1000 ml",
-    "vp_price": 1541.67
-  },
-  {
-    "category": "THE CENTURY OF LIGHT",
-    "code": "63096",
-    "mp_price": 5320,
-    "name": "MASK BLEACHING POWDER - blanš sa zaštitnim efektom",
-    "sub_category": "Century of Light (Пудры)",
-    "volume": "500g",
-    "vp_price": 4433.33
-  },
-  {
-    "category": "THE CENTURY OF LIGHT",
-    "code": "66062",
-    "mp_price": 6900,
-    "name": "THE CENTURY OF LIGHT LIBERTY POWDER - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
-    "sub_category": "Century of Light (Пудры)",
-    "volume": "450g",
-    "vp_price": 5750
-  },
-  {
-    "category": "THE CENTURY OF LIGHT",
-    "code": "66063",
-    "mp_price": 6900,
-    "name": "THE CENTURY OF LIGHT - TOLERANCE GEL LIGHTENING",
-    "sub_category": "Century of Light (Пудры)",
-    "volume": "900ml",
-    "vp_price": 5750
-  },
-  {
-    "category": "THE CENTURY OF LIGHT",
-    "code": "66074",
-    "mp_price": 9230,
-    "name": "THE CENTURY OF LIGHT PROGRESS POWDER - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
-    "sub_category": "Century of Light (Пудры)",
-    "volume": "800g",
-    "vp_price": 7691.67
-  },
-  {
-    "category": "THE CENTURY OF LIGHT",
-    "code": "66080",
-    "mp_price": 27500,
-    "name": "TCL PROGRESS REFILL KIT24 - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
-    "sub_category": "Century of Light (Пудры)",
-    "volume": "3x800g",
-    "vp_price": 22916.67
-  },
-  {
-    "category": "BALANCE & BOUCLE",
-    "code": "80034",
-    "mp_price": 2000,
-    "name": "Balance #1",
-    "sub_category": "Balance & Boucle (Завивка)",
-    "volume": "500ml",
-    "vp_price": 1666.67
-  },
-  {
-    "category": "BALANCE & BOUCLE",
-    "code": "80035",
-    "mp_price": 2000,
-    "name": "Balance #2",
-    "sub_category": "Balance & Boucle (Завивка)",
-    "volume": "500ml",
-    "vp_price": 1666.67
-  },
-  {
-    "category": "BALANCE & BOUCLE",
-    "code": "80031",
-    "mp_price": 1790,
-    "name": "Balance Neutralizer",
-    "sub_category": "Balance & Boucle (Завивка)",
-    "volume": "1000ml",
-    "vp_price": 1491.67
-  },
-  {
-    "category": "BALANCE & BOUCLE",
-    "code": "80018",
-    "mp_price": 1330,
-    "name": "Boucle #1",
-    "sub_category": "Balance & Boucle (Завивка)",
-    "volume": "100ml",
-    "vp_price": 1108.33
-  },
-  {
-    "category": "BALANCE & BOUCLE",
-    "code": "80019",
-    "mp_price": 1330,
-    "name": "Boucle #2",
-    "sub_category": "Balance & Boucle (Завивка)",
-    "volume": "100ml",
-    "vp_price": 1108.33
-  },
-  {
-    "category": "BALANCE & BOUCLE",
-    "code": "80030",
-    "mp_price": 950,
-    "name": "Boucle Neutralizer",
-    "sub_category": "Balance & Boucle (Завивка)",
-    "volume": "100ml",
-    "vp_price": 791.67
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
