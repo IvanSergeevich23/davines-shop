@@ -216,9 +216,6 @@
     try {
       tg.ready();
       tg.expand();
-      if (tg.requestFullscreen) {
-        try { tg.requestFullscreen(); } catch (e) {}
-      }
       if (tg.setHeaderColor) tg.setHeaderColor('#F9F8F5');
       if (tg.setBackgroundColor) tg.setBackgroundColor('#F9F8F5');
     } catch (e) {}

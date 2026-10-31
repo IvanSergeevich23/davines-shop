@@ -64,7 +64,6 @@ body {
 
 .header-top {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
 }
@@ -91,24 +90,30 @@ body {
   margin-top: -2px;
 }
 
-.header-actions {
+.header-subrow {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
 }
 
 .lang-btn {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 5px 10px;
+  padding: 0 12px;
+  height: 34px;
   border-radius: var(--radius-full);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  box-sizing: border-box;
   transition: all 0.2s ease;
 }
 
@@ -121,27 +126,32 @@ body {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 6px 12px;
+  padding: 0 12px;
+  height: 34px;
   border-radius: var(--radius-full);
   font-size: 12px;
   display: flex;
   align-items: center;
   gap: 6px;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
   transition: all 0.2s ease;
 }
 
 .salon-pill .salon-icon {
   font-size: 13px;
   color: var(--accent-clay);
+  flex-shrink: 0;
 }
 
 .salon-pill .salon-name {
   font-weight: 600;
-  max-width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
 }
 
 .salon-discount-pill {
