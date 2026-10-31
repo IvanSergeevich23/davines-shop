@@ -495,8 +495,36 @@
     return null;
   }
 
-  // 11. Render Product Grid
+  // 11. Render Product Grid (Progressive & DocumentFragment Optimized)
+  let renderQueue = [];
+  let renderedCount = 0;
+  const CHUNK_SIZE = 24;
+  let renderTimer = null;
+
+  function renderNextBatch() {
+    if (renderedCount >= renderQueue.length) return;
+    const nextBatch = renderQueue.slice(renderedCount, renderedCount + CHUNK_SIZE);
+    if (nextBatch.length === 0) return;
+
+    const fragment = document.createDocumentFragment();
+    nextBatch.forEach(item => {
+      const card = createProductCard(item);
+      fragment.appendChild(card);
+    });
+    dom.catalogList.appendChild(fragment);
+    renderedCount += nextBatch.length;
+
+    if (renderedCount < renderQueue.length) {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(renderNextBatch, { timeout: 100 });
+      } else {
+        renderTimer = setTimeout(renderNextBatch, 40);
+      }
+    }
+  }
+
   function renderProducts() {
+    if (renderTimer) clearTimeout(renderTimer);
     const t = I18N[state.lang];
     const items = getFilteredProducts();
 
@@ -513,10 +541,27 @@
       return;
     }
 
-    items.forEach(item => {
+    renderQueue = items;
+    renderedCount = 0;
+
+    // Render first chunk synchronously (instant load for first 3-4 screens)
+    const firstBatch = renderQueue.slice(0, CHUNK_SIZE);
+    const fragment = document.createDocumentFragment();
+    firstBatch.forEach(item => {
       const card = createProductCard(item);
-      dom.catalogList.appendChild(card);
+      fragment.appendChild(card);
     });
+    dom.catalogList.appendChild(fragment);
+    renderedCount = firstBatch.length;
+
+    // Render subsequent chunks in background idle frames without blocking main thread
+    if (renderedCount < renderQueue.length) {
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(renderNextBatch, { timeout: 100 });
+      } else {
+        renderTimer = setTimeout(renderNextBatch, 40);
+      }
+    }
   }
 
   function createProductCard(item) {
@@ -1380,14 +1425,34 @@
       triggerHaptic('light');
     });
 
+    // Window scroll for progressive chunked loading
+    window.addEventListener('scroll', () => {
+      if (renderedCount < renderQueue.length) {
+        const scrollBottom = window.innerHeight + window.scrollY;
+        if (scrollBottom >= document.body.offsetHeight - 800) {
+          renderNextBatch();
+        }
+      }
+    }, { passive: true });
+
     // Auto-prompt salon name & discount on first run if not set
     if (!state.salonName || (state.discount !== 20 && state.discount !== 30)) {
       setTimeout(() => openSalonModal(true), 400);
     }
   }
 
-  // 18. App Init
+  // 18. Service Worker Registration for Instant Caching
+  function registerServiceWorker() {
+    if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  }
+
+  // 19. App Init
   function init() {
+    registerServiceWorker();
     renderStaticTexts();
     renderCategoryTabs();
     renderSubcategoryPills();
