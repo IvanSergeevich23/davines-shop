@@ -29,15 +29,21 @@
       orderSuccess: "Заказ оформлен!",
       orderSuccessSub: "Список заказа передан в Telegram",
       allSubcats: "Все",
+      chooseShades: "Выбрать оттенки",
+      editShades: "Изменить оттенки",
+      shadesSelected: "Выбрано оттенков",
+      paletteSearchPlaceholder: "Поиск тона (7.34, 10, quartz)...",
+      applyPalette: "Применить в корзину",
+      tubes: "шт.",
       lines: {
         "ALL": "Все товары",
+        "COLORING": "Окрашивание",
         "ESSENTIAL": "Essential Evolution",
         "NATURALTECH": "NaturalTech",
         "OI": "OI Line",
         "MORE_INSIDE": "More Inside",
         "HEART_OF_GLASS": "Heart of Glass",
         "ALCHEMIC": "Alchemic System",
-        "BOJE": "Boje & Pigmenti",
         "CIRCLE": "The Circle Chronicles",
         "SU": "SU Sun Care",
         "PASTA_LOVE": "Pasta & Love",
@@ -70,15 +76,21 @@
       orderSuccess: "Porudžbina je kreirana!",
       orderSuccessSub: "Spisak je poslat u Telegram",
       allSubcats: "Sve",
+      chooseShades: "Izaberi nijanse",
+      editShades: "Promeni nijanse",
+      shadesSelected: "Izabrano nijansi",
+      paletteSearchPlaceholder: "Pretraga tona (7.34, 10, quartz)...",
+      applyPalette: "Sačuvaj u korpu",
+      tubes: "kom",
       lines: {
         "ALL": "Svi proizvodi",
+        "COLORING": "Bojenje",
         "ESSENTIAL": "Essential Evolution",
         "NATURALTECH": "NaturalTech",
         "OI": "OI Line",
         "MORE_INSIDE": "More Inside",
         "HEART_OF_GLASS": "Heart of Glass",
         "ALCHEMIC": "Alchemic System",
-        "BOJE": "Boje i Pigmenti",
         "CIRCLE": "The Circle Chronicles",
         "SU": "SU Sun Care",
         "PASTA_LOVE": "Pasta & Love",
@@ -90,6 +102,14 @@
 
   // 2. High-level category grouping definition
   const CATEGORY_MAP = {
+    "COLORING": {
+      key: "COLORING",
+      filter: item => item.category === "BOJE" || 
+                      item.category === "FINEST PIGMENTS" || 
+                      item.category === "ACTIVATOR" || 
+                      item.category === "THE CENTURY OF LIGHT" || 
+                      item.category === "BALANCE & BOUCLE"
+    },
     "ESSENTIAL": {
       key: "ESSENTIAL",
       filter: item => item.category === "ESSENTIAL HAIRCARE EVOLUTION"
@@ -114,10 +134,6 @@
       key: "ALCHEMIC",
       filter: item => item.category === "ALCHEMIC SYSTEM"
     },
-    "BOJE": {
-      key: "BOJE",
-      filter: item => item.category === "BOJE" || item.category === "FINEST PIGMENTS" || item.category === "ACTIVATOR"
-    },
     "CIRCLE": {
       key: "CIRCLE",
       filter: item => item.category === "THE CIRCLE CHRONICLES"
@@ -137,10 +153,8 @@
     "OTHER": {
       key: "OTHER",
       filter: item => item.category === "NATURALTECH TAILORING TREATMENT" || 
-                      item.category === "BALANCE & BOUCLE" || 
                       item.category === "DAVINES AUTHENTIC FORMULAS" || 
-                      item.category === "LIQUID SPELL" || 
-                      item.category === "THE CENTURY OF LIGHT"
+                      item.category === "LIQUID SPELL"
     }
   };
 
@@ -152,7 +166,12 @@
     activeSubcat: 'ALL',
     searchQuery: '',
     cart: JSON.parse(localStorage.getItem('davines_cart') || '{}'),
-    catalog: window.DAVINES_CATALOG || []
+    shadesCart: JSON.parse(localStorage.getItem('davines_shades_cart') || '{}'),
+    catalog: window.DAVINES_CATALOG || [],
+    shadesDb: window.DAVINES_SHADES || {},
+    currentPaletteKey: null,
+    paletteActiveLevel: 'ALL',
+    paletteSearch: ''
   };
 
   // 4. Telegram WebApp Init
@@ -198,7 +217,19 @@
     btnSendOrder: document.getElementById('btnSendOrder'),
     btnCopyOrder: document.getElementById('btnCopyOrder'),
     btnClearCart: document.getElementById('btnClearCart'),
-    toast: document.getElementById('toastMsg')
+    toast: document.getElementById('toastMsg'),
+    // Palette Modal DOM
+    paletteModal: document.getElementById('paletteModal'),
+    paletteTitle: document.getElementById('paletteTitle'),
+    paletteSubtitle: document.getElementById('paletteSubtitle'),
+    paletteCloseBtn: document.getElementById('paletteCloseBtn'),
+    paletteSearchInput: document.getElementById('paletteSearchInput'),
+    paletteClearSearchBtn: document.getElementById('paletteClearSearchBtn'),
+    paletteLevelTabs: document.getElementById('paletteLevelTabs'),
+    shadesGrid: document.getElementById('shadesGrid'),
+    paletteSelectedCount: document.getElementById('paletteSelectedCount'),
+    paletteSelectedTotal: document.getElementById('paletteSelectedTotal'),
+    btnSavePalette: document.getElementById('btnSavePalette')
   };
 
   // 6. Formatting Utilities
@@ -252,6 +283,10 @@
     dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
     dom.btnCopyOrder.textContent = t.copyOrder;
     dom.btnClearCart.textContent = t.clearCart;
+
+    // Palette modal labels
+    if (dom.paletteSearchInput) dom.paletteSearchInput.placeholder = t.paletteSearchPlaceholder;
+    if (dom.btnSavePalette) dom.btnSavePalette.textContent = t.applyPalette;
   }
 
   // 8. Render Category Tabs
@@ -261,13 +296,13 @@
 
     const categories = [
       { key: 'ALL', label: t.lines.ALL, count: state.catalog.length },
+      { key: 'COLORING', label: t.lines.COLORING, count: countItems('COLORING') },
       { key: 'ESSENTIAL', label: t.lines.ESSENTIAL, count: countItems('ESSENTIAL') },
       { key: 'NATURALTECH', label: t.lines.NATURALTECH, count: countItems('NATURALTECH') },
       { key: 'OI', label: t.lines.OI, count: countItems('OI') },
       { key: 'MORE_INSIDE', label: t.lines.MORE_INSIDE, count: countItems('MORE_INSIDE') },
       { key: 'HEART_OF_GLASS', label: t.lines.HEART_OF_GLASS, count: countItems('HEART_OF_GLASS') },
       { key: 'ALCHEMIC', label: t.lines.ALCHEMIC, count: countItems('ALCHEMIC') },
-      { key: 'BOJE', label: t.lines.BOJE, count: countItems('BOJE') },
       { key: 'CIRCLE', label: t.lines.CIRCLE, count: countItems('CIRCLE') },
       { key: 'SU', label: t.lines.SU, count: countItems('SU') },
       { key: 'PASTA_LOVE', label: t.lines.PASTA_LOVE, count: countItems('PASTA_LOVE') },
@@ -301,7 +336,7 @@
   // 9. Render Subcategories when a line is selected
   function renderSubcategoryPills() {
     const t = I18N[state.lang];
-    if (state.activeLine === 'ALL' || state.activeLine === 'TRAVEL' || state.activeLine === 'OTHER' || state.activeLine === 'CIRCLE' || state.activeLine === 'OI' || state.activeLine === 'SU' || state.activeLine === 'PASTA_LOVE') {
+    if (state.activeLine === 'ALL' || state.activeLine === 'TRAVEL' || state.activeLine === 'CIRCLE' || state.activeLine === 'OI' || state.activeLine === 'SU' || state.activeLine === 'PASTA_LOVE') {
       dom.subcatContainer.style.display = 'none';
       return;
     }
@@ -377,6 +412,14 @@
     return items;
   }
 
+  // Helper: map product code to shade database key
+  function getShadesKeyForProduct(code) {
+    if (code === "DAV-BOJE-01") return "MASK_VIBRACHROM";
+    if (code === "DAV-BOJE-02") return "VIEW_COLOR";
+    if (code === "DAV-BOJE-04") return "THE_PRESENT_TIME";
+    return null;
+  }
+
   // 11. Render Product Grid
   function renderProducts() {
     const t = I18N[state.lang];
@@ -403,8 +446,7 @@
 
   function createProductCard(item) {
     const t = I18N[state.lang];
-    const qty = state.cart[item.code] || 0;
-
+    const shadesKey = getShadesKeyForProduct(item.code);
     const card = document.createElement('div');
     card.className = 'product-card';
 
@@ -433,13 +475,38 @@
           <span class="price-note">${t.vatIncluded}</span>
         </div>
         <div class="card-actions" id="action-${item.code}">
-          ${renderQuantityWidget(item.code, qty)}
+          ${shadesKey ? renderShadesButtonWidget(shadesKey) : renderQuantityWidget(item.code, state.cart[item.code] || 0)}
         </div>
       </div>
     `;
 
-    bindCardButtons(card, item.code);
+    bindCardButtons(card, item.code, shadesKey);
     return card;
+  }
+
+  function renderShadesButtonWidget(shadesKey) {
+    const t = I18N[state.lang];
+    const shadesMap = state.shadesCart[shadesKey] || {};
+    let totalSelected = 0;
+    for (const qty of Object.values(shadesMap)) {
+      totalSelected += qty;
+    }
+
+    if (totalSelected > 0) {
+      const lineInfo = state.shadesDb[shadesKey] || {};
+      const totalAmount = totalSelected * (lineInfo.price_mp || 0);
+      return `
+        <button class="btn-add-initial btn-open-palette" data-line="${shadesKey}" style="background: var(--accent-green); font-size: 12px; padding: 7px 12px;">
+          🎨 ${totalSelected} ${t.tubes} (${formatMoney(totalAmount)})
+        </button>
+      `;
+    } else {
+      return `
+        <button class="btn-add-initial btn-open-palette" data-line="${shadesKey}">
+          🎨 ${t.chooseShades}
+        </button>
+      `;
+    }
   }
 
   function renderQuantityWidget(code, qty) {
@@ -461,7 +528,15 @@
     }
   }
 
-  function bindCardButtons(cardElement, code) {
+  function bindCardButtons(cardElement, code, shadesKey) {
+    if (shadesKey) {
+      const btn = cardElement.querySelector('.btn-open-palette');
+      if (btn) {
+        btn.addEventListener('click', () => openPaletteModal(shadesKey));
+      }
+      return;
+    }
+
     const addBtn = cardElement.querySelector('.btn-add');
     if (addBtn) {
       addBtn.addEventListener('click', () => updateQuantity(code, 1));
@@ -498,11 +573,33 @@
     renderCartDrawerContent();
   }
 
+  function updateShadeQuantity(lineKey, shade, newQty) {
+    triggerHaptic('light');
+    if (!state.shadesCart[lineKey]) {
+      state.shadesCart[lineKey] = {};
+    }
+    if (newQty <= 0) {
+      delete state.shadesCart[lineKey][shade];
+      if (Object.keys(state.shadesCart[lineKey]).length === 0) {
+        delete state.shadesCart[lineKey];
+      }
+    } else {
+      state.shadesCart[lineKey][shade] = newQty;
+    }
+    localStorage.setItem('davines_shades_cart', JSON.stringify(state.shadesCart));
+
+    // Update palette footer
+    renderPaletteSummary();
+    renderCartFloatingBar();
+    renderCartDrawerContent();
+  }
+
   function getCartSummary() {
     let totalItems = 0;
     let totalPriceMP = 0;
     let orderedList = [];
 
+    // 1. Standard Products
     for (const [code, qty] of Object.entries(state.cart)) {
       if (qty <= 0) continue;
       const product = state.catalog.find(p => p.code === code);
@@ -512,8 +609,36 @@
         totalPriceMP += subtotalMP;
         orderedList.push({
           product,
+          isShade: false,
           qty,
           subtotalMP
+        });
+      }
+    }
+
+    // 2. Shade Products from Palettes
+    for (const [lineKey, shadesMap] of Object.entries(state.shadesCart)) {
+      const lineInfo = state.shadesDb[lineKey];
+      if (!lineInfo) continue;
+      for (const [shade, qty] of Object.entries(shadesMap)) {
+        if (qty <= 0) continue;
+        totalItems += qty;
+        const subtotalMP = lineInfo.price_mp * qty;
+        totalPriceMP += subtotalMP;
+        orderedList.push({
+          product: {
+            code: `${lineKey}-${shade}`,
+            name: `${lineInfo.name} (тон ${shade})`,
+            volume: lineInfo.volume,
+            mp_price: lineInfo.price_mp,
+            category: "BOJE",
+            sub_category: "Красители (оттенки)"
+          },
+          isShade: true,
+          lineKey: lineKey,
+          shade: shade,
+          qty: qty,
+          subtotalMP: subtotalMP
         });
       }
     }
@@ -557,7 +682,7 @@
     dom.btnSendOrder.style.opacity = '1';
     dom.btnSendOrder.style.pointerEvents = 'auto';
 
-    orderedList.forEach(({ product, qty, subtotalMP }) => {
+    orderedList.forEach(({ product, isShade, lineKey, shade, qty, subtotalMP }) => {
       const cleanTitle = getCleanProductName(product.name);
       const row = document.createElement('div');
       row.className = 'cart-item-row';
@@ -569,18 +694,26 @@
           </div>
         </div>
         <div class="qty-control">
-          <button class="qty-btn btn-drawer-minus" data-code="${product.code}">−</button>
+          <button class="qty-btn btn-drawer-minus">−</button>
           <span class="qty-val">${qty}</span>
-          <button class="qty-btn btn-drawer-plus" data-code="${product.code}">+</button>
+          <button class="qty-btn btn-drawer-plus">+</button>
         </div>
         <div class="cart-item-price">${formatMoney(subtotalMP)}</div>
       `;
 
       row.querySelector('.btn-drawer-minus').addEventListener('click', () => {
-        updateQuantity(product.code, qty - 1);
+        if (isShade) {
+          updateShadeQuantity(lineKey, shade, qty - 1);
+        } else {
+          updateQuantity(product.code, qty - 1);
+        }
       });
       row.querySelector('.btn-drawer-plus').addEventListener('click', () => {
-        updateQuantity(product.code, qty + 1);
+        if (isShade) {
+          updateShadeQuantity(lineKey, shade, qty + 1);
+        } else {
+          updateQuantity(product.code, qty + 1);
+        }
       });
 
       dom.cartItemsScroll.appendChild(row);
@@ -630,7 +763,7 @@
       return;
     }
 
-    const { totalItems, totalPriceMP, orderedList } = getCartSummary();
+    const { totalItems, totalPriceMP } = getCartSummary();
     if (totalItems === 0) return;
 
     dom.btnSendOrder.disabled = true;
@@ -689,7 +822,9 @@
 
       // Reset cart
       state.cart = {};
+      state.shadesCart = {};
       localStorage.removeItem('davines_cart');
+      localStorage.removeItem('davines_shades_cart');
       renderProducts();
       renderCartFloatingBar();
 
@@ -724,7 +859,199 @@
     }
   }
 
-  // 15. Modals & Drawer Toggles
+  // 15. Color Palette Drawer Logic
+  function openPaletteModal(lineKey) {
+    state.currentPaletteKey = lineKey;
+    state.paletteActiveLevel = 'ALL';
+    state.paletteSearch = '';
+    const lineInfo = state.shadesDb[lineKey];
+    if (!lineInfo) return;
+
+    dom.paletteTitle.textContent = lineInfo.name;
+    dom.paletteSubtitle.textContent = `${lineInfo.volume} • ${formatMoney(lineInfo.price_mp)} sa PDV • Всего: ${lineInfo.count} оттенков`;
+    if (dom.paletteSearchInput) dom.paletteSearchInput.value = '';
+
+    renderPaletteLevelTabs(lineKey);
+    renderShadesGrid();
+    renderPaletteSummary();
+
+    dom.paletteModal.classList.add('open');
+    dom.modalOverlay.classList.add('open');
+    triggerHaptic('medium');
+  }
+
+  function closePaletteModal() {
+    dom.paletteModal.classList.remove('open');
+    if (!dom.cartDrawer.classList.contains('open') && !dom.salonModal.classList.contains('open')) {
+      dom.modalOverlay.classList.remove('open');
+    }
+    // Update product card badge
+    renderProducts();
+  }
+
+  function renderPaletteLevelTabs(lineKey) {
+    dom.paletteLevelTabs.innerHTML = '';
+    let tabs = [{ key: 'ALL', label: state.lang === 'ru' ? 'Все' : 'Sve' }];
+
+    if (lineKey === 'MASK_VIBRACHROM') {
+      tabs.push(
+        { key: 'NAT', label: '.0 Базы' },
+        { key: '1-4', label: '1 - 4' },
+        { key: '5-6', label: '5 - 6' },
+        { key: '7-8', label: '7 - 8' },
+        { key: '9-10', label: '9 - 10' },
+        { key: '12', label: '12 Блонды' },
+        { key: '0.xx', label: '0.xx Микстона' }
+      );
+    } else if (lineKey === 'VIEW_COLOR') {
+      tabs.push(
+        { key: 'TONERS', label: 'Тонеры / Gloss' },
+        { key: '2-4', label: '2 - 4' },
+        { key: '5-6', label: '5 - 6' },
+        { key: '7-8', label: '7 - 8' },
+        { key: '9-10', label: '9 - 10' }
+      );
+    } else if (lineKey === 'THE_PRESENT_TIME') {
+      tabs.push(
+        { key: 'SPECIAL', label: 'Specialties' },
+        { key: '2-4', label: '2 - 4' },
+        { key: '5-6', label: '5 - 6' },
+        { key: '7-8', label: '7 - 8' },
+        { key: '9-10', label: '9 - 10' }
+      );
+    }
+
+    tabs.forEach(t => {
+      const tab = document.createElement('div');
+      tab.className = `palette-level-tab ${state.paletteActiveLevel === t.key ? 'active' : ''}`;
+      tab.textContent = t.label;
+      tab.addEventListener('click', () => {
+        state.paletteActiveLevel = t.key;
+        triggerHaptic('light');
+        renderPaletteLevelTabs(lineKey);
+        renderShadesGrid();
+      });
+      dom.paletteLevelTabs.appendChild(tab);
+    });
+  }
+
+  function getFilteredShades() {
+    const lineKey = state.currentPaletteKey;
+    const lineInfo = state.shadesDb[lineKey];
+    if (!lineInfo) return [];
+
+    let shades = lineInfo.shades || [];
+
+    // Filter by Level
+    if (state.paletteActiveLevel !== 'ALL') {
+      const lvl = state.paletteActiveLevel;
+      if (lvl === 'NAT') {
+        shades = shades.filter(s => s.endsWith('.0') || s.endsWith(',0') || ['1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0', '33.0', '44.0', '55.0', '66.0', '77.0', '88.0', '99.0', '4', '5', '6', '7', '8'].includes(s));
+      } else if (lvl === '0.xx') {
+        shades = shades.filter(s => s.startsWith('0.'));
+      } else if (lvl === '12') {
+        shades = shades.filter(s => s.startsWith('12.'));
+      } else if (lvl === 'TONERS') {
+        shades = shades.filter(s => ['QUARTZ', 'BRONZE', 'CHARCOAL', 'STEEL', 'GLOSS 500', 'RUBY', 'VIOLET AMETH'].includes(s));
+      } else if (lvl === 'SPECIAL') {
+        shades = shades.filter(s => s.includes('BLUE') || s.includes('GREEN') || s.includes('VIOLET') || s.includes('RED') || s.includes('YELLOW') || s.includes('CLEAR'));
+      } else if (lvl === '1-4' || lvl === '2-4') {
+        shades = shades.filter(s => /^[1-4](\.|\b)/.test(s));
+      } else if (lvl === '5-6') {
+        shades = shades.filter(s => /^[5-6](\.|\b)/.test(s) || s.startsWith('55.') || s.startsWith('66.'));
+      } else if (lvl === '7-8') {
+        shades = shades.filter(s => /^[7-8](\.|\b)/.test(s) || s.startsWith('77.') || s.startsWith('88.'));
+      } else if (lvl === '9-10') {
+        shades = shades.filter(s => /^(9|10)(\.|\b)/.test(s) || s.startsWith('99.'));
+      }
+    }
+
+    // Filter by search text
+    if (state.paletteSearch.trim()) {
+      const q = state.paletteSearch.trim().toLowerCase();
+      shades = shades.filter(s => s.toLowerCase().includes(q));
+    }
+
+    return shades;
+  }
+
+  function renderShadesGrid() {
+    const shades = getFilteredShades();
+    dom.shadesGrid.innerHTML = '';
+
+    if (shades.length === 0) {
+      dom.shadesGrid.innerHTML = `
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px 10px; color: var(--text-muted);">
+          Не найдено оттенков
+        </div>
+      `;
+      return;
+    }
+
+    const lineKey = state.currentPaletteKey;
+    const currentCartMap = state.shadesCart[lineKey] || {};
+
+    shades.forEach(shade => {
+      const qty = currentCartMap[shade] || 0;
+      const tile = document.createElement('div');
+      tile.className = `shade-tile ${qty > 0 ? 'selected' : ''}`;
+      tile.innerHTML = `
+        <div class="shade-num">${shade}</div>
+        <div class="shade-tile-counter">
+          ${qty > 0 ? `
+            <button class="shade-btn-sm btn-tile-minus">−</button>
+            <span class="shade-qty-val">${qty}</span>
+            <button class="shade-btn-sm btn-tile-plus">+</button>
+          ` : `
+            <span style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">+ выбрать</span>
+          `}
+        </div>
+      `;
+
+      tile.addEventListener('click', (e) => {
+        // If clicking inside counter buttons
+        if (e.target.classList.contains('btn-tile-plus')) {
+          e.stopPropagation();
+          updateShadeQuantity(lineKey, shade, qty + 1);
+          renderShadesGrid();
+          return;
+        }
+        if (e.target.classList.contains('btn-tile-minus')) {
+          e.stopPropagation();
+          updateShadeQuantity(lineKey, shade, qty - 1);
+          renderShadesGrid();
+          return;
+        }
+
+        // Clicking the tile directly toggles / adds 1
+        if (qty === 0) {
+          updateShadeQuantity(lineKey, shade, 1);
+          renderShadesGrid();
+        }
+      });
+
+      dom.shadesGrid.appendChild(tile);
+    });
+  }
+
+  function renderPaletteSummary() {
+    const t = I18N[state.lang];
+    const lineKey = state.currentPaletteKey;
+    if (!lineKey) return;
+    const lineInfo = state.shadesDb[lineKey] || {};
+    const shadesMap = state.shadesCart[lineKey] || {};
+
+    let totalSelected = 0;
+    for (const qty of Object.values(shadesMap)) {
+      totalSelected += qty;
+    }
+
+    const totalMoney = totalSelected * (lineInfo.price_mp || 0);
+    dom.paletteSelectedCount.textContent = `${t.shadesSelected}: ${totalSelected} ${t.tubes}`;
+    dom.paletteSelectedTotal.textContent = formatMoney(totalMoney);
+  }
+
+  // 16. Modals & Drawer Toggles
   function openSalonModal() {
     dom.salonModalInput.value = state.salonName;
     dom.salonModal.classList.add('open');
@@ -734,7 +1061,7 @@
 
   function closeSalonModal() {
     dom.salonModal.classList.remove('open');
-    if (!dom.cartDrawer.classList.contains('open')) {
+    if (!dom.cartDrawer.classList.contains('open') && !dom.paletteModal.classList.contains('open')) {
       dom.modalOverlay.classList.remove('open');
     }
   }
@@ -760,12 +1087,12 @@
 
   function closeCartDrawer() {
     dom.cartDrawer.classList.remove('open');
-    if (!dom.salonModal.classList.contains('open')) {
+    if (!dom.salonModal.classList.contains('open') && !dom.paletteModal.classList.contains('open')) {
       dom.modalOverlay.classList.remove('open');
     }
   }
 
-  // 16. Event Listeners
+  // 17. Event Listeners
   function initEvents() {
     // Language switch
     dom.langBtn.addEventListener('click', () => {
@@ -791,11 +1118,37 @@
     dom.modalOverlay.addEventListener('click', () => {
       closeSalonModal();
       closeCartDrawer();
+      closePaletteModal();
     });
     dom.drawerCloseBtn.addEventListener('click', closeCartDrawer);
 
     // Floating cart bar click opens drawer
     dom.cartFloatingBar.addEventListener('click', openCartDrawer);
+
+    // Palette modal events
+    dom.paletteCloseBtn.addEventListener('click', closePaletteModal);
+    dom.btnSavePalette.addEventListener('click', () => {
+      triggerHaptic('success');
+      closePaletteModal();
+    });
+
+    if (dom.paletteSearchInput) {
+      dom.paletteSearchInput.addEventListener('input', (e) => {
+        state.paletteSearch = e.target.value;
+        if (state.paletteSearch.length > 0) {
+          dom.paletteClearSearchBtn.style.display = 'block';
+        } else {
+          dom.paletteClearSearchBtn.style.display = 'none';
+        }
+        renderShadesGrid();
+      });
+      dom.paletteClearSearchBtn.addEventListener('click', () => {
+        dom.paletteSearchInput.value = '';
+        state.paletteSearch = '';
+        dom.paletteClearSearchBtn.style.display = 'none';
+        renderShadesGrid();
+      });
+    }
 
     // Search input
     dom.searchInput.addEventListener('input', (e) => {
@@ -819,7 +1172,9 @@
     dom.btnClearCart.addEventListener('click', () => {
       if (confirm(state.lang === 'ru' ? 'Очистить корзину?' : 'Isprazniti korpu?')) {
         state.cart = {};
+        state.shadesCart = {};
         localStorage.removeItem('davines_cart');
+        localStorage.removeItem('davines_shades_cart');
         renderProducts();
         renderCartFloatingBar();
         renderCartDrawerContent();
@@ -841,7 +1196,7 @@
     }
   }
 
-  // 17. App Init
+  // 18. App Init
   function init() {
     renderStaticTexts();
     renderCategoryTabs();

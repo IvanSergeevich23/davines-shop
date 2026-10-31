@@ -143,11 +143,52 @@
     <button id="salonModalSave" class="dialog-save-btn">Сохранить</button>
   </div>
 
+  <!-- Color Palette Modal Drawer -->
+  <div id="paletteModal" class="palette-drawer">
+    <div class="drawer-drag-handle"></div>
+    <div class="palette-header">
+      <div>
+        <div id="paletteTitle" class="palette-title">Mask with Vibrachrom</div>
+        <div id="paletteSubtitle" class="palette-subtitle">100ml • 1.680 RSD sa PDV</div>
+      </div>
+      <button id="paletteCloseBtn" class="drawer-close-btn">✕</button>
+    </div>
+
+    <!-- Palette Search & Levels -->
+    <div class="palette-controls">
+      <div class="palette-search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="paletteSearchInput" class="search-input" placeholder="Поиск тона (7.34, 10, 0.00, quartz)..." autocomplete="off">
+        <button id="paletteClearSearchBtn" class="clear-search-btn" title="Очистить">✕</button>
+      </div>
+      <div id="paletteLevelTabs" class="palette-level-tabs">
+        <!-- Generated dynamically -->
+      </div>
+    </div>
+
+    <!-- Shades Grid -->
+    <div id="shadesGrid" class="shades-grid">
+      <!-- Generated dynamically -->
+    </div>
+
+    <!-- Palette Sticky Footer -->
+    <div class="palette-footer">
+      <div class="palette-footer-info">
+        <span id="paletteSelectedCount" class="palette-selected-count">Выбрано: 0 шт.</span>
+        <span id="paletteSelectedTotal" class="palette-selected-total">0 RSD</span>
+      </div>
+      <button id="btnSavePalette" class="btn-primary-send" style="padding: 11px 22px; font-size: 14px;">
+        Применить в корзину
+      </button>
+    </div>
+  </div>
+
   <!-- Toast Message -->
   <div id="toastMsg" class="toast-msg"></div>
 
   <!-- Catalog Data & Main App Scripts -->
   <script src="catalog_data.js"></script>
+  <script src="shades_data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
