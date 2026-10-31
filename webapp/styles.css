@@ -32,11 +32,19 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-main);
   line-height: 1.45;
+  min-height: 100vh;
+  min-height: var(--tg-viewport-stable-height, var(--tg-viewport-height, 100vh));
+  min-height: -webkit-fill-available;
   padding-bottom: calc(85px + var(--safe-bottom));
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -822,15 +830,19 @@ body {
   left: 50%;
   transform: translate(-50%, -50%) scale(0.92);
   width: 90%;
-  max-width: 440px;
+  max-width: 420px;
+  max-height: calc(var(--tg-viewport-height, 100vh) - 30px);
+  max-height: 88vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background: var(--bg-surface);
   border-radius: var(--radius-lg);
-  padding: 24px 22px;
+  padding: 22px 18px;
   z-index: 110;
   box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   opacity: 0;
   pointer-events: none;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1202,22 +1214,4 @@ body {
   font-size: 16px;
   font-weight: 700;
   color: var(--text-main);
-}
-
-/* Skeleton Loading Placeholder Animation */
-.skeleton-card {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.skeleton-line {
-  background: linear-gradient(90deg, #EBE7DF 25%, #F4F1EA 50%, #EBE7DF 75%);
-  background-size: 200% 100%;
-  animation: skeletonPulse 1.4s ease-in-out infinite;
-  border-radius: var(--radius-sm);
-}
-
-@keyframes skeletonPulse {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
 }

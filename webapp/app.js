@@ -178,13 +178,24 @@
     }
   };
 
-  // 3. Application State
+  // 3. Application State & Discount Initializer
   const savedDiscount = parseInt(localStorage.getItem('davines_discount') || '0', 10);
+  const savedSalon = localStorage.getItem('davines_salon_name') || '';
+
+  // For users who already entered a salon, auto-set default 20% discount so they are never blocked
+  let initialDiscount = 0;
+  if (savedDiscount === 20 || savedDiscount === 30) {
+    initialDiscount = savedDiscount;
+  } else if (savedSalon) {
+    initialDiscount = 20;
+    localStorage.setItem('davines_discount', '20');
+  }
+
   const state = {
     lang: localStorage.getItem('davines_lang') || 'ru',
-    salonName: localStorage.getItem('davines_salon_name') || '',
-    discount: (savedDiscount === 20 || savedDiscount === 30) ? savedDiscount : 0,
-    draftDiscount: (savedDiscount === 30) ? 30 : 20,
+    salonName: savedSalon,
+    discount: initialDiscount,
+    draftDiscount: (initialDiscount === 30) ? 30 : 20,
     activeLine: 'ALL',
     activeSubcat: 'ALL',
     searchQuery: '',
@@ -197,13 +208,47 @@
     paletteSearch: ''
   };
 
-  // 4. Telegram WebApp Init
+  // 4. Telegram WebApp Full-Screen Expansion (iOS & Android)
   const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-  if (tg) {
-    tg.ready();
-    tg.expand();
-    if (tg.setHeaderColor) tg.setHeaderColor('#F9F8F5');
-    if (tg.setBackgroundColor) tg.setBackgroundColor('#F9F8F5');
+
+  function expandTelegramApp() {
+    if (!tg) return;
+    try {
+      tg.ready();
+      tg.expand();
+      if (tg.requestFullscreen) {
+        try { tg.requestFullscreen(); } catch (e) {}
+      }
+      if (tg.setHeaderColor) tg.setHeaderColor('#F9F8F5');
+      if (tg.setBackgroundColor) tg.setBackgroundColor('#F9F8F5');
+    } catch (e) {}
+  }
+
+  // Force expand immediately and at key intervals for iOS WebKit handshake
+  expandTelegramApp();
+  setTimeout(expandTelegramApp, 60);
+  setTimeout(expandTelegramApp, 250);
+  setTimeout(expandTelegramApp, 600);
+  window.addEventListener('load', expandTelegramApp);
+
+  if (tg && tg.onEvent) {
+    tg.onEvent('viewportChanged', () => {
+      if (!tg.isExpanded && tg.expand) tg.expand();
+    });
+  }
+
+  // Clear any existing Service Workers to prevent iOS WebKit 60s fetch timeouts
+  if ('serviceWorker' in navigator) {
+    try {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (let reg of regs) reg.unregister();
+      });
+      if (window.caches) {
+        caches.keys().then(keys => {
+          for (let key of keys) caches.delete(key);
+        });
+      }
+    } catch (e) {}
   }
 
   function triggerHaptic(type = 'light') {
@@ -495,36 +540,8 @@
     return null;
   }
 
-  // 11. Render Product Grid (Progressive & DocumentFragment Optimized)
-  let renderQueue = [];
-  let renderedCount = 0;
-  const CHUNK_SIZE = 24;
-  let renderTimer = null;
-
-  function renderNextBatch() {
-    if (renderedCount >= renderQueue.length) return;
-    const nextBatch = renderQueue.slice(renderedCount, renderedCount + CHUNK_SIZE);
-    if (nextBatch.length === 0) return;
-
-    const fragment = document.createDocumentFragment();
-    nextBatch.forEach(item => {
-      const card = createProductCard(item);
-      fragment.appendChild(card);
-    });
-    dom.catalogList.appendChild(fragment);
-    renderedCount += nextBatch.length;
-
-    if (renderedCount < renderQueue.length) {
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(renderNextBatch, { timeout: 100 });
-      } else {
-        renderTimer = setTimeout(renderNextBatch, 40);
-      }
-    }
-  }
-
+  // 11. Render Product Grid (DocumentFragment Optimized, Ultra Fast)
   function renderProducts() {
-    if (renderTimer) clearTimeout(renderTimer);
     const t = I18N[state.lang];
     const items = getFilteredProducts();
 
@@ -541,27 +558,11 @@
       return;
     }
 
-    renderQueue = items;
-    renderedCount = 0;
-
-    // Render first chunk synchronously (instant load for first 3-4 screens)
-    const firstBatch = renderQueue.slice(0, CHUNK_SIZE);
     const fragment = document.createDocumentFragment();
-    firstBatch.forEach(item => {
-      const card = createProductCard(item);
-      fragment.appendChild(card);
-    });
-    dom.catalogList.appendChild(fragment);
-    renderedCount = firstBatch.length;
-
-    // Render subsequent chunks in background idle frames without blocking main thread
-    if (renderedCount < renderQueue.length) {
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(renderNextBatch, { timeout: 100 });
-      } else {
-        renderTimer = setTimeout(renderNextBatch, 40);
-      }
+    for (let i = 0; i < items.length; i++) {
+      fragment.appendChild(createProductCard(items[i]));
     }
+    dom.catalogList.appendChild(fragment);
   }
 
   function createProductCard(item) {
@@ -1425,34 +1426,15 @@
       triggerHaptic('light');
     });
 
-    // Window scroll for progressive chunked loading
-    window.addEventListener('scroll', () => {
-      if (renderedCount < renderQueue.length) {
-        const scrollBottom = window.innerHeight + window.scrollY;
-        if (scrollBottom >= document.body.offsetHeight - 800) {
-          renderNextBatch();
-        }
-      }
-    }, { passive: true });
-
-    // Auto-prompt salon name & discount on first run if not set
-    if (!state.salonName || (state.discount !== 20 && state.discount !== 30)) {
+    // Auto-prompt salon name & discount on first run if salon not yet entered
+    if (!state.salonName) {
       setTimeout(() => openSalonModal(true), 400);
     }
   }
 
-  // 18. Service Worker Registration for Instant Caching
-  function registerServiceWorker() {
-    if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
-      });
-    }
-  }
-
-  // 19. App Init
+  // 18. App Init
   function init() {
-    registerServiceWorker();
+    expandTelegramApp();
     renderStaticTexts();
     renderCategoryTabs();
     renderSubcategoryPills();
