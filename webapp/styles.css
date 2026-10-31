@@ -116,17 +116,11 @@ body {
   padding: 6px 12px;
   border-radius: var(--radius-full);
   font-size: 12px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 6px;
   width: 100%;
   transition: all 0.2s ease;
-}
-
-.salon-pill:hover, .salon-pill:active {
-  background: var(--bg-secondary);
-  border-color: var(--text-dim);
 }
 
 .salon-pill .salon-icon {
@@ -136,16 +130,22 @@ body {
 
 .salon-pill .salon-name {
   font-weight: 600;
-  max-width: 260px;
+  max-width: 250px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.salon-pill .salon-edit {
+.salon-discount-pill {
   margin-left: auto;
+  background: var(--accent-green);
+  color: #FFFFFF;
   font-size: 11px;
-  color: var(--text-muted);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
 }
 
 /* Search Bar */
@@ -400,15 +400,34 @@ body {
 }
 
 .price-main {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--text-main);
   letter-spacing: -0.3px;
+  line-height: 1.2;
 }
 
-.price-note {
-  font-size: 10px;
+.price-retail-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
   color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.price-retail-strike {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
+
+.price-discount-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent-clay);
+  background: var(--accent-clay-soft);
+  padding: 1px 5px;
+  border-radius: 3px;
 }
 
 /* Add / Counter Controls */
@@ -665,12 +684,25 @@ body {
   margin-top: 2px;
 }
 
+.cart-item-price-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 80px;
+}
+
 .cart-item-price {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-main);
-  min-width: 75px;
   text-align: right;
+}
+
+.cart-item-retail-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-decoration: line-through;
+  margin-top: 1px;
 }
 
 .cart-empty-view {
@@ -706,13 +738,20 @@ body {
   color: var(--text-main);
 }
 
-.cart-salon-btn {
-  background: none;
-  border: none;
+.cart-discount-badge {
+  background: var(--accent-green-soft);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
   font-size: 12px;
-  color: var(--accent-clay);
-  font-weight: 600;
-  cursor: pointer;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.summary-retail-note {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
 }
 
 /* Cart Footer */
@@ -783,10 +822,10 @@ body {
   left: 50%;
   transform: translate(-50%, -50%) scale(0.92);
   width: 90%;
-  max-width: 420px;
+  max-width: 440px;
   background: var(--bg-surface);
   border-radius: var(--radius-lg);
-  padding: 24px 20px;
+  padding: 24px 22px;
   z-index: 110;
   box-shadow: var(--shadow-lg);
   display: flex;
@@ -803,17 +842,58 @@ body {
   pointer-events: auto;
 }
 
+.dialog-brand-header {
+  text-align: center;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 8px;
+  margin-bottom: 2px;
+}
+
+.dialog-brand-title {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+
+.dialog-brand-sub {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: lowercase;
+  margin-top: -2px;
+}
+
 .dialog-title {
   font-family: var(--font-serif);
   font-size: 20px;
   font-weight: 600;
   color: var(--text-main);
+  text-align: center;
+  line-height: 1.25;
 }
 
 .dialog-desc {
   font-size: 13px;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.dialog-field-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dialog-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .dialog-input {
@@ -825,22 +905,86 @@ body {
   outline: none;
   font-family: inherit;
   transition: border-color 0.2s;
+  background: var(--bg-surface);
 }
 
 .dialog-input:focus {
   border-color: var(--accent-green);
 }
 
+.discount-selector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.discount-choice-btn {
+  background: var(--bg-secondary);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transition: all 0.2s ease;
+}
+
+.discount-choice-btn:active {
+  transform: scale(0.97);
+}
+
+.discount-choice-btn.active {
+  background: var(--accent-green-soft);
+  border-color: var(--accent-green);
+}
+
+.discount-num {
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.discount-choice-btn.active .discount-num {
+  color: var(--accent-green);
+}
+
+.discount-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.discount-choice-btn.active .discount-sub {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.dialog-discount-notice {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-top: 2px;
+  background: var(--bg-secondary);
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+}
+
 .dialog-save-btn {
   background: var(--text-main);
   color: #FFFFFF;
   border: none;
-  padding: 12px;
+  padding: 13px;
   border-radius: var(--radius-md);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-top: 4px;
 }
 
 /* Success notification toast */

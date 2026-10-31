@@ -7,10 +7,17 @@
     ru: {
       brandTagline: "sustainable beauty",
       salonPill: "Салон",
-      salonNotSet: "Укажите название вашего салона",
-      salonModalTitle: "Название салона",
-      salonModalDesc: "Укажите название салона красоты или имя мастера для оформления заказов:",
-      salonPlaceholder: "например: Studio Elegance, Мастер Анна...",
+      salonNotSet: "Укажите салон и скидку",
+      salonModalTitle: "Добро пожаловать в Davines",
+      salonModalDesc: "Укажите название вашей студии / салона и выберите вашу персональную скидку (20% или 30%):",
+      salonInputLabel: "Название салона / студии:",
+      discountLabel: "Персональная скидка:",
+      discLabel20: "Скидка клиента (20%)",
+      discLabel30: "Спец. скидка (30%)",
+      discountNotice: "ℹ️ Название и скидка фиксируются при первом входе и не подлежат изменению.",
+      saveAndEnter: "Сохранить и войти в каталог",
+      salonLockedToast: "Название салона и скидка зафиксированы и не меняются",
+      salonPlaceholder: "например: Studio Elegance, Салон Давинес...",
       save: "Сохранить",
       searchPlaceholder: "Поиск по коду или названию (70031, nounou, oi)...",
       allLines: "Все линейки",
@@ -20,14 +27,16 @@
       cartEmptyDesc: "Выберите нужные продукты Davines в каталоге выше",
       vatIncluded: "с НДС (sa PDV)",
       total: "Итого к оплате",
+      totalWithDiscount: "Итого со скидкой",
+      retailTotalWithoutDiscount: "Розничная цена (без скидки):",
       sendOrder: "Отправить заказ торговому представителю",
       copyOrder: "Скопировать список заказа",
       orderCopied: "Текст заказа скопирован!",
-      salonRequiredAlert: "Пожалуйста, укажите название салона перед отправкой!",
+      salonRequiredAlert: "Пожалуйста, укажите название салона перед входом!",
       clearCart: "Очистить",
       addBtn: "В корзину",
       orderSuccess: "Заказ оформлен!",
-      orderSuccessSub: "Список заказа передан в Telegram",
+      orderSuccessSub: "Список заказа передан торговому представителю",
       allSubcats: "Все",
       chooseShades: "Выбрать оттенки",
       editShades: "Изменить оттенки",
@@ -35,6 +44,7 @@
       paletteSearchPlaceholder: "Поиск тона (7.34, 10, quartz)...",
       applyPalette: "Применить в корзину",
       tubes: "шт.",
+      items: "товаров",
       lines: {
         "ALL": "Все товары",
         "COLORING": "Окрашивание",
@@ -54,9 +64,16 @@
     sr: {
       brandTagline: "sustainable beauty",
       salonPill: "Salon",
-      salonNotSet: "Unesite naziv vašeg salona",
-      salonModalTitle: "Naziv salona",
-      salonModalDesc: "Unesite naziv salona ili ime frizera radi kreiranja porudžbine:",
+      salonNotSet: "Unesite salon i popust",
+      salonModalTitle: "Dobrodošli u Davines",
+      salonModalDesc: "Unesite naziv vašeg studija / salona i izaberite vaš personalni popust (20% ili 30%):",
+      salonInputLabel: "Naziv salona / studija:",
+      discountLabel: "Personalni popust:",
+      discLabel20: "Klijentski popust (20%)",
+      discLabel30: "Specijalni popust (30%)",
+      discountNotice: "ℹ️ Naziv i popust se trajno fiksiraju i ne mogu se naknadno menjati.",
+      saveAndEnter: "Sačuvaj i otvori katalog",
+      salonLockedToast: "Naziv salona i popust su fiksirani i ne mogu se menjati",
       salonPlaceholder: "na primer: Studio Elegance, Frizerski salon Ana...",
       save: "Sačuvaj",
       searchPlaceholder: "Pretraga po šifri ili nazivu (70031, nounou, oi)...",
@@ -67,14 +84,16 @@
       cartEmptyDesc: "Izaberite željene Davines proizvode iz kataloga",
       vatIncluded: "sa PDV-om",
       total: "Ukupno",
+      totalWithDiscount: "Ukupno sa popustom",
+      retailTotalWithoutDiscount: "Maloprodajna cena (bez popusta):",
       sendOrder: "Pošalji porudžbinu predstavniku",
       copyOrder: "Kopiraj spisak porudžbine",
       orderCopied: "Spisak porudžbine je kopiran!",
-      salonRequiredAlert: "Molimo unesite naziv vašeg salona pre slanja!",
+      salonRequiredAlert: "Molimo unesite naziv vašeg salona!",
       clearCart: "Isprazni",
       addBtn: "U korpu",
       orderSuccess: "Porudžbina je kreirana!",
-      orderSuccessSub: "Spisak je poslat u Telegram",
+      orderSuccessSub: "Spisak je poslat prodajnom predstavniku",
       allSubcats: "Sve",
       chooseShades: "Izaberi nijanse",
       editShades: "Promeni nijanse",
@@ -82,6 +101,7 @@
       paletteSearchPlaceholder: "Pretraga tona (7.34, 10, quartz)...",
       applyPalette: "Sačuvaj u korpu",
       tubes: "kom",
+      items: "artikala",
       lines: {
         "ALL": "Svi proizvodi",
         "COLORING": "Bojenje",
@@ -159,9 +179,12 @@
   };
 
   // 3. Application State
+  const savedDiscount = parseInt(localStorage.getItem('davines_discount') || '0', 10);
   const state = {
     lang: localStorage.getItem('davines_lang') || 'ru',
     salonName: localStorage.getItem('davines_salon_name') || '',
+    discount: (savedDiscount === 20 || savedDiscount === 30) ? savedDiscount : 0,
+    draftDiscount: (savedDiscount === 30) ? 30 : 20,
     activeLine: 'ALL',
     activeSubcat: 'ALL',
     searchQuery: '',
@@ -194,9 +217,16 @@
     langBtn: document.getElementById('langBtn'),
     salonPill: document.getElementById('salonPill'),
     salonPillName: document.getElementById('salonPillName'),
+    salonPillDiscount: document.getElementById('salonPillDiscount'),
     salonModal: document.getElementById('salonModal'),
     salonModalInput: document.getElementById('salonModalInput'),
     salonModalSave: document.getElementById('salonModalSave'),
+    dialogSalonInputLabel: document.getElementById('dialogSalonInputLabel'),
+    dialogDiscountLabel: document.getElementById('dialogDiscountLabel'),
+    discLabel20: document.getElementById('discLabel20'),
+    discLabel30: document.getElementById('discLabel30'),
+    dialogDiscountNotice: document.getElementById('dialogDiscountNotice'),
+    discountChoiceBtns: document.querySelectorAll('.discount-choice-btn'),
     modalOverlay: document.getElementById('modalOverlay'),
     searchInput: document.getElementById('searchInput'),
     clearSearchBtn: document.getElementById('clearSearchBtn'),
@@ -213,7 +243,8 @@
     cartItemsScroll: document.getElementById('cartItemsScroll'),
     cartDrawerTotal: document.getElementById('cartDrawerTotal'),
     cartDrawerSalonVal: document.getElementById('cartDrawerSalonVal'),
-    cartDrawerSalonEdit: document.getElementById('cartDrawerSalonEdit'),
+    cartDrawerDiscountBadge: document.getElementById('cartDrawerDiscountBadge'),
+    cartDrawerRetailTotal: document.getElementById('cartDrawerRetailTotal'),
     btnSendOrder: document.getElementById('btnSendOrder'),
     btnCopyOrder: document.getElementById('btnCopyOrder'),
     btnClearCart: document.getElementById('btnClearCart'),
@@ -232,7 +263,16 @@
     btnSavePalette: document.getElementById('btnSavePalette')
   };
 
-  // 6. Formatting Utilities
+  // 6. Pricing & Formatting Utilities
+  function getDiscountRate() {
+    return (state.discount === 30 || (!state.discount && state.draftDiscount === 30)) ? 30 : 20;
+  }
+
+  function getDiscountedPrice(retailPrice) {
+    const disc = (state.discount === 30) ? 30 : ((state.discount === 20) ? 20 : state.draftDiscount);
+    return Math.round(retailPrice * (1 - (disc / 100)));
+  }
+
   function getCleanProductName(fullName) {
     if (!fullName) return "";
     if (fullName.includes(" - ")) {
@@ -258,28 +298,43 @@
   // 7. Render Language & Static UI Elements
   function renderStaticTexts() {
     const t = I18N[state.lang];
+    const disc = (state.discount === 30 || state.discount === 20) ? state.discount : state.draftDiscount;
+
     dom.langBtn.innerHTML = state.lang === 'ru' ? '🇷🇺 RU' : '🇷🇸 SR';
     dom.searchInput.placeholder = t.searchPlaceholder;
     
-    // Salon pill
+    // Salon pill & Discount Pill
     if (state.salonName) {
       dom.salonPillName.textContent = state.salonName;
     } else {
       dom.salonPillName.textContent = t.salonNotSet;
     }
+    if (dom.salonPillDiscount) {
+      dom.salonPillDiscount.textContent = `-${disc}%`;
+    }
+
+    // Cart Drawer Salon Val & Badge
     dom.cartDrawerSalonVal.textContent = state.salonName || t.salonNotSet;
+    if (dom.cartDrawerDiscountBadge) {
+      dom.cartDrawerDiscountBadge.textContent = `-${disc}%`;
+    }
     
     // Salon Modal labels
     document.getElementById('dialogTitle').textContent = t.salonModalTitle;
     document.getElementById('dialogDesc').textContent = t.salonModalDesc;
+    if (dom.dialogSalonInputLabel) dom.dialogSalonInputLabel.textContent = t.salonInputLabel;
+    if (dom.dialogDiscountLabel) dom.dialogDiscountLabel.textContent = t.discountLabel;
+    if (dom.discLabel20) dom.discLabel20.textContent = t.discLabel20;
+    if (dom.discLabel30) dom.discLabel30.textContent = t.discLabel30;
+    if (dom.dialogDiscountNotice) dom.dialogDiscountNotice.textContent = t.discountNotice;
     dom.salonModalInput.placeholder = t.salonPlaceholder;
-    dom.salonModalSave.textContent = t.save;
+    dom.salonModalSave.textContent = t.saveAndEnter;
     
     // Cart drawer labels
     document.getElementById('drawerTitle').textContent = t.cart;
     document.getElementById('cartSalonLabel').textContent = t.salonPill + ":";
     document.getElementById('cartDrawerVatNote').textContent = t.vatIncluded;
-    document.getElementById('summaryLabel').textContent = t.total + ":";
+    document.getElementById('summaryLabel').textContent = `${t.totalWithDiscount} (-${disc}%):`;
     dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
     dom.btnCopyOrder.textContent = t.copyOrder;
     dom.btnClearCart.textContent = t.clearCart;
@@ -479,6 +534,9 @@
       desc = parts.slice(1).join(" - ");
     }
 
+    const discRate = getDiscountRate();
+    const discPrice = getDiscountedPrice(item.mp_price);
+
     card.innerHTML = `
       <div>
         <div class="card-header">
@@ -491,8 +549,11 @@
       <div class="card-footer">
         <div class="volume-price-box">
           <span class="volume-badge">${item.volume}</span>
-          <span class="price-main">${formatMoney(item.mp_price)}</span>
-          <span class="price-note">${t.vatIncluded}</span>
+          <span class="price-main">${formatMoney(discPrice)}</span>
+          <div class="price-retail-row">
+            <span class="price-retail-strike">${formatMoney(item.mp_price)}</span>
+            <span class="price-discount-tag">-${discRate}%</span>
+          </div>
         </div>
         <div class="card-actions" id="action-${item.code}">
           ${shadesKey ? renderShadesButtonWidget(shadesKey) : renderQuantityWidget(item.code, state.cart[item.code] || 0)}
@@ -514,7 +575,8 @@
 
     if (totalSelected > 0) {
       const lineInfo = state.shadesDb[shadesKey] || {};
-      const totalAmount = totalSelected * (lineInfo.price_mp || 0);
+      const discShadePrice = getDiscountedPrice(lineInfo.price_mp || 0);
+      const totalAmount = totalSelected * discShadePrice;
       return `
         <button class="btn-add-initial btn-open-palette" data-line="${shadesKey}" style="background: var(--accent-green); font-size: 12px; padding: 7px 12px;">
           🎨 ${totalSelected} ${t.tubes} (${formatMoney(totalAmount)})
@@ -616,7 +678,8 @@
 
   function getCartSummary() {
     let totalItems = 0;
-    let totalPriceMP = 0;
+    let totalPriceDiscounted = 0;
+    let totalPriceRetail = 0;
     let orderedList = [];
 
     // 1. Standard Products
@@ -624,14 +687,21 @@
       if (qty <= 0) continue;
       const product = state.catalog.find(p => p.code === code);
       if (product) {
+        const discPrice = getDiscountedPrice(product.mp_price);
+        const subtotalDisc = discPrice * qty;
+        const subtotalRetail = product.mp_price * qty;
+
         totalItems += qty;
-        const subtotalMP = product.mp_price * qty;
-        totalPriceMP += subtotalMP;
+        totalPriceDiscounted += subtotalDisc;
+        totalPriceRetail += subtotalRetail;
+
         orderedList.push({
           product,
           isShade: false,
           qty,
-          subtotalMP
+          discPrice,
+          subtotalDisc,
+          subtotalRetail
         });
       }
     }
@@ -642,9 +712,14 @@
       if (!lineInfo) continue;
       for (const [shade, qty] of Object.entries(shadesMap)) {
         if (qty <= 0) continue;
+        const discPrice = getDiscountedPrice(lineInfo.price_mp);
+        const subtotalDisc = discPrice * qty;
+        const subtotalRetail = lineInfo.price_mp * qty;
+
         totalItems += qty;
-        const subtotalMP = lineInfo.price_mp * qty;
-        totalPriceMP += subtotalMP;
+        totalPriceDiscounted += subtotalDisc;
+        totalPriceRetail += subtotalRetail;
+
         orderedList.push({
           product: {
             code: `${lineKey}-${shade}`,
@@ -658,22 +733,24 @@
           lineKey: lineKey,
           shade: shade,
           qty: qty,
-          subtotalMP: subtotalMP
+          discPrice,
+          subtotalDisc,
+          subtotalRetail
         });
       }
     }
 
-    return { totalItems, totalPriceMP, orderedList };
+    return { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList };
   }
 
   function renderCartFloatingBar() {
     const t = I18N[state.lang];
-    const { totalItems, totalPriceMP } = getCartSummary();
+    const { totalItems, totalPriceDiscounted } = getCartSummary();
 
     if (totalItems > 0) {
       dom.cartFloatingBar.classList.add('visible');
       dom.cartBarCount.textContent = `${totalItems} ${t.items}`;
-      dom.cartBarTotal.textContent = formatMoney(totalPriceMP);
+      dom.cartBarTotal.textContent = formatMoney(totalPriceDiscounted);
     } else {
       dom.cartFloatingBar.classList.remove('visible');
     }
@@ -681,9 +758,18 @@
 
   function renderCartDrawerContent() {
     const t = I18N[state.lang];
-    const { totalItems, totalPriceMP, orderedList } = getCartSummary();
+    const discRate = getDiscountRate();
+    const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
 
-    dom.cartDrawerTotal.textContent = formatMoney(totalPriceMP);
+    document.getElementById('summaryLabel').textContent = `${t.totalWithDiscount} (-${discRate}%):`;
+    dom.cartDrawerTotal.textContent = formatMoney(totalPriceDiscounted);
+    if (dom.cartDrawerRetailTotal) {
+      if (totalItems > 0) {
+        dom.cartDrawerRetailTotal.innerHTML = `${t.retailTotalWithoutDiscount} <s>${formatMoney(totalPriceRetail)}</s>`;
+      } else {
+        dom.cartDrawerRetailTotal.textContent = '';
+      }
+    }
     dom.cartItemsScroll.innerHTML = '';
 
     if (orderedList.length === 0) {
@@ -702,7 +788,7 @@
     dom.btnSendOrder.style.opacity = '1';
     dom.btnSendOrder.style.pointerEvents = 'auto';
 
-    orderedList.forEach(({ product, isShade, lineKey, shade, qty, subtotalMP }) => {
+    orderedList.forEach(({ product, isShade, lineKey, shade, qty, subtotalDisc, subtotalRetail }) => {
       const cleanTitle = getCleanProductName(product.name);
       const row = document.createElement('div');
       row.className = 'cart-item-row';
@@ -718,7 +804,10 @@
           <span class="qty-val">${qty}</span>
           <button class="qty-btn btn-drawer-plus">+</button>
         </div>
-        <div class="cart-item-price">${formatMoney(subtotalMP)}</div>
+        <div class="cart-item-price-box">
+          <div class="cart-item-price">${formatMoney(subtotalDisc)}</div>
+          <div class="cart-item-retail-sub"><s>${formatMoney(subtotalRetail)}</s></div>
+        </div>
       `;
 
       row.querySelector('.btn-drawer-minus').addEventListener('click', () => {
@@ -742,7 +831,8 @@
 
   // 13. Order Text Formatting
   function generateOrderMessageText() {
-    const { totalItems, totalPriceMP, orderedList } = getCartSummary();
+    const discRate = getDiscountRate();
+    const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
     const dateStr = new Date().toLocaleString('sr-RS', {
       day: '2-digit',
       month: '2-digit',
@@ -755,6 +845,7 @@
     lines.push(`🌿 *PORUDŽBINA / ЗАКАЗ DAVINES* 🌿`);
     lines.push(`📅 Datum: ${dateStr}`);
     lines.push(`💈 *Salon / Салон:* ${state.salonName || "Nije navedeno"}`);
+    lines.push(`🏷 *Popust / Скидка:* ${discRate}%`);
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const u = tg.initDataUnsafe.user;
       lines.push(`👤 Master: ${u.first_name || ''} ${u.last_name || ''} ${u.username ? `(@${u.username})` : ''}`.trim());
@@ -762,14 +853,15 @@
     lines.push(``);
     lines.push(`📦 *Artikli / Товары (${totalItems} kom):*`);
 
-    orderedList.forEach(({ product, qty, subtotalMP }, idx) => {
+    orderedList.forEach(({ product, qty, discPrice, subtotalDisc }, idx) => {
       const cleanTitle = getCleanProductName(product.name);
       lines.push(`${idx + 1}. [${product.code}] ${cleanTitle} (${product.volume})`);
-      lines.push(`   └ ${qty} kom x ${formatMoney(product.mp_price)} = *${formatMoney(subtotalMP)}*`);
+      lines.push(`   └ ${qty} kom x ${formatMoney(discPrice)} (MP: <s>${formatMoney(product.mp_price)}</s>) = *${formatMoney(subtotalDisc)}*`);
     });
 
     lines.push(``);
-    lines.push(`💰 *UKUPNO / ИТОГО (sa PDV): ${formatMoney(totalPriceMP)}*`);
+    lines.push(`💰 *UKUPNO SA POPUSTOM (-${discRate}%): ${formatMoney(totalPriceDiscounted)}*`);
+    lines.push(`Maloprodajna cena bez popusta: ${formatMoney(totalPriceRetail)}`);
 
     return lines.join('\n');
   }
@@ -779,11 +871,12 @@
     const t = I18N[state.lang];
     if (!state.salonName.trim()) {
       showToast(t.salonRequiredAlert);
-      openSalonModal();
+      openSalonModal(true);
       return;
     }
 
-    const { totalItems, totalPriceMP } = getCartSummary();
+    const discRate = getDiscountRate();
+    const { totalItems, totalPriceDiscounted, totalPriceRetail } = getCartSummary();
     if (totalItems === 0) return;
 
     dom.btnSendOrder.disabled = true;
@@ -816,7 +909,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             chat_id: clientChatId,
-            text: `✅ *Vaša porudžbina je uspešno poslata! / Заказ отправлен!*\n\n💈 Salon: *${state.salonName}*\n📦 Artikala: *${totalItems} kom*\n💰 Ukupno: *${formatMoney(totalPriceMP)}*\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`,
+            text: `✅ *Vaša porudžbina je uspešno poslata! / Заказ отправлен!*\n\n💈 Salon: *${state.salonName}* (-${discRate}%)\n📦 Artikala: *${totalItems} kom*\n💰 Ukupno sa popustom: *${formatMoney(totalPriceDiscounted)}*\n(MP bez popusta: ${formatMoney(totalPriceRetail)})\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`,
             parse_mode: "Markdown"
           })
         }).catch(e => console.log("Client note error:", e));
@@ -826,6 +919,16 @@
       if (tg && tg.sendData) {
         try {
           tg.sendData(JSON.stringify({
+            action: "davines_order",
+            salon_name: state.salonName,
+            discount: discRate,
+            total_items: totalItems,
+            total_price_mp: totalPriceDiscounted
+          }));
+        } catch(e) {
+          console.log("sendData ignored:", e);
+        }
+      }
             action: "davines_order",
             salon_name: state.salonName,
             total_items: totalItems,
@@ -887,8 +990,11 @@
     const lineInfo = state.shadesDb[lineKey];
     if (!lineInfo) return;
 
+    const discRate = getDiscountRate();
+    const discPrice = getDiscountedPrice(lineInfo.price_mp);
+
     dom.paletteTitle.textContent = lineInfo.name;
-    dom.paletteSubtitle.textContent = `${lineInfo.volume} • ${formatMoney(lineInfo.price_mp)} sa PDV • Всего: ${lineInfo.count} оттенков`;
+    dom.paletteSubtitle.innerHTML = `${lineInfo.volume} • <b>${formatMoney(discPrice)}</b> <span style="font-size: 11px; opacity: 0.85;">(<s>${formatMoney(lineInfo.price_mp)}</s> MP -${discRate}%)</span> • ${lineInfo.count} ${state.lang === 'ru' ? 'оттенков' : 'nijansi'}`;
     if (dom.paletteSearchInput) dom.paletteSearchInput.value = '';
 
     renderPaletteLevelTabs(lineKey);
@@ -1066,20 +1172,46 @@
       totalSelected += qty;
     }
 
-    const totalMoney = totalSelected * (lineInfo.price_mp || 0);
+    const discPrice = getDiscountedPrice(lineInfo.price_mp || 0);
+    const totalMoney = totalSelected * discPrice;
     dom.paletteSelectedCount.textContent = `${t.shadesSelected}: ${totalSelected} ${t.tubes}`;
     dom.paletteSelectedTotal.textContent = formatMoney(totalMoney);
   }
 
   // 16. Modals & Drawer Toggles
-  function openSalonModal() {
+  function updateDiscountButtonsUI() {
+    const activeVal = state.draftDiscount || 20;
+    const btns = document.querySelectorAll('.discount-choice-btn');
+    btns.forEach(btn => {
+      const d = parseInt(btn.getAttribute('data-discount'), 10);
+      if (d === activeVal) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  function openSalonModal(force = false) {
+    if (!force && state.salonName && (state.discount === 20 || state.discount === 30)) {
+      showToast(I18N[state.lang].salonLockedToast);
+      return;
+    }
+
     dom.salonModalInput.value = state.salonName;
+    state.draftDiscount = (state.discount === 30) ? 30 : 20;
+    updateDiscountButtonsUI();
+
     dom.salonModal.classList.add('open');
     dom.modalOverlay.classList.add('open');
     setTimeout(() => dom.salonModalInput.focus(), 150);
   }
 
   function closeSalonModal() {
+    if (!state.salonName || (state.discount !== 20 && state.discount !== 30)) {
+      // Must complete setup before closing
+      return;
+    }
     dom.salonModal.classList.remove('open');
     if (!dom.cartDrawer.classList.contains('open') && !dom.paletteModal.classList.contains('open')) {
       dom.modalOverlay.classList.remove('open');
@@ -1088,14 +1220,30 @@
 
   function saveSalonName() {
     const val = dom.salonModalInput.value.trim();
-    if (val) {
-      state.salonName = val;
-      localStorage.setItem('davines_salon_name', val);
-      renderStaticTexts();
-      closeSalonModal();
-      showToast("Салон сохранен / Salon je sačuvan");
-      triggerHaptic('light');
+    if (!val) {
+      showToast(I18N[state.lang].salonRequiredAlert);
+      dom.salonModalInput.focus();
+      return;
     }
+
+    state.salonName = val;
+    state.discount = state.draftDiscount || 20;
+    localStorage.setItem('davines_salon_name', state.salonName);
+    localStorage.setItem('davines_discount', state.discount.toString());
+
+    renderStaticTexts();
+    renderCategoryTabs();
+    renderProducts();
+    renderCartFloatingBar();
+    renderCartDrawerContent();
+
+    dom.salonModal.classList.remove('open');
+    if (!dom.cartDrawer.classList.contains('open') && !dom.paletteModal.classList.contains('open')) {
+      dom.modalOverlay.classList.remove('open');
+    }
+
+    showToast(state.lang === 'ru' ? 'Данные успешно зафиксированы' : 'Podaci su uspešno fiksirani');
+    triggerHaptic('success');
   }
 
   function openCartDrawer() {
@@ -1124,21 +1272,43 @@
       renderSubcategoryPills();
       renderProducts();
       renderCartFloatingBar();
+      renderCartDrawerContent();
     });
 
-    // Salon pill edit
-    dom.salonPill.addEventListener('click', openSalonModal);
-    dom.cartDrawerSalonEdit.addEventListener('click', openSalonModal);
+    // Salon pill click (only triggers setup if not configured yet; otherwise notifies user that it is locked)
+    dom.salonPill.addEventListener('click', () => {
+      if (state.salonName && (state.discount === 20 || state.discount === 30)) {
+        showToast(I18N[state.lang].salonLockedToast);
+      } else {
+        openSalonModal(true);
+      }
+    });
+
+    // Discount selector buttons in modal
+    const discountBtns = document.querySelectorAll('.discount-choice-btn');
+    discountBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const d = parseInt(btn.getAttribute('data-discount'), 10);
+        if (d === 20 || d === 30) {
+          state.draftDiscount = d;
+          updateDiscountButtonsUI();
+          triggerHaptic('light');
+        }
+      });
+    });
+
     dom.salonModalSave.addEventListener('click', saveSalonName);
     dom.salonModalInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') saveSalonName();
     });
 
-    // Overlay click closes
+    // Overlay click closes modals only if setup is done
     dom.modalOverlay.addEventListener('click', () => {
-      closeSalonModal();
-      closeCartDrawer();
-      closePaletteModal();
+      if (state.salonName && (state.discount === 20 || state.discount === 30)) {
+        closeSalonModal();
+        closeCartDrawer();
+        closePaletteModal();
+      }
     });
     dom.drawerCloseBtn.addEventListener('click', closeCartDrawer);
 
@@ -1210,9 +1380,9 @@
       triggerHaptic('light');
     });
 
-    // Auto-prompt salon name on first run if empty
-    if (!state.salonName) {
-      setTimeout(() => openSalonModal(), 600);
+    // Auto-prompt salon name & discount on first run if not set
+    if (!state.salonName || (state.discount !== 20 && state.discount !== 30)) {
+      setTimeout(() => openSalonModal(true), 400);
     }
   }
 

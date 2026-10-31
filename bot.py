@@ -168,8 +168,7 @@ def get_main_keyboard(salon_name=None):
                 }
             ],
             [
-                {"text": "📋 Moje porudžbine / Мои заказы"},
-                {"text": "💈 Promeni salon / Сменить салон"}
+                {"text": "📋 Moje porudžbine / Мои заказы"}
             ]
         ],
         "resize_keyboard": True
@@ -213,21 +212,22 @@ def handle_message(msg):
 
         salon = get_salon_name(chat_id)
         greeting = (
-            "🌿 *Dobrodošli u Davines Srbija! / Добро пожаловать в Davines Сербия!*\n\n"
-            "Ovaj bot i WebApp omogućavaju vam brzo i pregledno kreiranje porudžbina Davines proizvoda "
-            "sa ažurnim cenama sa PDV-om (MP cena).\n\n"
+            "🌿 *Добро пожаловать в Davines Сербия!*\n"
+            "Бот для быстрого оформления заказов профессиональной продукции Davines.\n\n"
+            "Нажмите кнопку ниже, чтобы открыть каталог, укажите название вашей студии/салона и выберите вашу персональную скидку (20% или 30%).\n\n"
+            "──────────────────────\n\n"
+            "🌿 *Dobrodošli u Davines Srbija!*\n"
+            "Bot za brzo kreiranje porudžbina profesionalnih Davines proizvoda.\n\n"
+            "Pritisnite dugme ispod da otvorite katalog, unesite naziv vašeg studija/salona i izaberite vaš personalni popust (20% ili 30%)."
         )
         if salon:
-            greeting += f"💈 *Prijavljeni salon / Текущий салон:* `{salon}`\n\n"
-        else:
-            greeting += "💈 *Naziv salona / Название салона:* Nije uneto (možete uneti direktno u katalogu ili komandom `/salon NazivSalona`).\n\n"
+            greeting += f"\n\n💈 *Prijavljeni salon / Салон:* `{salon}`"
 
         if WEBAPP_URL and WEBAPP_URL.startswith("http"):
-            greeting += "Pritisnite dugme ispod da otvorite vizuelni katalog i sastavite porudžbinu 👇"
             send_message(chat_id, greeting, reply_markup=get_main_keyboard(salon))
         else:
             greeting += (
-                "ℹ️ *Vaš Telegram Chat ID:* `" + str(chat_id) + "`\n"
+                "\n\nℹ️ *Vaš Telegram Chat ID:* `" + str(chat_id) + "`\n"
                 "(Koristite ovaj ID za prijem porudžbina u `config.py`).\n\n"
                 "⚠️ WebApp URL još uvek nije podešen na HTTPS adresu. "
                 "Možete hostovati folder `webapp/` (npr. preko GitHub Pages ili Vercel) "
@@ -236,24 +236,14 @@ def handle_message(msg):
             send_message(chat_id, greeting)
         return
 
-    # C) Command /salon <name> or "Promeni salon"
-    if text.startswith("/salon") or text == "💈 Promeni salon / Сменить салон":
-        parts = text.split(maxsplit=1)
-        if len(parts) > 1 and parts[1].strip():
-            new_name = parts[1].strip()
-            save_salon_name(chat_id, new_name, username)
-            send_message(
-                chat_id, 
-                f"✅ *Salon je uspešno sačuvan:* `{new_name}`\nMožete otvoriti katalog ispod:",
-                reply_markup=get_main_keyboard(new_name)
-            )
-        else:
-            send_message(
-                chat_id,
-                "💈 Da biste promenili naziv salona, pošaljite poruku u formatu:\n"
-                "`/salon Naziv Salona`\n\n"
-                "Ili jednostavno kliknite na naziv salona u vrhu WebApp kataloga!"
-            )
+    # C) Command /salon notice
+    if text.startswith("/salon") or "Promeni salon" in text or "Сменить салон" in text:
+        send_message(
+            chat_id,
+            "ℹ️ Naziv salona i popust (20% ili 30%) se unose jednom prilikom prvog ulaska u katalog i ne mogu se naknadno menjati.\n\n"
+            "ℹ️ Название студии/салона и скидка (20% или 30%) фиксируются при первом входе в каталог и не подлежат изменению.",
+            reply_markup=get_main_keyboard()
+        )
         return
 
     # D) "Moje porudžbine" or /orders
@@ -311,13 +301,15 @@ def handle_webapp_order(chat_id, user, user_fullname, username, raw_data):
 
     order_num = f"#DV-{order_id:04d}"
     price_formatted = f"{int(round(total_price)):,} RSD".replace(",", ".")
+    discount = order_info.get("discount", 20)
 
     # 1. Confirmation message to Client Salon
     confirmation_msg = (
         f"✅ *Porudžbina {order_num} je uspešno kreirana! / Заказ успешно оформлен!*\n\n"
         f"💈 *Salon:* {salon_name}\n"
+        f"🏷 *Popust / Скидка:* {discount}%\n"
         f"📦 *Broj artikala:* {total_items} kom\n"
-        f"💰 *Ukupan iznos:* *{price_formatted}* (sa PDV)\n\n"
+        f"💰 *Ukupan iznos:* *{price_formatted}* (sa popustom i PDV)\n\n"
         f"Vaša porudžbina je prosleđena prodajnom predstavniku Davinesa. Uskoro ćete biti kontaktirani radi potvrde isporuke. Hvala!"
     )
     send_message(chat_id, confirmation_msg)

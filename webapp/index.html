@@ -28,10 +28,10 @@
         <button id="langBtn" class="lang-btn" title="Сменить язык / Promeni jezik">🇷🇺 RU</button>
       </div>
     </div>
-    <div id="salonPill" class="salon-pill" title="Нажмите, чтобы изменить название салона">
+    <div id="salonPill" class="salon-pill">
       <span class="salon-icon">💈</span>
       <span id="salonPillName" class="salon-name">Укажите название вашего салона</span>
-      <span class="salon-edit">✎</span>
+      <span id="salonPillDiscount" class="salon-discount-pill">-20%</span>
     </div>
   </header>
 
@@ -107,7 +107,7 @@
         <div id="cartSalonLabel" class="cart-salon-label">Салон:</div>
         <div id="cartDrawerSalonVal" class="cart-salon-val">—</div>
       </div>
-      <button id="cartDrawerSalonEdit" class="cart-salon-btn">Изменить</button>
+      <div id="cartDrawerDiscountBadge" class="cart-discount-badge">-20%</div>
     </div>
 
     <!-- Scrollable Items List in Cart -->
@@ -119,8 +119,9 @@
     <div class="drawer-footer">
       <div class="summary-row">
         <div>
-          <span id="summaryLabel" class="summary-label">Итого к оплате:</span>
+          <span id="summaryLabel" class="summary-label">Итого со скидкой:</span>
           <div id="cartDrawerVatNote" style="font-size: 11px; color: var(--text-dim);">с НДС (sa PDV)</div>
+          <div id="cartDrawerRetailTotal" class="summary-retail-note"></div>
         </div>
         <span id="cartDrawerTotal" class="summary-val-main">0 RSD</span>
       </div>
@@ -133,14 +134,40 @@
     </div>
   </div>
 
-  <!-- Salon Name Setup / Edit Dialog -->
+  <!-- Salon Name & Discount Setup Dialog (Permanent, First-time Setup) -->
   <div id="salonModal" class="dialog-modal">
-    <div id="dialogTitle" class="dialog-title">Название салона</div>
-    <div id="dialogDesc" class="dialog-desc">
-      Укажите название вашего салона красоты или имя мастера для оформления заказов:
+    <div class="dialog-brand-header">
+      <div class="dialog-brand-title">DAVINES</div>
+      <div class="dialog-brand-sub">sustainable beauty</div>
     </div>
-    <input type="text" id="salonModalInput" class="dialog-input" placeholder="например: Studio Elegance, Мастер Анна..." maxlength="60">
-    <button id="salonModalSave" class="dialog-save-btn">Сохранить</button>
+    <div id="dialogTitle" class="dialog-title">Добро пожаловать в Davines</div>
+    <div id="dialogDesc" class="dialog-desc">
+      Укажите название вашей студии / салона и выберите вашу персональную скидку:
+    </div>
+    
+    <div class="dialog-field-block">
+      <label id="dialogSalonInputLabel" class="dialog-label" for="salonModalInput">Название салона / студии:</label>
+      <input type="text" id="salonModalInput" class="dialog-input" placeholder="например: Studio Elegance, Салон Давинес..." maxlength="60" autocomplete="off">
+    </div>
+
+    <div class="dialog-field-block">
+      <label id="dialogDiscountLabel" class="dialog-label">Персональная скидка:</label>
+      <div class="discount-selector-grid">
+        <button type="button" class="discount-choice-btn active" data-discount="20">
+          <span class="discount-num">20%</span>
+          <span class="discount-sub" id="discLabel20">Скидка клиента</span>
+        </button>
+        <button type="button" class="discount-choice-btn" data-discount="30">
+          <span class="discount-num">30%</span>
+          <span class="discount-sub" id="discLabel30">Спец. скидка</span>
+        </button>
+      </div>
+      <div id="dialogDiscountNotice" class="dialog-discount-notice">
+        ℹ️ Название студии и скидка сохраняются для вашего устройства и не подлежат изменению.
+      </div>
+    </div>
+
+    <button id="salonModalSave" class="dialog-save-btn">Сохранить и войти в каталог</button>
   </div>
 
   <!-- Color Palette Modal Drawer -->
