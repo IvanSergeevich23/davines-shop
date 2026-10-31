@@ -975,15 +975,6 @@
           console.log("sendData ignored:", e);
         }
       }
-            action: "davines_order",
-            salon_name: state.salonName,
-            total_items: totalItems,
-            total_price_mp: totalPriceMP
-          }));
-        } catch(e) {
-          console.log("sendData ignored:", e);
-        }
-      }
 
       triggerHaptic('success');
       showToast(t.orderSuccess);
