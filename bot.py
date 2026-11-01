@@ -290,19 +290,48 @@ def handle_message(msg):
     if text.startswith("/orders") or text == "📋 Moje porudžbine / Мои заказы":
         orders = get_recent_orders(chat_id, limit=5)
         if not orders:
-            send_message(chat_id, "ℹ️ Još uvek nemate prethodnih porudžbina. Otvorite katalog da kreirate prvu!")
+            send_message(
+                chat_id,
+                "ℹ️ <b>У вас пока нет оформленных заказов.</b>\n"
+                "Нажмите кнопку «🛍 Открыть каталог», чтобы сделать первый заказ!\n\n"
+                "──────────────────────\n\n"
+                "ℹ️ <b>Još uvek nemate prethodnih porudžbina.</b>\n"
+                "Pritisnite dugme ispod da otvorite katalog i kreirate prvu porudžbinu!",
+                reply_markup=get_main_keyboard(get_salon_name(chat_id)),
+                parse_mode="HTML"
+            )
             return
 
-        lines = ["📋 *Vaše poslednje porudžbine / Ваши последние заказы:*\n"]
+        lines = ["📋 <b>Ваши последние заказы / Vaše poslednje porudžbine:</b>\n"]
         for o_id, s_name, t_items, t_price, c_at in orders:
             price_fmt = f"{int(round(t_price)):,} RSD".replace(",", ".")
-            lines.append(f"• *Porudžbina #DV-{o_id:04d}* ({c_at[:16]})")
-            lines.append(f"  Salon: `{s_name}` | {t_items} art. | *{price_fmt}*")
+            dt_str = c_at[:16] if c_at else ""
+            lines.append(f"• <b>Заказ #DV-{o_id:04d}</b> ({dt_str})")
+            lines.append(f"  Салон: <code>{s_name}</code> | {t_items} поз. | <b>{price_fmt}</b>\n")
         
-        send_message(chat_id, "\n".join(lines))
+        send_message(chat_id, "\n".join(lines), reply_markup=get_main_keyboard(get_salon_name(chat_id)), parse_mode="HTML")
         return
 
-    # E) Default fallback
+    # E) /all_orders (for Sales Representative)
+    if text.startswith("/all_orders") and str(chat_id) == str(MANAGER_CHAT_ID):
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, salon_name, user_fullname, username, total_items, total_price_mp, created_at FROM orders ORDER BY id DESC LIMIT 15")
+        all_orders = cursor.fetchall()
+        conn.close()
+        if not all_orders:
+            send_message(chat_id, "ℹ️ В базе пока нет заказов.")
+            return
+        lines = ["📊 <b>Все последние заказы салонов:</b>\n"]
+        for o_id, s_name, u_full, u_name, t_items, t_price, c_at in all_orders:
+            price_fmt = f"{int(round(t_price)):,} RSD".replace(",", ".")
+            u_mention = f"@{u_name}" if u_name else u_full
+            lines.append(f"• <b>#DV-{o_id:04d}</b> {s_name} ({u_mention})")
+            lines.append(f"  {t_items} поз. | <b>{price_fmt}</b> | {c_at[:16]}\n")
+        send_message(chat_id, "\n".join(lines), parse_mode="HTML")
+        return
+
+    # F) Default fallback
     salon = get_salon_name(chat_id)
     send_message(
         chat_id,
@@ -325,7 +354,9 @@ def handle_webapp_order(chat_id, user, user_fullname, username, raw_data):
     total_items = order_info.get("total_items", 0)
     total_price = order_info.get("total_price_mp", 0.0)
     items = order_info.get("items", [])
+    formatted_html = order_info.get("formatted_html", "")
     formatted_text = order_info.get("formatted_text", "")
+    discount = order_info.get("discount", 20)
 
     # Save to database
     order_id = save_order(
@@ -336,36 +367,37 @@ def handle_webapp_order(chat_id, user, user_fullname, username, raw_data):
         total_items=total_items,
         total_price_mp=total_price,
         items_json=items,
-        formatted_text=formatted_text
+        formatted_text=formatted_html or formatted_text
     )
 
     order_num = f"#DV-{order_id:04d}"
     price_formatted = f"{int(round(total_price)):,} RSD".replace(",", ".")
-    discount = order_info.get("discount", 20)
 
     # 1. Confirmation message to Client Salon
     confirmation_msg = (
-        f"✅ *Porudžbina {order_num} je uspešno kreirana! / Заказ успешно оформлен!*\n\n"
-        f"💈 *Salon:* {salon_name}\n"
-        f"🏷 *Popust / Скидка:* {discount}%\n"
-        f"📦 *Broj artikala:* {total_items} kom\n"
-        f"💰 *Ukupan iznos:* *{price_formatted}* (sa popustom i PDV)\n\n"
-        f"Vaša porudžbina je prosleđena prodajnom predstavniku Davinesa. Uskoro ćete biti kontaktirani radi potvrde isporuke. Hvala!"
+        f"✅ <b>Заказ {order_num} успешно оформлен! / Porudžbina je kreirana!</b>\n\n"
+        f"💈 <b>Салон / Salon:</b> {salon_name}\n"
+        f"🏷 <b>Скидка / Popust:</b> {discount}%\n"
+        f"📦 <b>Позиций / Artikala:</b> {total_items} шт / kom\n"
+        f"💰 <b>Сумма со скидкой / Ukupno sa popustom:</b> <b>{price_formatted}</b> (sa PDV)\n\n"
+        f"Торговый представитель Davines свяжется с вами для подтверждения заказа. Спасибо!\n"
+        f"Prodajni predstavnik Davinesa je obavešten o porudžbini. Hvala!"
     )
-    send_message(chat_id, confirmation_msg)
+    send_message(chat_id, confirmation_msg, parse_mode="HTML")
 
     # 2. Notification to Sales Representative (MANAGER_CHAT_ID)
     if MANAGER_CHAT_ID and MANAGER_CHAT_ID != "YOUR_TELEGRAM_CHAT_ID_HERE":
-        user_mention = f"@{username}" if username else user_fullname
-        if formatted_text:
+        if formatted_html:
+            manager_notification = formatted_html
+        elif formatted_text:
             manager_notification = formatted_text
         else:
             user_mention = f"@{username}" if username else user_fullname
             manager_notification = (
                 f"<b>{salon_name}</b> (\"{user_fullname}\" {user_mention})\n\n"
-                f"Porudžbina {order_num} ({total_items} kom) - {price_formatted}"
+                f"Заказ {order_num} ({total_items} шт) - {price_formatted}"
             )
-        send_message(MANAGER_CHAT_ID, manager_notification)
+        send_message(MANAGER_CHAT_ID, manager_notification, parse_mode="HTML")
         print(f"Successfully delivered order {order_num} to manager ({MANAGER_CHAT_ID})")
     else:
         print(f"Notice: MANAGER_CHAT_ID is not configured. Order {order_num} saved to database.")

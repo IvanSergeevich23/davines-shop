@@ -25,8 +25,21 @@
       cart: "Корзина",
       cartEmptyTitle: "Ваша корзина пуста",
       cartEmptyDesc: "Выберите нужные продукты Davines в каталоге выше",
-      cartCommentLabel: "💬 Комментарий к заказу (пеньюары, пакеты, пожелания):",
-      cartCommentPlaceholder: "например: нужны одноразовые пеньюары, пакеты для клиентов...",
+      commentTileTitle: "Комментарий к заказу",
+      commentTileDesc: "Одноразовые пеньюары, пакеты, пожелания...",
+      commentTileAdd: "Добавить",
+      commentTileEdit: "Изменить",
+      commentModalTitle: "💬 Комментарий к заказу",
+      commentModalDesc: "Укажите необходимые расходники (пеньюары, пакеты) или пожелания к доставке:",
+      commentModalPlaceholder: "Например: нужны одноразовые пеньюары (2 пачки), пакеты для клиентов...",
+      commentSave: "✓ Сохранить комментарий",
+      commentClear: "🗑 Очистить",
+      commentCancel: "Отмена",
+      historyBtn: "📋 Заказы",
+      historyTitle: "История заказов",
+      historyDesc: "Ваши предыдущие оформленные заказы:",
+      historyEmpty: "У вас пока нет оформленных заказов на этом устройстве.",
+      historyRepeat: "Повторить заказ",
       vatIncluded: "с НДС (sa PDV)",
       total: "Итого к оплате",
       totalWithDiscount: "Итого со скидкой",
@@ -84,8 +97,21 @@
       cart: "Korpa",
       cartEmptyTitle: "Vaša korpa je prazna",
       cartEmptyDesc: "Izaberite željene Davines proizvode iz kataloga",
-      cartCommentLabel: "💬 Dodatna napomena (peškiri, kese za klijente, želje):",
-      cartCommentPlaceholder: "na primer: jednokratni peškiri, brendirane kese...",
+      commentTileTitle: "Komentar uz porudžbinu",
+      commentTileDesc: "Pelerine za jednokratnu upotrebu, kese, napomene...",
+      commentTileAdd: "Dodaj",
+      commentTileEdit: "Izmeni",
+      commentModalTitle: "💬 Komentar uz porudžbinu",
+      commentModalDesc: "Navedite besplatne potrošne materijale (pelerine, kese) ili napomene za dostavu:",
+      commentModalPlaceholder: "Npr: potrebne jednokratne pelerine (2 pak.), kese za klijente...",
+      commentSave: "✓ Sačuvaj komentar",
+      commentClear: "🗑 Obriši",
+      commentCancel: "Otkaži",
+      historyBtn: "📋 Porudžbine",
+      historyTitle: "Istorija porudžbina",
+      historyDesc: "Vaše prethodne kreirane porudžbine:",
+      historyEmpty: "Još uvek nemate prethodnih porudžbina na ovom uređaju.",
+      historyRepeat: "Ponovi porudžbinu",
       vatIncluded: "sa PDV-om",
       total: "Ukupno",
       totalWithDiscount: "Ukupno sa popustom",
@@ -217,6 +243,7 @@
     activeLine: 'ALL',
     activeSubcat: 'ALL',
     searchQuery: '',
+    comment: localStorage.getItem('davines_cart_comment') || '',
     cart: JSON.parse(localStorage.getItem('davines_cart') || '{}'),
     shadesCart: JSON.parse(localStorage.getItem('davines_shades_cart') || '{}'),
     catalog: window.DAVINES_CATALOG || [],
@@ -306,10 +333,23 @@
     cartDrawerDiscountBadge: document.getElementById('cartDrawerDiscountBadge'),
     cartDrawerRetailTotal: document.getElementById('cartDrawerRetailTotal'),
     cartDrawerBody: document.getElementById('cartDrawerBody'),
-    cartCommentBlock: document.getElementById('cartCommentBlock'),
-    cartCommentLabel: document.getElementById('cartCommentLabel'),
-    cartCommentInput: document.getElementById('cartCommentInput'),
-    btnDismissKeyboard: document.getElementById('btnDismissKeyboard'),
+    cartCommentTile: document.getElementById('cartCommentTile'),
+    commentTileTitle: document.getElementById('commentTileTitle'),
+    commentTileDesc: document.getElementById('commentTileDesc'),
+    commentTileActionText: document.getElementById('commentTileActionText'),
+    commentModal: document.getElementById('commentModal'),
+    commentModalTitle: document.getElementById('commentModalTitle'),
+    commentModalDesc: document.getElementById('commentModalDesc'),
+    commentModalInput: document.getElementById('commentModalInput'),
+    btnSaveComment: document.getElementById('btnSaveComment'),
+    btnClearComment: document.getElementById('btnClearComment'),
+    btnCancelComment: document.getElementById('btnCancelComment'),
+    historyBtn: document.getElementById('historyBtn'),
+    historyModal: document.getElementById('historyModal'),
+    historyModalTitle: document.getElementById('historyModalTitle'),
+    historyModalDesc: document.getElementById('historyModalDesc'),
+    historyList: document.getElementById('historyList'),
+    historyCloseBtn: document.getElementById('historyCloseBtn'),
     btnSendOrder: document.getElementById('btnSendOrder'),
     btnCopyOrder: document.getElementById('btnCopyOrder'),
     btnClearCart: document.getElementById('btnClearCart'),
@@ -398,11 +438,23 @@
     document.getElementById('cartSalonLabel').textContent = t.salonPill + ":";
     document.getElementById('cartDrawerVatNote').textContent = t.vatIncluded;
     document.getElementById('summaryLabel').textContent = `${t.totalWithDiscount} (-${disc}%):`;
-    if (dom.cartCommentLabel) dom.cartCommentLabel.textContent = t.cartCommentLabel;
-    if (dom.cartCommentInput) dom.cartCommentInput.placeholder = t.cartCommentPlaceholder;
     dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
     dom.btnCopyOrder.textContent = t.copyOrder;
     dom.btnClearCart.textContent = t.clearCart;
+
+    // Comment Modal labels
+    if (dom.commentModalTitle) dom.commentModalTitle.textContent = t.commentModalTitle;
+    if (dom.commentModalDesc) dom.commentModalDesc.textContent = t.commentModalDesc;
+    if (dom.commentModalInput) dom.commentModalInput.placeholder = t.commentModalPlaceholder;
+    if (dom.btnSaveComment) dom.btnSaveComment.textContent = t.commentSave;
+    if (dom.btnClearComment) dom.btnClearComment.textContent = t.commentClear;
+    if (dom.btnCancelComment) dom.btnCancelComment.textContent = t.commentCancel;
+    updateCommentTileDisplay();
+
+    // History Modal labels
+    if (dom.historyBtn) dom.historyBtn.textContent = t.historyBtn;
+    if (dom.historyModalTitle) dom.historyModalTitle.textContent = t.historyTitle;
+    if (dom.historyModalDesc) dom.historyModalDesc.textContent = t.historyDesc;
 
     // Palette modal labels
     if (dom.paletteSearchInput) dom.paletteSearchInput.placeholder = t.paletteSearchPlaceholder;
@@ -853,7 +905,7 @@
     dom.cartItemsScroll.innerHTML = '';
 
     if (orderedList.length === 0) {
-      if (dom.cartCommentBlock) dom.cartCommentBlock.style.display = 'none';
+      if (dom.cartCommentTile) dom.cartCommentTile.style.display = 'none';
       dom.cartItemsScroll.innerHTML = `
         <div class="cart-empty-view">
           <div class="cart-empty-icon">🛒</div>
@@ -866,7 +918,8 @@
       return;
     }
 
-    if (dom.cartCommentBlock) dom.cartCommentBlock.style.display = 'flex';
+    if (dom.cartCommentTile) dom.cartCommentTile.style.display = 'flex';
+    updateCommentTileDisplay();
     dom.btnSendOrder.style.opacity = '1';
     dom.btnSendOrder.style.pointerEvents = 'auto';
 
@@ -925,7 +978,7 @@
   function generateOrderHtml() {
     const discRate = getDiscountRate();
     const { totalItems, totalPriceDiscounted, orderedList } = getCartSummary();
-    const comment = (dom.cartCommentInput ? dom.cartCommentInput.value.trim() : "");
+    const comment = (state.comment ? state.comment.trim() : "");
 
     let lines = [];
     const salonStr = escapeHtml(state.salonName || "Nije navedeno");
@@ -980,7 +1033,7 @@
   function generateOrderPlainText() {
     const discRate = getDiscountRate();
     const { totalItems, totalPriceDiscounted, orderedList } = getCartSummary();
-    const comment = (dom.cartCommentInput ? dom.cartCommentInput.value.trim() : "");
+    const comment = (state.comment ? state.comment.trim() : "");
 
     let lines = [];
     const salonStr = state.salonName || "Nije navedeno";
@@ -1029,8 +1082,8 @@
     return lines.join('\n');
   }
 
-  // 14. Send Order Handler (Direct Telegram Bot API Delivery + WebApp fallback)
-  async function handleSendOrder() {
+  // 14. Send Order Handler (Native Telegram WebApp sendData + Device History)
+  function handleSendOrder() {
     const t = I18N[state.lang];
     if (!state.salonName.trim()) {
       showToast(t.salonRequiredAlert);
@@ -1039,98 +1092,73 @@
     }
 
     const discRate = getDiscountRate();
-    const { totalItems, totalPriceDiscounted, totalPriceRetail } = getCartSummary();
+    const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
     if (totalItems === 0) return;
 
     dom.btnSendOrder.disabled = true;
-    dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Отправка заказа...' : 'Slanje porudžbine...'}`;
+    dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Оформление заказа...' : 'Slanje porudžbine...'}`;
 
     const orderHtml = generateOrderHtml();
     const orderPlainText = generateOrderPlainText();
-    const botToken = "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24nU";
-    const managerChatId = "414194396";
-    const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
-    const clientChatId = clientUser ? clientUser.id : null;
+    const currentComment = state.comment ? state.comment.trim() : "";
 
-    // Helper: Send message with HTML, with guaranteed plain text fallback on any entity parse error
-    async function sendTelegramMsg(chatId, htmlText, plainText) {
-      try {
-        const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: htmlText,
-            parse_mode: "HTML"
-          })
-        });
-        const data = await res.json();
-        if (data && data.ok) return true;
-        console.warn("HTML delivery failed, falling back to plain text:", data);
-      } catch (e) {
-        console.warn("HTML delivery network error, trying plain text:", e);
-      }
+    const orderPayload = {
+      action: "davines_order",
+      salon_name: state.salonName,
+      discount: discRate,
+      total_items: totalItems,
+      total_price_mp: totalPriceDiscounted,
+      comment: currentComment,
+      items: orderedList.map(item => ({
+        code: item.product.code,
+        name: item.isShade ? `${item.lineKey} (${item.shade})` : item.product.name,
+        volume: item.product.volume || '',
+        qty: item.qty,
+        price_mp: item.product.mp_price,
+        disc_price: item.discPrice
+      })),
+      formatted_html: orderHtml,
+      formatted_text: orderPlainText
+    };
 
-      try {
-        const resFb = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: plainText
-          })
-        });
-        const dataFb = await resFb.json();
-        return Boolean(dataFb && dataFb.ok);
-      } catch (e2) {
-        console.error("Plain text delivery error:", e2);
-        return false;
-      }
-    }
+    // Save to local device order history
+    saveOrderToLocalHistory({
+      id: Date.now(),
+      date: new Date().toISOString(),
+      salon_name: state.salonName,
+      discount: discRate,
+      total_items: totalItems,
+      total_price_mp: totalPriceDiscounted,
+      comment: currentComment,
+      formatted_text: orderPlainText,
+      items: orderPayload.items
+    });
 
-    try {
-      // 1. Deliver order to Sales Representative (Ivan)
-      const deliveredToManager = await sendTelegramMsg(managerChatId, orderHtml, orderPlainText);
-      if (!deliveredToManager) {
-        throw new Error("Не удалось доставить заказ представителю");
-      }
+    // Check if running inside Telegram WebApp
+    const isInsideTelegram = Boolean(tg && typeof tg.sendData === 'function');
 
-      // 2. Send confirmation to client if different from manager
-      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
-        const clientHtml = `✅ <b>Vaša porudžbina je uspešno poslata! / Заказ отправлен!</b>\n\n💈 Salon: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Artikala: <b>${totalItems} kom</b>\n💰 Ukupno sa popustom: <b>${formatMoney(totalPriceDiscounted)}</b>\n(MP bez popusta: ${formatMoney(totalPriceRetail)})\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`;
-        const clientPlain = `✅ Vaša porudžbina je uspešno poslata! / Заказ отправлен!\n\n💈 Salon: ${state.salonName} (-${discRate}%)\n📦 Artikala: ${totalItems} kom\n💰 Ukupno sa popustom: ${formatMoney(totalPriceDiscounted)}\n(MP bez popusta: ${formatMoney(totalPriceRetail)})\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`;
-        sendTelegramMsg(clientChatId, clientHtml, clientPlain).catch(() => {});
-      }
-
-      // 3. Trigger sendData if context supports it
-      if (tg && tg.sendData) {
-        try {
-          tg.sendData(JSON.stringify({
-            action: "davines_order",
-            salon_name: state.salonName,
-            discount: discRate,
-            total_items: totalItems,
-            total_price_mp: totalPriceDiscounted,
-            comment: (dom.cartCommentInput ? dom.cartCommentInput.value.trim() : ""),
-            formatted_text: orderPlainText
-          }));
-        } catch(e) {
-          console.log("sendData ignored:", e);
-        }
-      }
-
+    if (isInsideTelegram) {
       triggerHaptic('success');
       showToast(t.orderSuccess);
-      dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ успешно отправлен!' : 'Porudžbina poslata!'}`;
+      dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ оформлен!' : 'Porudžbina poslata!'}`;
 
-      // Reset cart & comment
+      // Reset cart and comment state
       state.cart = {};
       state.shadesCart = {};
-      if (dom.cartCommentInput) dom.cartCommentInput.value = '';
+      state.comment = "";
       localStorage.removeItem('davines_cart');
       localStorage.removeItem('davines_shades_cart');
+      localStorage.removeItem('davines_cart_comment');
       renderProducts();
       renderCartFloatingBar();
+      updateCommentTileDisplay();
+
+      // Send payload directly to Telegram Bot via native client bridge
+      try {
+        tg.sendData(JSON.stringify(orderPayload));
+      } catch (err) {
+        console.warn("tg.sendData warning:", err);
+      }
 
       setTimeout(() => {
         closeCartDrawer();
@@ -1139,15 +1167,173 @@
         if (tg && tg.close) {
           try { tg.close(); } catch(e) {}
         }
-      }, 1400);
-
-    } catch (err) {
-      console.error("Failed to send order via API:", err);
-      copyToClipboard(orderPlainText);
-      showToast(state.lang === 'ru' ? 'Ошибка отправки! Текст заказа скопирован в буфер.' : 'Greška pri slanju! Tekst je kopiran.');
-      dom.btnSendOrder.disabled = false;
-      dom.btnSendOrder.innerHTML = `<span>📋</span> ${t.copyOrder}`;
+      }, 1000);
+      return;
     }
+
+    // Standalone Browser Fallback (e.g. testing in desktop/mobile browser)
+    copyToClipboard(orderPlainText);
+    showToast(state.lang === 'ru' ? 'Заказ скопирован! Открываем Telegram...' : 'Porudžbina je kopirana!');
+    dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ скопирован' : 'Spisak kopiran'}`;
+
+    const tgUrl = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(orderPlainText)}`;
+    setTimeout(() => {
+      window.open(tgUrl, '_blank');
+      closeCartDrawer();
+      dom.btnSendOrder.disabled = false;
+      dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
+    }, 1000);
+  }
+
+  // Comment Modal & Tile Handlers
+  function openCommentModal() {
+    dom.commentModalInput.value = state.comment || "";
+    if (dom.btnClearComment) {
+      dom.btnClearComment.style.display = state.comment ? "block" : "none";
+    }
+    dom.modalOverlay.classList.add("open");
+    dom.commentModal.classList.add("open");
+    setTimeout(() => {
+      if (dom.commentModalInput) dom.commentModalInput.focus();
+    }, 150);
+  }
+
+  function closeCommentModal() {
+    if (document.activeElement) document.activeElement.blur();
+    dom.commentModal.classList.remove("open");
+    if (!dom.cartDrawer.classList.contains("open")) {
+      dom.modalOverlay.classList.remove("open");
+    }
+  }
+
+  function saveComment() {
+    state.comment = dom.commentModalInput.value.trim();
+    if (state.comment) {
+      localStorage.setItem("davines_cart_comment", state.comment);
+    } else {
+      localStorage.removeItem("davines_cart_comment");
+    }
+    triggerHaptic("light");
+    closeCommentModal();
+    updateCommentTileDisplay();
+  }
+
+  function clearComment() {
+    state.comment = "";
+    dom.commentModalInput.value = "";
+    localStorage.removeItem("davines_cart_comment");
+    triggerHaptic("light");
+    closeCommentModal();
+    updateCommentTileDisplay();
+  }
+
+  function updateCommentTileDisplay() {
+    const t = I18N[state.lang];
+    if (!dom.cartCommentTile) return;
+    if (state.comment && state.comment.trim()) {
+      dom.cartCommentTile.classList.add("has-comment");
+      if (dom.commentTileTitle) dom.commentTileTitle.textContent = t.commentTileTitle + ":";
+      if (dom.commentTileDesc) dom.commentTileDesc.textContent = state.comment.trim();
+      if (dom.commentTileActionText) dom.commentTileActionText.textContent = t.commentTileEdit;
+    } else {
+      dom.cartCommentTile.classList.remove("has-comment");
+      if (dom.commentTileTitle) dom.commentTileTitle.textContent = t.commentTileTitle;
+      if (dom.commentTileDesc) dom.commentTileDesc.textContent = t.commentTileDesc;
+      if (dom.commentTileActionText) dom.commentTileActionText.textContent = t.commentTileAdd;
+    }
+  }
+
+  // Local Order History
+  function saveOrderToLocalHistory(orderRecord) {
+    try {
+      let history = JSON.parse(localStorage.getItem("davines_order_history") || "[]");
+      history.unshift(orderRecord);
+      if (history.length > 25) history = history.slice(0, 25);
+      localStorage.setItem("davines_order_history", JSON.stringify(history));
+    } catch(e) {
+      console.warn("Failed to save local history:", e);
+    }
+  }
+
+  function openHistoryModal() {
+    const t = I18N[state.lang];
+    if (!dom.historyList) return;
+    dom.historyList.innerHTML = "";
+
+    let history = [];
+    try {
+      history = JSON.parse(localStorage.getItem("davines_order_history") || "[]");
+    } catch(e) {}
+
+    if (!history || history.length === 0) {
+      dom.historyList.innerHTML = `
+        <div style="text-align: center; padding: 30px 10px; color: var(--text-muted); font-size: 13px;">
+          ${t.historyEmpty}
+        </div>
+      `;
+    } else {
+      history.forEach((order, index) => {
+        const dateObj = new Date(order.date);
+        const dateFormatted = dateObj.toLocaleDateString(state.lang === 'ru' ? 'ru-RU' : 'sr-RS', {
+          day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+        });
+        const orderNum = `#DV-${String(history.length - index).padStart(4, '0')}`;
+        const card = document.createElement("div");
+        card.className = "history-card";
+        card.innerHTML = `
+          <div class="history-card-header">
+            <span class="history-card-id">${orderNum} • ${escapeHtml(order.salon_name)} (-${order.discount}%)</span>
+            <span class="history-card-date">${dateFormatted}</span>
+          </div>
+          <div class="history-card-summary">
+            <span class="history-card-items">${order.total_items} ${t.items}</span>
+            <span class="history-card-total">${formatMoney(order.total_price_mp)}</span>
+          </div>
+          ${order.comment ? `<div class="history-card-comment">💬 ${escapeHtml(order.comment)}</div>` : ''}
+          <button type="button" class="history-card-repeat-btn" data-idx="${index}">
+            🔄 ${t.historyRepeat}
+          </button>
+        `;
+
+        card.querySelector(".history-card-repeat-btn").addEventListener("click", () => {
+          repeatOrder(order);
+        });
+
+        dom.historyList.appendChild(card);
+      });
+    }
+
+    dom.modalOverlay.classList.add("open");
+    dom.historyModal.classList.add("open");
+  }
+
+  function closeHistoryModal() {
+    dom.historyModal.classList.remove("open");
+    if (!dom.cartDrawer.classList.contains("open")) {
+      dom.modalOverlay.classList.remove("open");
+    }
+  }
+
+  function repeatOrder(order) {
+    if (!order.items || !Array.isArray(order.items)) return;
+    triggerHaptic("success");
+    order.items.forEach(item => {
+      if (item.code.includes("-")) {
+        const [lineKey, ...shadeParts] = item.code.split("-");
+        const shade = shadeParts.join("-");
+        if (!state.shadesCart[lineKey]) state.shadesCart[lineKey] = {};
+        state.shadesCart[lineKey][shade] = (state.shadesCart[lineKey][shade] || 0) + item.qty;
+      } else {
+        state.cart[item.code] = (state.cart[item.code] || 0) + item.qty;
+      }
+    });
+    localStorage.setItem("davines_cart", JSON.stringify(state.cart));
+    localStorage.setItem("davines_shades_cart", JSON.stringify(state.shadesCart));
+    renderProducts();
+    renderCartFloatingBar();
+    closeHistoryModal();
+    openCartDrawer();
+    showToast(state.lang === 'ru' ? 'Товары добавлены в корзину!' : 'Artikli su dodati u korpu!');
   }
 
   function copyToClipboard(text) {
@@ -1505,8 +1691,10 @@
       if (e.key === 'Enter') saveSalonName();
     });
 
-    // Overlay click closes modals only if setup is done
+    // Overlay click closes modals
     dom.modalOverlay.addEventListener('click', () => {
+      closeCommentModal();
+      closeHistoryModal();
       if (state.salonName && (state.discount === 20 || state.discount === 30)) {
         closeSalonModal();
         closeCartDrawer();
@@ -1517,6 +1705,33 @@
 
     // Floating cart bar click opens drawer
     dom.cartFloatingBar.addEventListener('click', openCartDrawer);
+
+    // Comment Modal events
+    if (dom.cartCommentTile) dom.cartCommentTile.addEventListener('click', openCommentModal);
+    if (dom.btnSaveComment) dom.btnSaveComment.addEventListener('click', saveComment);
+    if (dom.btnClearComment) dom.btnClearComment.addEventListener('click', clearComment);
+    if (dom.btnCancelComment) dom.btnCancelComment.addEventListener('click', closeCommentModal);
+
+    // Quick chips in comment modal
+    document.querySelectorAll('.comment-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        triggerHaptic('light');
+        const textToAdd = chip.getAttribute('data-chip');
+        const current = dom.commentModalInput.value.trim();
+        if (current) {
+          if (!current.includes(textToAdd)) {
+            dom.commentModalInput.value = `${current}, ${textToAdd}`;
+          }
+        } else {
+          dom.commentModalInput.value = textToAdd;
+        }
+        if (dom.btnClearComment) dom.btnClearComment.style.display = 'block';
+      });
+    });
+
+    // Order History modal events
+    if (dom.historyBtn) dom.historyBtn.addEventListener('click', openHistoryModal);
+    if (dom.historyCloseBtn) dom.historyCloseBtn.addEventListener('click', closeHistoryModal);
 
     // Palette modal events
     dom.paletteCloseBtn.addEventListener('click', closePaletteModal);
@@ -1561,48 +1776,15 @@
       renderProducts();
     });
 
-    // Cart buttons
-    if (dom.cartCommentInput && dom.btnDismissKeyboard) {
-      dom.cartCommentInput.addEventListener('focus', () => {
-        dom.btnDismissKeyboard.style.display = 'inline-flex';
-        setTimeout(() => {
-          if (dom.cartCommentBlock) {
-            dom.cartCommentBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }, 150);
-      });
-
-      dom.cartCommentInput.addEventListener('blur', () => {
-        setTimeout(() => {
-          if (dom.btnDismissKeyboard) {
-            dom.btnDismissKeyboard.style.display = 'none';
-          }
-        }, 200);
-      });
-
-      dom.btnDismissKeyboard.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dom.cartCommentInput.blur();
-        triggerHaptic('light');
-      });
-    }
-
-    if (dom.cartDrawerBody) {
-      dom.cartDrawerBody.addEventListener('touchstart', (e) => {
-        if (e.target !== dom.cartCommentInput && document.activeElement === dom.cartCommentInput) {
-          dom.cartCommentInput.blur();
-        }
-      }, { passive: true });
-    }
-
+    // Cart Clear & Send
     dom.btnClearCart.addEventListener('click', () => {
       if (confirm(state.lang === 'ru' ? 'Очистить корзину?' : 'Isprazniti korpu?')) {
         state.cart = {};
         state.shadesCart = {};
-        if (dom.cartCommentInput) dom.cartCommentInput.value = '';
+        state.comment = '';
         localStorage.removeItem('davines_cart');
         localStorage.removeItem('davines_shades_cart');
+        localStorage.removeItem('davines_cart_comment');
         renderProducts();
         renderCartFloatingBar();
         renderCartDrawerContent();

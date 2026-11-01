@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=3.5">
+  <link rel="stylesheet" href="styles.css?v=3.6">
 </head>
 <body>
 
@@ -35,6 +35,7 @@
         <span id="salonPillName" class="salon-name">Укажите название вашего салона</span>
         <span id="salonPillDiscount" class="salon-discount-pill">-20%</span>
       </div>
+      <button id="historyBtn" class="lang-btn" title="История заказов / Moje porudžbine">📋 Заказы</button>
       <button id="langBtn" class="lang-btn" title="Сменить язык / Promeni jezik">🇷🇺 RU</button>
     </div>
   </header>
@@ -119,17 +120,16 @@
       <div id="cartItemsScroll" class="cart-items-scroll">
         <!-- Generated via JS -->
       </div>
-      <!-- Order Comment / Extra requests -->
-      <div class="cart-comment-block" id="cartCommentBlock">
-        <div class="cart-comment-header">
-          <label id="cartCommentLabel" class="cart-comment-label" for="cartCommentInput">
-            💬 Комментарий к заказу (пеньюары, пакеты, пожелания):
-          </label>
-          <button id="btnDismissKeyboard" class="btn-dismiss-kb" type="button" style="display: none;">
-            Готово ✓
-          </button>
+      <!-- Order Comment Tile (Opens dedicated modal, no keyboard overlap!) -->
+      <div class="cart-comment-tile" id="cartCommentTile">
+        <div class="comment-tile-icon">💬</div>
+        <div class="comment-tile-content">
+          <div class="comment-tile-title" id="commentTileTitle">Комментарий к заказу</div>
+          <div class="comment-tile-desc" id="commentTileDesc">Одноразовые пеньюары, пакеты, пожелания...</div>
         </div>
-        <textarea id="cartCommentInput" class="cart-comment-input" rows="2" placeholder="например: нужны одноразовые пеньюары, пакеты для клиентов..."></textarea>
+        <div class="comment-tile-action">
+          <span id="commentTileActionText">Добавить</span> ›
+        </div>
       </div>
     </div>
 
@@ -228,12 +228,58 @@
     </div>
   </div>
 
+  <!-- Dedicated Comment Modal (Centered Dialog, No iPhone Keyboard Squish!) -->
+  <div id="commentModal" class="comment-modal">
+    <div class="dialog-brand-header">
+      <div class="dialog-brand-title">DAVINES</div>
+      <div class="dialog-brand-sub">sustainable beauty</div>
+    </div>
+    <div id="commentModalTitle" class="dialog-title">💬 Комментарий к заказу</div>
+    <div id="commentModalDesc" class="dialog-desc">
+      Укажите необходимые расходники (пеньюары, пакеты) или пожелания к доставке:
+    </div>
+
+    <!-- Fast Quick Chips -->
+    <div class="comment-chips">
+      <button type="button" class="comment-chip" data-chip="Пеньюары одноразовые">+ Пеньюары</button>
+      <button type="button" class="comment-chip" data-chip="Пакеты Davines">+ Пакеты Davines</button>
+      <button type="button" class="comment-chip" data-chip="Позвонить перед доставкой">+ Позвонить перед доставкой</button>
+      <button type="button" class="comment-chip" data-chip="Срочная доставка">+ Срочно</button>
+    </div>
+
+    <textarea id="commentModalInput" class="comment-modal-textarea" rows="3" placeholder="Например: нужны одноразовые пеньюары (2 пачки), пакеты для клиентов..."></textarea>
+
+    <div class="comment-modal-actions">
+      <button id="btnSaveComment" class="dialog-save-btn" type="button">✓ Сохранить комментарий</button>
+      <div class="comment-modal-subactions">
+        <button id="btnClearComment" class="comment-btn-clear" type="button" style="display: none;">🗑 Очистить</button>
+        <button id="btnCancelComment" class="comment-btn-cancel" type="button">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order History Modal -->
+  <div id="historyModal" class="dialog-modal">
+    <div class="dialog-brand-header">
+      <div class="dialog-brand-title">DAVINES</div>
+      <div class="dialog-brand-sub">sustainable beauty</div>
+    </div>
+    <div id="historyModalTitle" class="dialog-title">📋 История заказов</div>
+    <div id="historyModalDesc" class="dialog-desc">Ваши предыдущие оформленные заказы:</div>
+    <div id="historyList" class="history-list">
+      <!-- Populated dynamically via JS -->
+    </div>
+    <button id="historyCloseBtn" class="dialog-save-btn" type="button" style="background: var(--bg-secondary); color: var(--text-main); border: 1px solid var(--border-color); margin-top: 10px;">
+      Закрыть
+    </button>
+  </div>
+
   <!-- Toast Message -->
   <div id="toastMsg" class="toast-msg"></div>
 
   <!-- Catalog Data & Main App Scripts -->
-  <script src="catalog_data.js?v=3.5"></script>
-  <script src="shades_data.js?v=3.5"></script>
-  <script src="app.js?v=3.5"></script>
+  <script src="catalog_data.js?v=3.6"></script>
+  <script src="shades_data.js?v=3.6"></script>
+  <script src="app.js?v=3.6"></script>
 </body>
 </html>

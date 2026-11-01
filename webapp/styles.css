@@ -788,79 +788,269 @@ body {
   gap: 12px;
 }
 
-/* Order Comment Field */
-.cart-comment-block {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 10px;
-  padding: 12px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-}
-
-.cart-comment-header {
+/* Cart Comment Tile in Cart Drawer (Clean row, no inline keyboard squish) */
+.cart-comment-tile {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-}
-
-.cart-comment-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-muted);
-  flex: 1;
-}
-
-.btn-dismiss-kb {
-  background: var(--accent-green);
-  color: #FFFFFF;
-  border: none;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
+  gap: 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin: 12px 0 6px;
   cursor: pointer;
-  white-space: nowrap;
-  letter-spacing: 0.2px;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   transition: all 0.2s ease;
 }
 
-.btn-dismiss-kb:active {
-  transform: scale(0.95);
-  background: var(--accent-green-hover);
+.cart-comment-tile:active {
+  transform: scale(0.98);
+  background: var(--bg-secondary);
 }
 
-.cart-comment-input {
+.cart-comment-tile.has-comment {
+  border-color: var(--accent-green);
+  background: rgba(58, 74, 61, 0.06);
+}
+
+.comment-tile-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.comment-tile-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-tile-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.comment-tile-desc {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.cart-comment-tile.has-comment .comment-tile-desc {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.comment-tile-action {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-green);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* Dedicated Comment Modal (Centered above keyboard) */
+.comment-modal {
+  position: fixed;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.92);
+  width: 92%;
+  max-width: 440px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 22px 18px;
+  z-index: 120;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.comment-modal.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Quick Selection Chips */
+.comment-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 4px;
+}
+
+.comment-chip {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 6px 11px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.comment-chip:active {
+  background: var(--accent-green);
+  color: #FFFFFF;
+  border-color: var(--accent-green);
+  transform: scale(0.95);
+}
+
+.comment-modal-textarea {
   width: 100%;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
+  padding: 12px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   background: #FFFFFF;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 16px; /* 16px strictly prevents iOS Safari auto-zoom! */
   color: var(--text-main);
   resize: none;
   outline: none;
   box-sizing: border-box;
-  transition: all 0.2s ease;
   line-height: 1.4;
+  min-height: 90px;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.cart-comment-input:focus {
+.comment-modal-textarea:focus {
   border-color: var(--accent-green);
-  box-shadow: 0 0 0 2px var(--accent-green-soft);
+  box-shadow: 0 0 0 3px rgba(58, 74, 61, 0.12);
 }
 
-.cart-comment-input::placeholder {
-  color: var(--text-dim);
+.comment-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.comment-modal-subactions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.comment-btn-clear, .comment-btn-cancel {
+  flex: 1;
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-muted);
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.comment-btn-clear {
+  color: var(--accent-clay);
+  border-color: rgba(184, 80, 66, 0.2);
+}
+
+.comment-btn-clear:active {
+  background: rgba(184, 80, 66, 0.08);
+}
+
+.comment-btn-cancel:active {
+  background: var(--bg-secondary);
+}
+
+/* History List Modal */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 52vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 6px 0;
+}
+
+.history-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-size: 12px;
+}
+
+.history-card-id {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.history-card-date {
+  color: var(--text-dim);
+}
+
+.history-card-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.history-card-items {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.history-card-total {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-green);
+}
+
+.history-card-comment {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  background: rgba(0,0,0,0.03);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-style: italic;
+}
+
+.history-card-repeat-btn {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: 4px;
+  transition: all 0.15s ease;
+}
+
+.history-card-repeat-btn:active {
+  background: var(--accent-green-soft);
+  color: var(--accent-green);
 }
 
 .summary-row {
