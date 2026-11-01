@@ -290,9 +290,18 @@
   }
 
   function triggerHaptic(type = 'light') {
-    if (tg && tg.HapticFeedback) {
-      tg.HapticFeedback.impactOccurred(type);
-    }
+    try {
+      if (!tg || !tg.HapticFeedback) return;
+      if (type === 'success' || type === 'error' || type === 'warning') {
+        if (typeof tg.HapticFeedback.notificationOccurred === 'function') {
+          tg.HapticFeedback.notificationOccurred(type);
+        }
+      } else {
+        if (typeof tg.HapticFeedback.impactOccurred === 'function') {
+          tg.HapticFeedback.impactOccurred(type);
+        }
+      }
+    } catch (e) {}
   }
 
   // 5. DOM References
@@ -1080,65 +1089,62 @@
 
   // 14. Send Order Handler (Native Telegram WebApp sendData + Device History)
   function handleSendOrder() {
-    const t = I18N[state.lang];
-    if (!state.salonName.trim()) {
-      showToast(t.salonRequiredAlert);
-      openSalonModal(true);
-      return;
-    }
+    try {
+      const t = I18N[state.lang];
+      if (!state.salonName || !state.salonName.trim()) {
+        showToast(t.salonRequiredAlert);
+        openSalonModal(true);
+        return;
+      }
 
-    const discRate = getDiscountRate();
-    const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
-    if (totalItems === 0) return;
+      const discRate = getDiscountRate();
+      const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
+      if (totalItems === 0) return;
 
-    dom.btnSendOrder.disabled = true;
-    dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Оформление заказа...' : 'Slanje porudžbine...'}`;
+      dom.btnSendOrder.disabled = true;
+      dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Оформление заказа...' : 'Slanje porudžbine...'}`;
 
-    const orderHtml = generateOrderHtml();
-    const orderPlainText = generateOrderPlainText();
-    const currentComment = state.comment ? state.comment.trim() : "";
+      const orderHtml = generateOrderHtml();
+      const orderPlainText = generateOrderPlainText();
+      const currentComment = state.comment ? state.comment.trim() : "";
 
-    const orderPayload = {
-      action: "davines_order",
-      salon_name: state.salonName,
-      discount: discRate,
-      total_items: totalItems,
-      total_price_mp: totalPriceDiscounted,
-      comment: currentComment,
-      items: orderedList.map(item => ({
-        code: item.product.code,
-        name: item.isShade ? `${item.lineKey} (${item.shade})` : item.product.name,
-        volume: item.product.volume || '',
-        qty: item.qty,
-        price_mp: item.product.mp_price,
-        disc_price: item.discPrice
-      })),
-      formatted_html: orderHtml,
-      formatted_text: orderPlainText
-    };
+      const orderPayload = {
+        action: "davines_order",
+        salon_name: state.salonName,
+        discount: discRate,
+        total_items: totalItems,
+        total_price_mp: totalPriceDiscounted,
+        comment: currentComment,
+        items: orderedList.map(item => ({
+          code: item.product.code,
+          name: item.isShade ? `${item.lineKey} (${item.shade})` : item.product.name,
+          volume: item.product.volume || '',
+          qty: item.qty,
+          price_mp: item.product.mp_price,
+          disc_price: item.discPrice
+        })),
+        formatted_html: orderHtml,
+        formatted_text: orderPlainText
+      };
 
-    // Save to local device order history
-    saveOrderToLocalHistory({
-      id: Date.now(),
-      date: new Date().toISOString(),
-      salon_name: state.salonName,
-      discount: discRate,
-      total_items: totalItems,
-      total_price_mp: totalPriceDiscounted,
-      comment: currentComment,
-      formatted_text: orderPlainText,
-      items: orderPayload.items
-    });
+      // 1. Save to local device order history
+      try {
+        saveOrderToLocalHistory({
+          id: Date.now(),
+          date: new Date().toISOString(),
+          salon_name: state.salonName,
+          discount: discRate,
+          total_items: totalItems,
+          total_price_mp: totalPriceDiscounted,
+          comment: currentComment,
+          formatted_text: orderPlainText,
+          items: orderPayload.items
+        });
+      } catch (histErr) {
+        console.warn("History save warning:", histErr);
+      }
 
-    // Check if running inside Telegram WebApp
-    const isInsideTelegram = Boolean(tg && typeof tg.sendData === 'function');
-
-    if (isInsideTelegram) {
-      triggerHaptic('success');
-      showToast(t.orderSuccess);
-      dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ оформлен!' : 'Porudžbina poslata!'}`;
-
-      // Reset cart and comment state
+      // 2. Clear cart & comment immediately
       state.cart = {};
       state.shadesCart = {};
       state.comment = "";
@@ -1149,36 +1155,49 @@
       renderCartFloatingBar();
       updateCommentUI();
 
-      // Send payload directly to Telegram Bot via native client bridge
-      try {
-        tg.sendData(JSON.stringify(orderPayload));
-      } catch (err) {
-        console.warn("tg.sendData warning:", err);
+      // 3. Update button to SUCCESS state right away!
+      triggerHaptic('success');
+      showToast(t.orderSuccess);
+      dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ оформлен!' : 'Porudžbina poslata!'}`;
+
+      // 4. Send payload directly to Telegram Bot via native client bridge
+      let sendDataWorked = false;
+      if (tg && typeof tg.sendData === 'function') {
+        try {
+          tg.sendData(JSON.stringify(orderPayload));
+          sendDataWorked = true;
+        } catch (tgErr) {
+          console.warn("tg.sendData not available in this context:", tgErr);
+        }
       }
 
+      // If not sent via sendData (e.g. opened from inline button or outside Telegram):
+      if (!sendDataWorked) {
+        copyToClipboard(orderPlainText);
+        const tgUrl = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(orderPlainText)}`;
+        setTimeout(() => {
+          try {
+            window.open(tgUrl, '_blank');
+          } catch(e) {}
+        }, 500);
+      }
+
+      // 5. Close cart drawer after brief confirmation
       setTimeout(() => {
         closeCartDrawer();
         dom.btnSendOrder.disabled = false;
         dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
-        if (tg && tg.close) {
+        if (tg && typeof tg.close === 'function') {
           try { tg.close(); } catch(e) {}
         }
       }, 1000);
-      return;
-    }
 
-    // Standalone Browser Fallback (e.g. testing in desktop/mobile browser)
-    copyToClipboard(orderPlainText);
-    showToast(state.lang === 'ru' ? 'Заказ скопирован! Открываем Telegram...' : 'Porudžbina je kopirana!');
-    dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ скопирован' : 'Spisak kopiran'}`;
-
-    const tgUrl = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(orderPlainText)}`;
-    setTimeout(() => {
-      window.open(tgUrl, '_blank');
-      closeCartDrawer();
+    } catch (criticalErr) {
+      console.error("Critical error in handleSendOrder:", criticalErr);
       dom.btnSendOrder.disabled = false;
-      dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
-    }, 1000);
+      dom.btnSendOrder.innerHTML = `<span>✈️</span> ${I18N[state.lang].sendOrder}`;
+      showToast(state.lang === 'ru' ? 'Произошла ошибка, попробуйте снова' : 'Došlo je do greške, pokušajte ponovo');
+    }
   }
 
   // Comment Modal & Tile Handlers
