@@ -133,7 +133,7 @@ def tg_request(method, data=None):
             req = urllib.request.Request(url, data=req_data, headers=headers)
         else:
             req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=35, context=SSL_CONTEXT) as resp:
+        with urllib.request.urlopen(req, timeout=30, context=SSL_CONTEXT) as resp:
             res = resp.read()
             return json.loads(res.decode("utf-8"))
     except urllib.error.HTTPError as e:
@@ -141,10 +141,12 @@ def tg_request(method, data=None):
         print(f"Telegram API HTTPError on {method}: {e.code} - {err_msg}", file=sys.stderr)
         return None
     except Exception as e:
-        print(f"Telegram API Exception on {method}: {e}", file=sys.stderr)
+        # Don't clutter logs on expected polling timeout
+        if method != "getUpdates" or "timed out" not in str(e).lower():
+            print(f"Telegram API Exception on {method}: {e}", file=sys.stderr)
         return None
 
-def send_message(chat_id, text, reply_markup=None, parse_mode="Markdown"):
+def send_message(chat_id, text, reply_markup=None, parse_mode="HTML"):
     payload = {
         "chat_id": chat_id,
         "text": text
@@ -153,7 +155,13 @@ def send_message(chat_id, text, reply_markup=None, parse_mode="Markdown"):
         payload["parse_mode"] = parse_mode
     if reply_markup:
         payload["reply_markup"] = reply_markup
-    return tg_request("sendMessage", payload)
+    res = tg_request("sendMessage", payload)
+    if not res or not res.get("ok"):
+        # Auto-fallback to plain text if HTML/Markdown parsing failed
+        if parse_mode:
+            payload.pop("parse_mode", None)
+            res = tg_request("sendMessage", payload)
+    return res
 
 # 3. Main Keyboard with WebApp button
 def get_main_keyboard(salon_name=None):

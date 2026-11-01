@@ -127,8 +127,7 @@
       filter: item => item.category === "BOJE" || 
                       item.category === "FINEST PIGMENTS" || 
                       item.category === "ACTIVATOR" || 
-                      item.category === "THE CENTURY OF LIGHT" || 
-                      item.category === "BALANCE & BOUCLE"
+                      item.category === "THE CENTURY OF LIGHT"
     },
     "ESSENTIAL": {
       key: "ESSENTIAL",
@@ -172,7 +171,8 @@
     },
     "OTHER": {
       key: "OTHER",
-      filter: item => item.category === "NATURALTECH TAILORING TREATMENT" || 
+      filter: item => item.category === "BALANCE & BOUCLE" ||
+                      item.category === "NATURALTECH TAILORING TREATMENT" || 
                       item.category === "DAVINES AUTHENTIC FORMULAS" || 
                       item.category === "LIQUID SPELL"
     }
@@ -461,12 +461,26 @@
         'Красители (Mask, View, TPT)',
         'Century of Light (Пудры)',
         'Activator (Окислители)',
-        'Balance & Boucle (Завивка)',
         'Finest Pigments'
       ];
       subcats.sort((a, b) => {
         const ia = coloringOrder.indexOf(a);
         const ib = coloringOrder.indexOf(b);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.localeCompare(b);
+      });
+    } else if (state.activeLine === 'OTHER') {
+      const otherOrder = [
+        'Завивка',
+        'Tailoring Treatment',
+        'Authentic Formulas',
+        'Liquid Spell'
+      ];
+      subcats.sort((a, b) => {
+        const ia = otherOrder.indexOf(a);
+        const ib = otherOrder.indexOf(b);
         if (ia !== -1 && ib !== -1) return ia - ib;
         if (ia !== -1) return -1;
         if (ib !== -1) return 1;
@@ -886,8 +900,18 @@
     });
   }
 
-  // 13. Order Text Formatting
-  function generateOrderMessageText() {
+  // 13. Order Text Formatting (HTML and Plain Text variants)
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function generateOrderHtml() {
     const discRate = getDiscountRate();
     const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
     const dateStr = new Date().toLocaleString('sr-RS', {
@@ -899,25 +923,65 @@
     });
 
     let lines = [];
-    lines.push(`🌿 *PORUDŽBINA / ЗАКАЗ DAVINES* 🌿`);
+    lines.push(`🌿 <b>PORUDŽBINA / ЗАКАЗ DAVINES</b> 🌿`);
     lines.push(`📅 Datum: ${dateStr}`);
-    lines.push(`💈 *Salon / Салон:* ${state.salonName || "Nije navedeno"}`);
-    lines.push(`🏷 *Popust / Скидка:* ${discRate}%`);
+    lines.push(`💈 <b>Salon / Салон:</b> ${escapeHtml(state.salonName || "Nije navedeno")}`);
+    lines.push(`🏷 <b>Popust / Скидка:</b> ${discRate}%`);
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const u = tg.initDataUnsafe.user;
-      lines.push(`👤 Master: ${u.first_name || ''} ${u.last_name || ''} ${u.username ? `(@${u.username})` : ''}`.trim());
+      const userDisplay = `${u.first_name || ''} ${u.last_name || ''}`.trim();
+      const usernameDisplay = u.username ? ` (@${u.username})` : '';
+      lines.push(`👤 Master: ${escapeHtml(userDisplay + usernameDisplay)}`);
     }
     lines.push(``);
-    lines.push(`📦 *Artikli / Товары (${totalItems} kom):*`);
+    lines.push(`📦 <b>Artikli / Товары (${totalItems} kom):</b>`);
+
+    orderedList.forEach(({ product, qty, discPrice, subtotalDisc }, idx) => {
+      const cleanTitle = getCleanProductName(product.name);
+      lines.push(`${idx + 1}. [<code>${escapeHtml(product.code)}</code>] ${escapeHtml(cleanTitle)} (${escapeHtml(product.volume)})`);
+      lines.push(`   └ ${qty} kom x ${formatMoney(discPrice)} (MP: <s>${formatMoney(product.mp_price)}</s>) = <b>${formatMoney(subtotalDisc)}</b>`);
+    });
+
+    lines.push(``);
+    lines.push(`💰 <b>UKUPNO SA POPUSTOM (-${discRate}%): ${formatMoney(totalPriceDiscounted)}</b>`);
+    lines.push(`Maloprodajna cena bez popusta: ${formatMoney(totalPriceRetail)}`);
+
+    return lines.join('\n');
+  }
+
+  function generateOrderPlainText() {
+    const discRate = getDiscountRate();
+    const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
+    const dateStr = new Date().toLocaleString('sr-RS', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    let lines = [];
+    lines.push(`🌿 PORUDŽBINA / ЗАКАЗ DAVINES 🌿`);
+    lines.push(`📅 Datum: ${dateStr}`);
+    lines.push(`💈 Salon / Салон: ${state.salonName || "Nije navedeno"}`);
+    lines.push(`🏷 Popust / Скидка: ${discRate}%`);
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      const u = tg.initDataUnsafe.user;
+      const userDisplay = `${u.first_name || ''} ${u.last_name || ''}`.trim();
+      const usernameDisplay = u.username ? ` (@${u.username})` : '';
+      lines.push(`👤 Master: ${userDisplay + usernameDisplay}`);
+    }
+    lines.push(``);
+    lines.push(`📦 Artikli / Товары (${totalItems} kom):`);
 
     orderedList.forEach(({ product, qty, discPrice, subtotalDisc }, idx) => {
       const cleanTitle = getCleanProductName(product.name);
       lines.push(`${idx + 1}. [${product.code}] ${cleanTitle} (${product.volume})`);
-      lines.push(`   └ ${qty} kom x ${formatMoney(discPrice)} (MP: <s>${formatMoney(product.mp_price)}</s>) = *${formatMoney(subtotalDisc)}*`);
+      lines.push(`   └ ${qty} kom x ${formatMoney(discPrice)} (MP: ${formatMoney(product.mp_price)}) = ${formatMoney(subtotalDisc)}`);
     });
 
     lines.push(``);
-    lines.push(`💰 *UKUPNO SA POPUSTOM (-${discRate}%): ${formatMoney(totalPriceDiscounted)}*`);
+    lines.push(`💰 UKUPNO SA POPUSTOM (-${discRate}%): ${formatMoney(totalPriceDiscounted)}`);
     lines.push(`Maloprodajna cena bez popusta: ${formatMoney(totalPriceRetail)}`);
 
     return lines.join('\n');
@@ -939,37 +1003,61 @@
     dom.btnSendOrder.disabled = true;
     dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Отправка заказа...' : 'Slanje porudžbine...'}`;
 
-    const orderText = generateOrderMessageText();
+    const orderHtml = generateOrderHtml();
+    const orderPlainText = generateOrderPlainText();
     const botToken = "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24nU";
     const managerChatId = "414194396";
     const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
     const clientChatId = clientUser ? clientUser.id : null;
 
-    try {
-      // 1. Direct API delivery to Sales Representative (Ivan)
-      const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: managerChatId,
-          text: orderText,
-          parse_mode: "Markdown"
-        })
-      });
-      const data = await res.json();
-      console.log("Order dispatch result:", data);
-
-      // 2. Send confirmation to client if different from manager
-      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
-        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    // Helper: Send message with HTML, with guaranteed plain text fallback on any entity parse error
+    async function sendTelegramMsg(chatId, htmlText, plainText) {
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            chat_id: clientChatId,
-            text: `✅ *Vaša porudžbina je uspešno poslata! / Заказ отправлен!*\n\n💈 Salon: *${state.salonName}* (-${discRate}%)\n📦 Artikala: *${totalItems} kom*\n💰 Ukupno sa popustom: *${formatMoney(totalPriceDiscounted)}*\n(MP bez popusta: ${formatMoney(totalPriceRetail)})\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`,
-            parse_mode: "Markdown"
+            chat_id: chatId,
+            text: htmlText,
+            parse_mode: "HTML"
           })
-        }).catch(e => console.log("Client note error:", e));
+        });
+        const data = await res.json();
+        if (data && data.ok) return true;
+        console.warn("HTML delivery failed, falling back to plain text:", data);
+      } catch (e) {
+        console.warn("HTML delivery network error, trying plain text:", e);
+      }
+
+      try {
+        const resFb = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: plainText
+          })
+        });
+        const dataFb = await resFb.json();
+        return Boolean(dataFb && dataFb.ok);
+      } catch (e2) {
+        console.error("Plain text delivery error:", e2);
+        return false;
+      }
+    }
+
+    try {
+      // 1. Deliver order to Sales Representative (Ivan)
+      const deliveredToManager = await sendTelegramMsg(managerChatId, orderHtml, orderPlainText);
+      if (!deliveredToManager) {
+        throw new Error("Не удалось доставить заказ представителю");
+      }
+
+      // 2. Send confirmation to client if different from manager
+      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
+        const clientHtml = `✅ <b>Vaša porudžbina je uspešno poslata! / Заказ отправлен!</b>\n\n💈 Salon: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Artikala: <b>${totalItems} kom</b>\n💰 Ukupno sa popustom: <b>${formatMoney(totalPriceDiscounted)}</b>\n(MP bez popusta: ${formatMoney(totalPriceRetail)})\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`;
+        const clientPlain = `✅ Vaša porudžbina je uspešno poslata! / Заказ отправлен!\n\n💈 Salon: ${state.salonName} (-${discRate}%)\n📦 Artikala: ${totalItems} kom\n💰 Ukupno sa popustom: ${formatMoney(totalPriceDiscounted)}\n(MP bez popusta: ${formatMoney(totalPriceRetail)})\n\nProdajni predstavnik Davinesa je obavešten o porudžbini. Hvala!`;
+        sendTelegramMsg(clientChatId, clientHtml, clientPlain).catch(() => {});
       }
 
       // 3. Trigger sendData if context supports it
@@ -1010,8 +1098,8 @@
 
     } catch (err) {
       console.error("Failed to send order via API:", err);
-      copyToClipboard(orderText);
-      showToast(t.orderCopied);
+      copyToClipboard(orderPlainText);
+      showToast(state.lang === 'ru' ? 'Ошибка отправки! Текст заказа скопирован в буфер.' : 'Greška pri slanju! Tekst je kopiran.');
       dom.btnSendOrder.disabled = false;
       dom.btnSendOrder.innerHTML = `<span>📋</span> ${t.copyOrder}`;
     }

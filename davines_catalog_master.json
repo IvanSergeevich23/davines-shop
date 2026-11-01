@@ -157,7 +157,7 @@
     "code": "80034",
     "mp_price": 2000,
     "name": "Balance #1",
-    "sub_category": "Balance & Boucle (Завивка)",
+    "sub_category": "Завивка",
     "volume": "500ml",
     "vp_price": 1666.67
   },
@@ -166,7 +166,7 @@
     "code": "80035",
     "mp_price": 2000,
     "name": "Balance #2",
-    "sub_category": "Balance & Boucle (Завивка)",
+    "sub_category": "Завивка",
     "volume": "500ml",
     "vp_price": 1666.67
   },
@@ -175,7 +175,7 @@
     "code": "80031",
     "mp_price": 1790,
     "name": "Balance Neutralizer",
-    "sub_category": "Balance & Boucle (Завивка)",
+    "sub_category": "Завивка",
     "volume": "1000ml",
     "vp_price": 1491.67
   },
@@ -184,7 +184,7 @@
     "code": "80018",
     "mp_price": 1330,
     "name": "Boucle #1",
-    "sub_category": "Balance & Boucle (Завивка)",
+    "sub_category": "Завивка",
     "volume": "100ml",
     "vp_price": 1108.33
   },
@@ -193,7 +193,7 @@
     "code": "80019",
     "mp_price": 1330,
     "name": "Boucle #2",
-    "sub_category": "Balance & Boucle (Завивка)",
+    "sub_category": "Завивка",
     "volume": "100ml",
     "vp_price": 1108.33
   },
@@ -202,7 +202,7 @@
     "code": "80030",
     "mp_price": 950,
     "name": "Boucle Neutralizer",
-    "sub_category": "Balance & Boucle (Завивка)",
+    "sub_category": "Завивка",
     "volume": "100ml",
     "vp_price": 791.67
   },
