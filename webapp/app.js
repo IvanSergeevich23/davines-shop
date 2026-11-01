@@ -1087,7 +1087,27 @@
     return lines.join('\n');
   }
 
-  // 14. Send Order Handler (Native Telegram WebApp sendData + Device History)
+  // Helper: Dispatch message directly to Telegram Bot API via GET (No CORS preflight!)
+  function dispatchTelegramMessage(chatId, text, parseMode = "HTML") {
+    const botToken = "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24nU";
+    const params = new URLSearchParams({
+      chat_id: String(chatId),
+      text: text
+    });
+    if (parseMode) params.append("parse_mode", parseMode);
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?${params.toString()}`;
+
+    try {
+      fetch(url, { method: "GET", mode: "no-cors" }).catch(() => {});
+    } catch(e) {}
+
+    try {
+      const img = new Image();
+      img.src = url;
+    } catch(e) {}
+  }
+
+  // 14. Send Order Handler (Direct Delivery + Telegram WebApp + Device History)
   function handleSendOrder() {
     try {
       const t = I18N[state.lang];
@@ -1127,7 +1147,19 @@
         formatted_text: orderPlainText
       };
 
-      // 1. Save to local device order history
+      // 1. Deliver order directly to Sales Representative (Ivan: 414194396)
+      const managerChatId = "414194396";
+      dispatchTelegramMessage(managerChatId, orderHtml, "HTML");
+
+      // 2. Deliver confirmation directly to Client Salon if clientChatId exists
+      const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+      const clientChatId = clientUser ? clientUser.id : null;
+      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
+        const clientConfirmMsg = `✅ <b>Заказ успешно оформлен! / Porudžbina je poslata!</b>\n\n💈 Салон: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Позиций: <b>${totalItems} шт</b>\n💰 Сумма: <b>${formatMoney(totalPriceDiscounted)}</b>\n\nТорговый представитель Davines свяжется с вами для подтверждения заказа. Спасибо!`;
+        dispatchTelegramMessage(clientChatId, clientConfirmMsg, "HTML");
+      }
+
+      // 3. Save to local device order history
       try {
         saveOrderToLocalHistory({
           id: Date.now(),
@@ -1144,7 +1176,7 @@
         console.warn("History save warning:", histErr);
       }
 
-      // 2. Clear cart & comment immediately
+      // 4. Clear cart & comment immediately
       state.cart = {};
       state.shadesCart = {};
       state.comment = "";
@@ -1155,34 +1187,21 @@
       renderCartFloatingBar();
       updateCommentUI();
 
-      // 3. Update button to SUCCESS state right away!
+      // 5. Update button to SUCCESS state
       triggerHaptic('success');
       showToast(t.orderSuccess);
       dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ оформлен!' : 'Porudžbina poslata!'}`;
 
-      // 4. Send payload directly to Telegram Bot via native client bridge
-      let sendDataWorked = false;
+      // 6. Also deliver via tg.sendData if supported by context
       if (tg && typeof tg.sendData === 'function') {
         try {
           tg.sendData(JSON.stringify(orderPayload));
-          sendDataWorked = true;
         } catch (tgErr) {
-          console.warn("tg.sendData not available in this context:", tgErr);
+          console.warn("tg.sendData warning:", tgErr);
         }
       }
 
-      // If not sent via sendData (e.g. opened from inline button or outside Telegram):
-      if (!sendDataWorked) {
-        copyToClipboard(orderPlainText);
-        const tgUrl = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(orderPlainText)}`;
-        setTimeout(() => {
-          try {
-            window.open(tgUrl, '_blank');
-          } catch(e) {}
-        }, 500);
-      }
-
-      // 5. Close cart drawer after brief confirmation
+      // 7. Close cart drawer after brief confirmation
       setTimeout(() => {
         closeCartDrawer();
         dom.btnSendOrder.disabled = false;
@@ -1190,7 +1209,7 @@
         if (tg && typeof tg.close === 'function') {
           try { tg.close(); } catch(e) {}
         }
-      }, 1000);
+      }, 1200);
 
     } catch (criticalErr) {
       console.error("Critical error in handleSendOrder:", criticalErr);
