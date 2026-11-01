@@ -665,11 +665,17 @@ body {
   color: var(--text-main);
 }
 
-.cart-items-scroll {
-  padding: 14px 20px;
+.drawer-body {
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   flex: 1;
-  max-height: 45vh;
+  min-height: 0;
+  max-height: 54vh;
+  padding: 0 20px 14px;
+}
+
+.cart-items-scroll {
+  padding: 8px 0;
 }
 
 .cart-item-row {
@@ -787,21 +793,56 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 2px;
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.cart-comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .cart-comment-label {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-muted);
+  flex: 1;
+}
+
+.btn-dismiss-kb {
+  background: var(--accent-green);
+  color: #FFFFFF;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.btn-dismiss-kb:active {
+  transform: scale(0.95);
+  background: var(--accent-green-hover);
 }
 
 .cart-comment-input {
   width: 100%;
-  padding: 8px 12px;
-  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  background: #FFFFFF;
   font-family: inherit;
   font-size: 13px;
   color: var(--text-main);
@@ -814,7 +855,6 @@ body {
 
 .cart-comment-input:focus {
   border-color: var(--accent-green);
-  background: #FFFFFF;
   box-shadow: 0 0 0 2px var(--accent-green-soft);
 }
 

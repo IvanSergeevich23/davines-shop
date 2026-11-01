@@ -305,8 +305,11 @@
     cartDrawerSalonVal: document.getElementById('cartDrawerSalonVal'),
     cartDrawerDiscountBadge: document.getElementById('cartDrawerDiscountBadge'),
     cartDrawerRetailTotal: document.getElementById('cartDrawerRetailTotal'),
+    cartDrawerBody: document.getElementById('cartDrawerBody'),
+    cartCommentBlock: document.getElementById('cartCommentBlock'),
     cartCommentLabel: document.getElementById('cartCommentLabel'),
     cartCommentInput: document.getElementById('cartCommentInput'),
+    btnDismissKeyboard: document.getElementById('btnDismissKeyboard'),
     btnSendOrder: document.getElementById('btnSendOrder'),
     btnCopyOrder: document.getElementById('btnCopyOrder'),
     btnClearCart: document.getElementById('btnClearCart'),
@@ -850,6 +853,7 @@
     dom.cartItemsScroll.innerHTML = '';
 
     if (orderedList.length === 0) {
+      if (dom.cartCommentBlock) dom.cartCommentBlock.style.display = 'none';
       dom.cartItemsScroll.innerHTML = `
         <div class="cart-empty-view">
           <div class="cart-empty-icon">🛒</div>
@@ -862,6 +866,7 @@
       return;
     }
 
+    if (dom.cartCommentBlock) dom.cartCommentBlock.style.display = 'flex';
     dom.btnSendOrder.style.opacity = '1';
     dom.btnSendOrder.style.pointerEvents = 'auto';
 
@@ -1557,6 +1562,40 @@
     });
 
     // Cart buttons
+    if (dom.cartCommentInput && dom.btnDismissKeyboard) {
+      dom.cartCommentInput.addEventListener('focus', () => {
+        dom.btnDismissKeyboard.style.display = 'inline-flex';
+        setTimeout(() => {
+          if (dom.cartCommentBlock) {
+            dom.cartCommentBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 150);
+      });
+
+      dom.cartCommentInput.addEventListener('blur', () => {
+        setTimeout(() => {
+          if (dom.btnDismissKeyboard) {
+            dom.btnDismissKeyboard.style.display = 'none';
+          }
+        }, 200);
+      });
+
+      dom.btnDismissKeyboard.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dom.cartCommentInput.blur();
+        triggerHaptic('light');
+      });
+    }
+
+    if (dom.cartDrawerBody) {
+      dom.cartDrawerBody.addEventListener('touchstart', (e) => {
+        if (e.target !== dom.cartCommentInput && document.activeElement === dom.cartCommentInput) {
+          dom.cartCommentInput.blur();
+        }
+      }, { passive: true });
+    }
+
     dom.btnClearCart.addEventListener('click', () => {
       if (confirm(state.lang === 'ru' ? 'Очистить корзину?' : 'Isprazniti korpu?')) {
         state.cart = {};
@@ -1573,7 +1612,7 @@
 
     dom.btnSendOrder.addEventListener('click', handleSendOrder);
     dom.btnCopyOrder.addEventListener('click', () => {
-      const text = generateOrderMessageText();
+      const text = generateOrderPlainText();
       copyToClipboard(text);
       showToast(I18N[state.lang].orderCopied);
       triggerHaptic('light');
