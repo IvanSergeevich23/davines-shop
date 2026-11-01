@@ -42,14 +42,19 @@
       total: "Итого к оплате",
       totalWithDiscount: "Итого со скидкой",
       retailTotalWithoutDiscount: "Розничная цена (без скидки):",
-      sendOrder: "Отправить заказ торговому представителю",
-      copyOrder: "Скопировать список заказа",
+      sendOrder: "Отправить заказ",
+      copyOrder: "Скопировать список",
       orderCopied: "Текст заказа скопирован!",
       salonRequiredAlert: "Пожалуйста, укажите название салона перед входом!",
       clearCart: "Очистить",
       addBtn: "В корзину",
-      orderSuccess: "Заказ оформлен!",
-      orderSuccessSub: "Список заказа передан торговому представителю",
+      orderSuccess: "Заказ сформирован!",
+      orderSuccessSub: "Список заказа передан в диалог Telegram",
+      orderSuccessTitle: "✈️ Заказ сформирован!",
+      orderSuccessDesc: "Заказ скопирован в буфер обмена. Мы открываем диалог с вашим представителем Davines (Иван @Ivan_Sergeevich_23).",
+      btnOpenTg: "Открыть диалог в Telegram",
+      btnCopy: "Скопировать",
+      btnClose: "Закрыть",
       allSubcats: "Все",
       chooseShades: "Выбрать оттенки",
       editShades: "Изменить оттенки",
@@ -112,14 +117,19 @@
       total: "Ukupno",
       totalWithDiscount: "Ukupno sa popustom",
       retailTotalWithoutDiscount: "Maloprodajna cena (bez popusta):",
-      sendOrder: "Pošalji porudžbinu predstavniku",
-      copyOrder: "Kopiraj spisak porudžbine",
+      sendOrder: "Pošalji porudžbinu",
+      copyOrder: "Kopiraj spisak",
       orderCopied: "Spisak porudžbine je kopiran!",
       salonRequiredAlert: "Molimo unesite naziv vašeg salona!",
       clearCart: "Isprazni",
       addBtn: "U korpu",
-      orderSuccess: "Porudžbina je kreirana!",
-      orderSuccessSub: "Spisak je poslat prodajnom predstavniku",
+      orderSuccess: "Porudžbina je pripremljena!",
+      orderSuccessSub: "Spisak je prenet u Telegram chat",
+      orderSuccessTitle: "✈️ Porudžbina je pripremljena!",
+      orderSuccessDesc: "Porudžbina je kopirana. Otvaramo chat sa prodajnim predstavnikom Davinesa (Ivan @Ivan_Sergeevich_23).",
+      btnOpenTg: "Otvori chat u Telegramu",
+      btnCopy: "Kopiraj",
+      btnClose: "Zatvori",
       allSubcats: "Sve",
       chooseShades: "Izaberi nijanse",
       editShades: "Promeni nijanse",
@@ -357,7 +367,17 @@
     historyList: document.getElementById('historyList'),
     historyCloseBtn: document.getElementById('historyCloseBtn'),
     btnSendOrder: document.getElementById('btnSendOrder'),
+    btnSendOrderText: document.getElementById('btnSendOrderText'),
     btnCopyOrder: document.getElementById('btnCopyOrder'),
+    btnCopyOrderText: document.getElementById('btnCopyOrderText'),
+    orderSuccessModal: document.getElementById('orderSuccessModal'),
+    orderSuccessModalTitle: document.getElementById('orderSuccessModalTitle'),
+    orderSuccessModalDesc: document.getElementById('orderSuccessModalDesc'),
+    orderSuccessDetails: document.getElementById('orderSuccessDetails'),
+    btnOpenTgDirect: document.getElementById('btnOpenTgDirect'),
+    btnOpenTgDirectText: document.getElementById('btnOpenTgDirectText'),
+    btnCopySuccessOrder: document.getElementById('btnCopySuccessOrder'),
+    btnCloseSuccessModal: document.getElementById('btnCloseSuccessModal'),
     btnClearCart: document.getElementById('btnClearCart'),
     toast: document.getElementById('toastMsg'),
     // Palette Modal DOM
@@ -444,9 +464,18 @@
     document.getElementById('cartSalonLabel').textContent = t.salonPill + ":";
     document.getElementById('cartDrawerVatNote').textContent = t.vatIncluded;
     document.getElementById('summaryLabel').textContent = `${t.totalWithDiscount} (-${disc}%):`;
-    dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
-    dom.btnCopyOrder.textContent = t.copyOrder;
+    if (dom.btnSendOrderText) dom.btnSendOrderText.textContent = t.sendOrder;
+    else dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
+    if (dom.btnCopyOrderText) dom.btnCopyOrderText.textContent = t.copyOrder;
+    else dom.btnCopyOrder.textContent = t.copyOrder;
     dom.btnClearCart.textContent = t.clearCart;
+
+    // Order Success Modal labels
+    if (dom.orderSuccessModalTitle) dom.orderSuccessModalTitle.textContent = t.orderSuccessTitle;
+    if (dom.orderSuccessModalDesc) dom.orderSuccessModalDesc.textContent = t.orderSuccessDesc;
+    if (dom.btnOpenTgDirectText) dom.btnOpenTgDirectText.textContent = t.btnOpenTg;
+    if (dom.btnCopySuccessOrder) dom.btnCopySuccessOrder.textContent = t.btnCopy;
+    if (dom.btnCloseSuccessModal) dom.btnCloseSuccessModal.textContent = t.btnClose;
 
     // Comment Modal labels
     if (dom.commentModalTitle) dom.commentModalTitle.textContent = t.commentModalTitle;
@@ -1087,27 +1116,24 @@
     return lines.join('\n');
   }
 
-  // Helper: Dispatch message directly to Telegram Bot API via GET (No CORS preflight!)
-  function dispatchTelegramMessage(chatId, text, parseMode = "HTML") {
-    const botToken = "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24nU";
-    const params = new URLSearchParams({
-      chat_id: String(chatId),
-      text: text
-    });
-    if (parseMode) params.append("parse_mode", parseMode);
-    const url = `https://api.telegram.org/bot${botToken}/sendMessage?${params.toString()}`;
+  // 14. Send Order Handler (Direct Telegram Delivery + Native tg.sendData + Local History)
+  let lastOrderPlainText = "";
+  let lastTgUrl = "";
 
-    try {
-      fetch(url, { method: "GET", mode: "no-cors" }).catch(() => {});
-    } catch(e) {}
-
-    try {
-      const img = new Image();
-      img.src = url;
-    } catch(e) {}
+  function openDirectTelegramOrder(urlToOpen) {
+    const targetUrl = urlToOpen || lastTgUrl;
+    if (!targetUrl) return;
+    if (tg && typeof tg.openTelegramLink === 'function') {
+      try {
+        tg.openTelegramLink(targetUrl);
+        return;
+      } catch (err) {
+        console.warn("tg.openTelegramLink failed, using fallback:", err);
+      }
+    }
+    window.open(targetUrl, '_blank');
   }
 
-  // 14. Send Order Handler (Direct Delivery + Telegram WebApp + Device History)
   function handleSendOrder() {
     try {
       const t = I18N[state.lang];
@@ -1122,11 +1148,12 @@
       if (totalItems === 0) return;
 
       dom.btnSendOrder.disabled = true;
-      dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Оформление заказа...' : 'Slanje porudžbine...'}`;
+      dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Подготовка заказа...' : 'Priprema...'}`;
 
       const orderHtml = generateOrderHtml();
       const orderPlainText = generateOrderPlainText();
       const currentComment = state.comment ? state.comment.trim() : "";
+      lastOrderPlainText = orderPlainText;
 
       const orderPayload = {
         action: "davines_order",
@@ -1147,19 +1174,10 @@
         formatted_text: orderPlainText
       };
 
-      // 1. Deliver order directly to Sales Representative (Ivan: 414194396)
-      const managerChatId = "414194396";
-      dispatchTelegramMessage(managerChatId, orderHtml, "HTML");
+      // 1. Copy formatted plain-text order to clipboard immediately
+      copyToClipboard(orderPlainText);
 
-      // 2. Deliver confirmation directly to Client Salon if clientChatId exists
-      const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
-      const clientChatId = clientUser ? clientUser.id : null;
-      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
-        const clientConfirmMsg = `✅ <b>Заказ успешно оформлен! / Porudžbina je poslata!</b>\n\n💈 Салон: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Позиций: <b>${totalItems} шт</b>\n💰 Сумма: <b>${formatMoney(totalPriceDiscounted)}</b>\n\nТорговый представитель Davines свяжется с вами для подтверждения заказа. Спасибо!`;
-        dispatchTelegramMessage(clientChatId, clientConfirmMsg, "HTML");
-      }
-
-      // 3. Save to local device order history
+      // 2. Save to local device order history
       try {
         saveOrderToLocalHistory({
           id: Date.now(),
@@ -1176,7 +1194,7 @@
         console.warn("History save warning:", histErr);
       }
 
-      // 4. Clear cart & comment immediately
+      // 3. Clear cart & comment immediately
       state.cart = {};
       state.shadesCart = {};
       state.comment = "";
@@ -1187,12 +1205,7 @@
       renderCartFloatingBar();
       updateCommentUI();
 
-      // 5. Update button to SUCCESS state
-      triggerHaptic('success');
-      showToast(t.orderSuccess);
-      dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ оформлен!' : 'Porudžbina poslata!'}`;
-
-      // 6. Also deliver via tg.sendData if supported by context
+      // 4. Also deliver via native tg.sendData if launched via Keyboard button
       if (tg && typeof tg.sendData === 'function') {
         try {
           tg.sendData(JSON.stringify(orderPayload));
@@ -1201,21 +1214,60 @@
         }
       }
 
-      // 7. Close cart drawer after brief confirmation
+      // 5. Build direct Telegram chat link to Ivan (@Ivan_Sergeevich_23)
+      lastTgUrl = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(orderPlainText)}`;
+
+      // 6. Reset button state & close cart drawer
+      closeCartDrawer();
+      dom.btnSendOrder.disabled = false;
+      if (dom.btnSendOrderText) dom.btnSendOrderText.textContent = t.sendOrder;
+      else dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
+
+      // 7. Populate & Open Order Success Modal
+      if (dom.orderSuccessDetails) {
+        dom.orderSuccessDetails.innerHTML = `
+          <div class="order-success-preview-row">
+            <span>💈 ${t.salonPill}:</span>
+            <b>${escapeHtml(state.salonName)} (-${discRate}%)</b>
+          </div>
+          <div class="order-success-preview-row">
+            <span>📦 ${t.items}:</span>
+            <b>${totalItems} ${t.tubes || 'шт.'}</b>
+          </div>
+          <div class="order-success-preview-row">
+            <span>💰 ${t.total}:</span>
+            <span class="order-success-preview-val">${formatMoney(totalPriceDiscounted)}</span>
+          </div>
+          ${currentComment ? `<div style="font-size: 12px; color: var(--text-muted); margin-top: 4px; font-style: italic;">💬 ${escapeHtml(currentComment)}</div>` : ''}
+        `;
+      }
+      dom.modalOverlay.classList.add("open");
+      dom.orderSuccessModal.classList.add("open");
+      triggerHaptic('success');
+      showToast(t.orderSuccess);
+
+      // 8. Auto-open Telegram chat with Ivan after brief tick
       setTimeout(() => {
-        closeCartDrawer();
-        dom.btnSendOrder.disabled = false;
-        dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
-        if (tg && typeof tg.close === 'function') {
-          try { tg.close(); } catch(e) {}
-        }
-      }, 1200);
+        openDirectTelegramOrder(lastTgUrl);
+      }, 350);
 
     } catch (criticalErr) {
       console.error("Critical error in handleSendOrder:", criticalErr);
       dom.btnSendOrder.disabled = false;
-      dom.btnSendOrder.innerHTML = `<span>✈️</span> ${I18N[state.lang].sendOrder}`;
+      if (dom.btnSendOrderText) dom.btnSendOrderText.textContent = I18N[state.lang].sendOrder;
+      else dom.btnSendOrder.innerHTML = `<span>✈️</span> ${I18N[state.lang].sendOrder}`;
       showToast(state.lang === 'ru' ? 'Произошла ошибка, попробуйте снова' : 'Došlo je do greške, pokušajte ponovo');
+    }
+  }
+
+  function closeOrderSuccessModal() {
+    if (dom.orderSuccessModal) dom.orderSuccessModal.classList.remove('open');
+    if (!dom.cartDrawer.classList.contains('open') &&
+        !dom.salonModal.classList.contains('open') &&
+        !dom.paletteModal.classList.contains('open') &&
+        !dom.historyModal.classList.contains('open') &&
+        !dom.commentModal.classList.contains('open')) {
+      dom.modalOverlay.classList.remove('open');
     }
   }
 
@@ -1324,12 +1376,34 @@
             <span class="history-card-total">${formatMoney(order.total_price_mp)}</span>
           </div>
           ${order.comment ? `<div class="history-card-comment">💬 ${escapeHtml(order.comment)}</div>` : ''}
-          <button type="button" class="history-card-repeat-btn" data-idx="${index}">
-            🔄 ${t.historyRepeat}
-          </button>
+          <div style="display: flex; gap: 6px; justify-content: flex-end; margin-top: 8px; flex-wrap: wrap;">
+            <button type="button" class="history-card-repeat-btn history-action-send" data-idx="${index}" style="background: #2AABEE; color: #FFFFFF; border-color: #2AABEE;">
+              ✈️ ${state.lang === 'ru' ? 'В Telegram' : 'U Telegram'}
+            </button>
+            <button type="button" class="history-card-repeat-btn history-action-copy" data-idx="${index}">
+              📋 ${state.lang === 'ru' ? 'Копия' : 'Kopija'}
+            </button>
+            <button type="button" class="history-card-repeat-btn history-action-repeat" data-idx="${index}">
+              🔄 ${t.historyRepeat}
+            </button>
+          </div>
         `;
 
-        card.querySelector(".history-card-repeat-btn").addEventListener("click", () => {
+        card.querySelector(".history-action-send").addEventListener("click", () => {
+          const text = order.formatted_text || generateOrderPlainText();
+          const url = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(text)}`;
+          openDirectTelegramOrder(url);
+          triggerHaptic("light");
+        });
+
+        card.querySelector(".history-action-copy").addEventListener("click", () => {
+          const text = order.formatted_text || generateOrderPlainText();
+          copyToClipboard(text);
+          showToast(t.orderCopied);
+          triggerHaptic("light");
+        });
+
+        card.querySelector(".history-action-repeat").addEventListener("click", () => {
           repeatOrder(order);
         });
 
@@ -1656,7 +1730,11 @@
 
   function closeCartDrawer() {
     dom.cartDrawer.classList.remove('open');
-    if (!dom.salonModal.classList.contains('open') && !dom.paletteModal.classList.contains('open')) {
+    if (!dom.salonModal.classList.contains('open') && 
+        !dom.paletteModal.classList.contains('open') &&
+        !dom.historyModal.classList.contains('open') &&
+        !dom.commentModal.classList.contains('open') &&
+        !(dom.orderSuccessModal && dom.orderSuccessModal.classList.contains('open'))) {
       dom.modalOverlay.classList.remove('open');
     }
   }
@@ -1729,6 +1807,7 @@
     dom.modalOverlay.addEventListener('click', () => {
       closeCommentModal();
       closeHistoryModal();
+      closeOrderSuccessModal();
       if (state.salonName && (state.discount === 20 || state.discount === 30)) {
         closeSalonModal();
         closeCartDrawer();
@@ -1827,6 +1906,23 @@
       showToast(I18N[state.lang].orderCopied);
       triggerHaptic('light');
     });
+
+    // Order Success Modal events
+    if (dom.btnOpenTgDirect) {
+      dom.btnOpenTgDirect.addEventListener('click', () => {
+        openDirectTelegramOrder(lastTgUrl);
+      });
+    }
+    if (dom.btnCopySuccessOrder) {
+      dom.btnCopySuccessOrder.addEventListener('click', () => {
+        copyToClipboard(lastOrderPlainText);
+        showToast(I18N[state.lang].orderCopied);
+        triggerHaptic('light');
+      });
+    }
+    if (dom.btnCloseSuccessModal) {
+      dom.btnCloseSuccessModal.addEventListener('click', closeOrderSuccessModal);
+    }
 
     // Auto-prompt salon name & discount on first run if salon not yet entered
     if (!state.salonName) {
