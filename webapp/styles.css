@@ -741,35 +741,144 @@ body {
   opacity: 0.6;
 }
 
-/* Salon Input in Cart */
+/* Salon Banner in Cart with Comment Button at Top */
 .cart-salon-banner {
   background: var(--bg-secondary);
-  padding: 12px 20px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cart-salon-banner-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border-color);
+  gap: 10px;
+}
+
+.cart-salon-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
 }
 
 .cart-salon-label {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cart-salon-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
 }
 
 .cart-salon-val {
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cart-discount-badge {
   background: var(--accent-green-soft);
   color: var(--accent-green);
   border: 1px solid var(--accent-green);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 2px 7px;
   border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* Comment Button in Salon Banner */
+.cart-comment-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 6px 13px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: all 0.2s ease;
+}
+
+.cart-comment-btn:active {
+  transform: scale(0.96);
+  background: var(--bg-primary);
+}
+
+.cart-comment-btn.has-comment {
+  background: var(--accent-green-soft);
+  color: var(--accent-green);
+  border-color: var(--accent-green);
+}
+
+/* Compact Comment Preview Row */
+.cart-comment-preview-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(58, 74, 61, 0.08);
+  border: 1px dashed var(--accent-green);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cart-comment-preview-row:active {
+  background: rgba(58, 74, 61, 0.14);
+}
+
+.comment-preview-icon {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.comment-preview-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.comment-preview-clear {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.comment-preview-clear:active {
+  color: var(--accent-clay);
 }
 
 .summary-retail-note {
@@ -786,71 +895,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-/* Cart Comment Tile in Cart Drawer (Clean row, no inline keyboard squish) */
-.cart-comment-tile {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
-  margin: 12px 0 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.cart-comment-tile:active {
-  transform: scale(0.98);
-  background: var(--bg-secondary);
-}
-
-.cart-comment-tile.has-comment {
-  border-color: var(--accent-green);
-  background: rgba(58, 74, 61, 0.06);
-}
-
-.comment-tile-icon {
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.comment-tile-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.comment-tile-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.comment-tile-desc {
-  font-size: 11.5px;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 2px;
-}
-
-.cart-comment-tile.has-comment .comment-tile-desc {
-  color: var(--accent-green);
-  font-weight: 600;
-}
-
-.comment-tile-action {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent-green);
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  flex-shrink: 0;
 }
 
 /* Dedicated Comment Modal (Centered above keyboard) */
@@ -881,34 +925,6 @@ body {
   pointer-events: auto;
 }
 
-/* Quick Selection Chips */
-.comment-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 2px 0 4px;
-}
-
-.comment-chip {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  padding: 6px 11px;
-  border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.comment-chip:active {
-  background: var(--accent-green);
-  color: #FFFFFF;
-  border-color: var(--accent-green);
-  transform: scale(0.95);
-}
-
 .comment-modal-textarea {
   width: 100%;
   padding: 12px;
@@ -922,7 +938,7 @@ body {
   outline: none;
   box-sizing: border-box;
   line-height: 1.4;
-  min-height: 90px;
+  min-height: 100px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 

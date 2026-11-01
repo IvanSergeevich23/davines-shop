@@ -25,13 +25,11 @@
       cart: "Корзина",
       cartEmptyTitle: "Ваша корзина пуста",
       cartEmptyDesc: "Выберите нужные продукты Davines в каталоге выше",
-      commentTileTitle: "Комментарий к заказу",
-      commentTileDesc: "Одноразовые пеньюары, пакеты, пожелания...",
-      commentTileAdd: "Добавить",
-      commentTileEdit: "Изменить",
+      commentBtn: "Комментарий",
+      commentBtnEdit: "Изменить",
       commentModalTitle: "💬 Комментарий к заказу",
       commentModalDesc: "Укажите необходимые расходники (пеньюары, пакеты) или пожелания к доставке:",
-      commentModalPlaceholder: "Например: нужны одноразовые пеньюары (2 пачки), пакеты для клиентов...",
+      commentModalPlaceholder: "Например: нужны одноразовые пеньюары, пакеты для клиентов...",
       commentSave: "✓ Сохранить комментарий",
       commentClear: "🗑 Очистить",
       commentCancel: "Отмена",
@@ -97,13 +95,11 @@
       cart: "Korpa",
       cartEmptyTitle: "Vaša korpa je prazna",
       cartEmptyDesc: "Izaberite željene Davines proizvode iz kataloga",
-      commentTileTitle: "Komentar uz porudžbinu",
-      commentTileDesc: "Pelerine za jednokratnu upotrebu, kese, napomene...",
-      commentTileAdd: "Dodaj",
-      commentTileEdit: "Izmeni",
+      commentBtn: "Komentar",
+      commentBtnEdit: "Izmeni",
       commentModalTitle: "💬 Komentar uz porudžbinu",
       commentModalDesc: "Navedite besplatne potrošne materijale (pelerine, kese) ili napomene za dostavu:",
-      commentModalPlaceholder: "Npr: potrebne jednokratne pelerine (2 pak.), kese za klijente...",
+      commentModalPlaceholder: "Na primer: potrebne jednokratne pelerine, kese za klijente...",
       commentSave: "✓ Sačuvaj komentar",
       commentClear: "🗑 Obriši",
       commentCancel: "Otkaži",
@@ -333,10 +329,11 @@
     cartDrawerDiscountBadge: document.getElementById('cartDrawerDiscountBadge'),
     cartDrawerRetailTotal: document.getElementById('cartDrawerRetailTotal'),
     cartDrawerBody: document.getElementById('cartDrawerBody'),
-    cartCommentTile: document.getElementById('cartCommentTile'),
-    commentTileTitle: document.getElementById('commentTileTitle'),
-    commentTileDesc: document.getElementById('commentTileDesc'),
-    commentTileActionText: document.getElementById('commentTileActionText'),
+    cartCommentBtn: document.getElementById('cartCommentBtn'),
+    cartCommentBtnText: document.getElementById('cartCommentBtnText'),
+    cartCommentPreviewRow: document.getElementById('cartCommentPreviewRow'),
+    cartCommentPreviewText: document.getElementById('cartCommentPreviewText'),
+    cartCommentClearBtn: document.getElementById('cartCommentClearBtn'),
     commentModal: document.getElementById('commentModal'),
     commentModalTitle: document.getElementById('commentModalTitle'),
     commentModalDesc: document.getElementById('commentModalDesc'),
@@ -449,7 +446,7 @@
     if (dom.btnSaveComment) dom.btnSaveComment.textContent = t.commentSave;
     if (dom.btnClearComment) dom.btnClearComment.textContent = t.commentClear;
     if (dom.btnCancelComment) dom.btnCancelComment.textContent = t.commentCancel;
-    updateCommentTileDisplay();
+    updateCommentUI();
 
     // History Modal labels
     if (dom.historyBtn) dom.historyBtn.textContent = t.historyBtn;
@@ -904,8 +901,9 @@
     }
     dom.cartItemsScroll.innerHTML = '';
 
+    updateCommentUI();
+
     if (orderedList.length === 0) {
-      if (dom.cartCommentTile) dom.cartCommentTile.style.display = 'none';
       dom.cartItemsScroll.innerHTML = `
         <div class="cart-empty-view">
           <div class="cart-empty-icon">🛒</div>
@@ -918,8 +916,6 @@
       return;
     }
 
-    if (dom.cartCommentTile) dom.cartCommentTile.style.display = 'flex';
-    updateCommentTileDisplay();
     dom.btnSendOrder.style.opacity = '1';
     dom.btnSendOrder.style.pointerEvents = 'auto';
 
@@ -1151,7 +1147,7 @@
       localStorage.removeItem('davines_cart_comment');
       renderProducts();
       renderCartFloatingBar();
-      updateCommentTileDisplay();
+      updateCommentUI();
 
       // Send payload directly to Telegram Bot via native client bridge
       try {
@@ -1215,7 +1211,7 @@
     }
     triggerHaptic("light");
     closeCommentModal();
-    updateCommentTileDisplay();
+    updateCommentUI();
   }
 
   function clearComment() {
@@ -1224,22 +1220,22 @@
     localStorage.removeItem("davines_cart_comment");
     triggerHaptic("light");
     closeCommentModal();
-    updateCommentTileDisplay();
+    updateCommentUI();
   }
 
-  function updateCommentTileDisplay() {
+  function updateCommentUI() {
     const t = I18N[state.lang];
-    if (!dom.cartCommentTile) return;
+    if (!dom.cartCommentBtn) return;
     if (state.comment && state.comment.trim()) {
-      dom.cartCommentTile.classList.add("has-comment");
-      if (dom.commentTileTitle) dom.commentTileTitle.textContent = t.commentTileTitle + ":";
-      if (dom.commentTileDesc) dom.commentTileDesc.textContent = state.comment.trim();
-      if (dom.commentTileActionText) dom.commentTileActionText.textContent = t.commentTileEdit;
+      dom.cartCommentBtn.classList.add("has-comment");
+      if (dom.cartCommentBtnText) dom.cartCommentBtnText.textContent = t.commentBtnEdit || (state.lang === 'ru' ? 'Изменить' : 'Izmeni');
+      if (dom.cartCommentPreviewRow) dom.cartCommentPreviewRow.style.display = "flex";
+      if (dom.cartCommentPreviewText) dom.cartCommentPreviewText.textContent = state.comment.trim();
     } else {
-      dom.cartCommentTile.classList.remove("has-comment");
-      if (dom.commentTileTitle) dom.commentTileTitle.textContent = t.commentTileTitle;
-      if (dom.commentTileDesc) dom.commentTileDesc.textContent = t.commentTileDesc;
-      if (dom.commentTileActionText) dom.commentTileActionText.textContent = t.commentTileAdd;
+      dom.cartCommentBtn.classList.remove("has-comment");
+      if (dom.cartCommentBtnText) dom.cartCommentBtnText.textContent = t.commentBtn || (state.lang === 'ru' ? 'Комментарий' : 'Komentar');
+      if (dom.cartCommentPreviewRow) dom.cartCommentPreviewRow.style.display = "none";
+      if (dom.cartCommentPreviewText) dom.cartCommentPreviewText.textContent = "";
     }
   }
 
@@ -1706,28 +1702,22 @@
     // Floating cart bar click opens drawer
     dom.cartFloatingBar.addEventListener('click', openCartDrawer);
 
-    // Comment Modal events
-    if (dom.cartCommentTile) dom.cartCommentTile.addEventListener('click', openCommentModal);
+    // Comment events (Button in top banner + modal controls)
+    if (dom.cartCommentBtn) dom.cartCommentBtn.addEventListener('click', openCommentModal);
+    if (dom.cartCommentPreviewRow) {
+      dom.cartCommentPreviewRow.addEventListener('click', (e) => {
+        if (e.target !== dom.cartCommentClearBtn) openCommentModal();
+      });
+    }
+    if (dom.cartCommentClearBtn) {
+      dom.cartCommentClearBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearComment();
+      });
+    }
     if (dom.btnSaveComment) dom.btnSaveComment.addEventListener('click', saveComment);
     if (dom.btnClearComment) dom.btnClearComment.addEventListener('click', clearComment);
     if (dom.btnCancelComment) dom.btnCancelComment.addEventListener('click', closeCommentModal);
-
-    // Quick chips in comment modal
-    document.querySelectorAll('.comment-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        triggerHaptic('light');
-        const textToAdd = chip.getAttribute('data-chip');
-        const current = dom.commentModalInput.value.trim();
-        if (current) {
-          if (!current.includes(textToAdd)) {
-            dom.commentModalInput.value = `${current}, ${textToAdd}`;
-          }
-        } else {
-          dom.commentModalInput.value = textToAdd;
-        }
-        if (dom.btnClearComment) dom.btnClearComment.style.display = 'block';
-      });
-    });
 
     // Order History modal events
     if (dom.historyBtn) dom.historyBtn.addEventListener('click', openHistoryModal);
