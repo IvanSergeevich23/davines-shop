@@ -25,6 +25,8 @@
       cart: "Корзина",
       cartEmptyTitle: "Ваша корзина пуста",
       cartEmptyDesc: "Выберите нужные продукты Davines в каталоге выше",
+      cartCommentLabel: "💬 Комментарий к заказу (пеньюары, пакеты, пожелания):",
+      cartCommentPlaceholder: "например: нужны одноразовые пеньюары, пакеты для клиентов...",
       vatIncluded: "с НДС (sa PDV)",
       total: "Итого к оплате",
       totalWithDiscount: "Итого со скидкой",
@@ -82,6 +84,8 @@
       cart: "Korpa",
       cartEmptyTitle: "Vaša korpa je prazna",
       cartEmptyDesc: "Izaberite željene Davines proizvode iz kataloga",
+      cartCommentLabel: "💬 Dodatna napomena (peškiri, kese za klijente, želje):",
+      cartCommentPlaceholder: "na primer: jednokratni peškiri, brendirane kese...",
       vatIncluded: "sa PDV-om",
       total: "Ukupno",
       totalWithDiscount: "Ukupno sa popustom",
@@ -301,6 +305,8 @@
     cartDrawerSalonVal: document.getElementById('cartDrawerSalonVal'),
     cartDrawerDiscountBadge: document.getElementById('cartDrawerDiscountBadge'),
     cartDrawerRetailTotal: document.getElementById('cartDrawerRetailTotal'),
+    cartCommentLabel: document.getElementById('cartCommentLabel'),
+    cartCommentInput: document.getElementById('cartCommentInput'),
     btnSendOrder: document.getElementById('btnSendOrder'),
     btnCopyOrder: document.getElementById('btnCopyOrder'),
     btnClearCart: document.getElementById('btnClearCart'),
@@ -331,10 +337,8 @@
 
   function getCleanProductName(fullName) {
     if (!fullName) return "";
-    if (fullName.includes(" - ")) {
-      return fullName.split(" - ")[0].trim();
-    }
-    return fullName.trim();
+    const parts = fullName.split(/\s*[-—]\s*/);
+    return parts[0].trim();
   }
 
   function formatMoney(amount) {
@@ -391,6 +395,8 @@
     document.getElementById('cartSalonLabel').textContent = t.salonPill + ":";
     document.getElementById('cartDrawerVatNote').textContent = t.vatIncluded;
     document.getElementById('summaryLabel').textContent = `${t.totalWithDiscount} (-${disc}%):`;
+    if (dom.cartCommentLabel) dom.cartCommentLabel.textContent = t.cartCommentLabel;
+    if (dom.cartCommentInput) dom.cartCommentInput.placeholder = t.cartCommentPlaceholder;
     dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
     dom.btnCopyOrder.textContent = t.copyOrder;
     dom.btnClearCart.textContent = t.clearCart;
@@ -913,76 +919,107 @@
 
   function generateOrderHtml() {
     const discRate = getDiscountRate();
-    const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
-    const dateStr = new Date().toLocaleString('sr-RS', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const { totalItems, totalPriceDiscounted, orderedList } = getCartSummary();
+    const comment = (dom.cartCommentInput ? dom.cartCommentInput.value.trim() : "");
 
     let lines = [];
-    lines.push(`🌿 <b>PORUDŽBINA / ЗАКАЗ DAVINES</b> 🌿`);
-    lines.push(`📅 Datum: ${dateStr}`);
-    lines.push(`💈 <b>Salon / Салон:</b> ${escapeHtml(state.salonName || "Nije navedeno")}`);
-    lines.push(`🏷 <b>Popust / Скидка:</b> ${discRate}%`);
+    const salonStr = escapeHtml(state.salonName || "Nije navedeno");
+    let headerStr = `<b>${salonStr}</b>`;
+
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const u = tg.initDataUnsafe.user;
-      const userDisplay = `${u.first_name || ''} ${u.last_name || ''}`.trim();
-      const usernameDisplay = u.username ? ` (@${u.username})` : '';
-      lines.push(`👤 Master: ${escapeHtml(userDisplay + usernameDisplay)}`);
-    }
-    lines.push(``);
-    lines.push(`📦 <b>Artikli / Товары (${totalItems} kom):</b>`);
+      const firstName = u.first_name || '';
+      const lastName = u.last_name || '';
+      const fullName = [firstName, lastName].filter(Boolean).join(' ') || u.username || '';
+      const escapedName = escapeHtml(fullName);
 
-    orderedList.forEach(({ product, qty, discPrice, subtotalDisc }, idx) => {
-      const cleanTitle = getCleanProductName(product.name);
-      lines.push(`${idx + 1}. [<code>${escapeHtml(product.code)}</code>] ${escapeHtml(cleanTitle)} (${escapeHtml(product.volume)})`);
-      lines.push(`   └ ${qty} kom x ${formatMoney(discPrice)} (MP: <s>${formatMoney(product.mp_price)}</s>) = <b>${formatMoney(subtotalDisc)}</b>`);
+      if (u.username) {
+        headerStr += ` ("${escapedName}" <a href="https://t.me/${u.username}">@${u.username}</a>)`;
+      } else if (u.id) {
+        headerStr += ` (<a href="tg://user?id=${u.id}">"${escapedName}"</a>)`;
+      } else if (escapedName) {
+        headerStr += ` ("${escapedName}")`;
+      }
+    }
+
+    lines.push(headerStr);
+    lines.push(``);
+
+    orderedList.forEach((item, idx) => {
+      let itemTitle = "";
+      if (item.isShade) {
+        let brandPrefix = "View";
+        if (item.lineKey === 'MASK_VIBRACHROM') brandPrefix = "Mask";
+        else if (item.lineKey === 'THE_PRESENT_TIME') brandPrefix = "The Present Time";
+        itemTitle = `${brandPrefix} (${escapeHtml(item.shade)})`;
+      } else {
+        const clean = getCleanProductName(item.product.name);
+        const vol = item.product.volume || '';
+        const volPart = (vol && !clean.toLowerCase().includes(vol.toLowerCase())) ? ` ${vol}` : '';
+        itemTitle = `(${escapeHtml(item.product.code)}) ${escapeHtml(clean)}${escapeHtml(volPart)}`;
+      }
+      lines.push(`${idx + 1}. ${itemTitle} — ${item.qty} шт`);
     });
 
+    if (comment) {
+      lines.push(``);
+      lines.push(`💬 <b>Комментарий:</b> ${escapeHtml(comment)}`);
+    }
+
     lines.push(``);
-    lines.push(`💰 <b>UKUPNO SA POPUSTOM (-${discRate}%): ${formatMoney(totalPriceDiscounted)}</b>`);
-    lines.push(`Maloprodajna cena bez popusta: ${formatMoney(totalPriceRetail)}`);
+    lines.push(`💰 <b>Итого со скидкой (${discRate}%):</b> ${formatMoney(totalPriceDiscounted)}`);
 
     return lines.join('\n');
   }
 
   function generateOrderPlainText() {
     const discRate = getDiscountRate();
-    const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
-    const dateStr = new Date().toLocaleString('sr-RS', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const { totalItems, totalPriceDiscounted, orderedList } = getCartSummary();
+    const comment = (dom.cartCommentInput ? dom.cartCommentInput.value.trim() : "");
 
     let lines = [];
-    lines.push(`🌿 PORUDŽBINA / ЗАКАЗ DAVINES 🌿`);
-    lines.push(`📅 Datum: ${dateStr}`);
-    lines.push(`💈 Salon / Салон: ${state.salonName || "Nije navedeno"}`);
-    lines.push(`🏷 Popust / Скидка: ${discRate}%`);
+    const salonStr = state.salonName || "Nije navedeno";
+    let headerStr = `${salonStr}`;
+
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const u = tg.initDataUnsafe.user;
-      const userDisplay = `${u.first_name || ''} ${u.last_name || ''}`.trim();
-      const usernameDisplay = u.username ? ` (@${u.username})` : '';
-      lines.push(`👤 Master: ${userDisplay + usernameDisplay}`);
-    }
-    lines.push(``);
-    lines.push(`📦 Artikli / Товары (${totalItems} kom):`);
+      const firstName = u.first_name || '';
+      const lastName = u.last_name || '';
+      const fullName = [firstName, lastName].filter(Boolean).join(' ') || u.username || '';
 
-    orderedList.forEach(({ product, qty, discPrice, subtotalDisc }, idx) => {
-      const cleanTitle = getCleanProductName(product.name);
-      lines.push(`${idx + 1}. [${product.code}] ${cleanTitle} (${product.volume})`);
-      lines.push(`   └ ${qty} kom x ${formatMoney(discPrice)} (MP: ${formatMoney(product.mp_price)}) = ${formatMoney(subtotalDisc)}`);
+      if (u.username) {
+        headerStr += ` ("${fullName}" @${u.username})`;
+      } else if (fullName) {
+        headerStr += ` ("${fullName}")`;
+      }
+    }
+
+    lines.push(headerStr);
+    lines.push(``);
+
+    orderedList.forEach((item, idx) => {
+      let itemTitle = "";
+      if (item.isShade) {
+        let brandPrefix = "View";
+        if (item.lineKey === 'MASK_VIBRACHROM') brandPrefix = "Mask";
+        else if (item.lineKey === 'THE_PRESENT_TIME') brandPrefix = "The Present Time";
+        itemTitle = `${brandPrefix} (${item.shade})`;
+      } else {
+        const clean = getCleanProductName(item.product.name);
+        const vol = item.product.volume || '';
+        const volPart = (vol && !clean.toLowerCase().includes(vol.toLowerCase())) ? ` ${vol}` : '';
+        itemTitle = `(${item.product.code}) ${clean}${volPart}`;
+      }
+      lines.push(`${idx + 1}. ${itemTitle} — ${item.qty} шт`);
     });
 
+    if (comment) {
+      lines.push(``);
+      lines.push(`💬 Комментарий: ${comment}`);
+    }
+
     lines.push(``);
-    lines.push(`💰 UKUPNO SA POPUSTOM (-${discRate}%): ${formatMoney(totalPriceDiscounted)}`);
-    lines.push(`Maloprodajna cena bez popusta: ${formatMoney(totalPriceRetail)}`);
+    lines.push(`💰 Итого со скидкой (${discRate}%): ${formatMoney(totalPriceDiscounted)}`);
 
     return lines.join('\n');
   }
@@ -1068,7 +1105,9 @@
             salon_name: state.salonName,
             discount: discRate,
             total_items: totalItems,
-            total_price_mp: totalPriceDiscounted
+            total_price_mp: totalPriceDiscounted,
+            comment: (dom.cartCommentInput ? dom.cartCommentInput.value.trim() : ""),
+            formatted_text: orderPlainText
           }));
         } catch(e) {
           console.log("sendData ignored:", e);
@@ -1079,9 +1118,10 @@
       showToast(t.orderSuccess);
       dom.btnSendOrder.innerHTML = `<span>✅</span> ${state.lang === 'ru' ? 'Заказ успешно отправлен!' : 'Porudžbina poslata!'}`;
 
-      // Reset cart
+      // Reset cart & comment
       state.cart = {};
       state.shadesCart = {};
+      if (dom.cartCommentInput) dom.cartCommentInput.value = '';
       localStorage.removeItem('davines_cart');
       localStorage.removeItem('davines_shades_cart');
       renderProducts();
@@ -1521,6 +1561,7 @@
       if (confirm(state.lang === 'ru' ? 'Очистить корзину?' : 'Isprazniti korpu?')) {
         state.cart = {};
         state.shadesCart = {};
+        if (dom.cartCommentInput) dom.cartCommentInput.value = '';
         localStorage.removeItem('davines_cart');
         localStorage.removeItem('davines_shades_cart');
         renderProducts();

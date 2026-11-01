@@ -357,16 +357,14 @@ def handle_webapp_order(chat_id, user, user_fullname, username, raw_data):
     # 2. Notification to Sales Representative (MANAGER_CHAT_ID)
     if MANAGER_CHAT_ID and MANAGER_CHAT_ID != "YOUR_TELEGRAM_CHAT_ID_HERE":
         user_mention = f"@{username}" if username else user_fullname
-        manager_notification = (
-            f"🔔 *NOVA PORUDŽBINA {order_num} OD KLIJENTA!* 🔔\n\n"
-            f"💈 *Salon:* `{salon_name}`\n"
-            f"👤 *Naručilac:* {user_fullname} ({user_mention})\n"
-            f"🆔 *Chat ID:* `{chat_id}`\n\n"
-            f"-----------------------------------------\n"
-            f"{formatted_text}\n"
-            f"-----------------------------------------\n"
-            f"Status: Novo • Spreman za obradu"
-        )
+        if formatted_text:
+            manager_notification = formatted_text
+        else:
+            user_mention = f"@{username}" if username else user_fullname
+            manager_notification = (
+                f"<b>{salon_name}</b> (\"{user_fullname}\" {user_mention})\n\n"
+                f"Porudžbina {order_num} ({total_items} kom) - {price_formatted}"
+            )
         send_message(MANAGER_CHAT_ID, manager_notification)
         print(f"Successfully delivered order {order_num} to manager ({MANAGER_CHAT_ID})")
     else:
