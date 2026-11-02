@@ -5,8 +5,8 @@
     "code": "DAV-BOJE-01",
     "name": "MASK WITH VIBRACHROM trajna boja - omogućava ujednačeno prodiranje boje u strukturu dlake, pruža dodatni sjaj i izuzetnu postojanost boje",
     "volume": "100ml",
-    "vp_price": 1400.00,
-    "mp_price": 1680.00
+    "vp_price": 1400.0,
+    "mp_price": 1680.0
   },
   {
     "category": "BOJE",
@@ -15,7 +15,7 @@
     "name": "VIEW COLOR polupermanentna boja - od 88% do 93% sastojaka je prirodnog porekla,view je inovativna i veoma održiva linija boja sa kiselim pH, koja nudi izvanredan sjaj i izvanredne hromatske rezultate. U potpunosti poštuju i ojačavaju strukturu kose bez podizanja prirodnog tona",
     "volume": "60ml",
     "vp_price": 1058.33,
-    "mp_price": 1270.00
+    "mp_price": 1270.0
   },
   {
     "category": "BOJE",
@@ -23,8 +23,8 @@
     "code": "DAV-BOJE-03",
     "name": "VIEW COLOR GLOSS polupermanentna boja sa kiselim pH vrednostima - za dodatni sjaj ili u kombinaciji sa različitim nijansama radi smanjenja intenziteta boje",
     "volume": "500ml",
-    "vp_price": 3750.00,
-    "mp_price": 4500.00
+    "vp_price": 3750.0,
+    "mp_price": 4500.0
   },
   {
     "category": "BOJE",
@@ -33,7 +33,7 @@
     "name": "THE PRESENT TIME demi-permanentna boja, bez amonijaka - koristi revolucionarnu biomimetičku tehnologiju koja je dizajnirana da obnavlja i štiti lipide u kosi. Može podići nivo boje za jedan ton i sadrži 88-93% sastojaka prirodnog porekla",
     "volume": "100ml",
     "vp_price": 1541.67,
-    "mp_price": 1850.00
+    "mp_price": 1850.0
   },
   {
     "category": "BOJE",
@@ -42,7 +42,7 @@
     "name": "PROTECTION PROVIDER 200ML- zastita za teme i skalp prilkom bojenja",
     "volume": "200ml",
     "vp_price": 1745.83,
-    "mp_price": 2095.00
+    "mp_price": 2095.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -50,8 +50,8 @@
     "code": "64000",
     "name": "FIN PIG GLOSS - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -59,8 +59,8 @@
     "code": "64005",
     "name": "FIN PIG GRAY/GRIGIO - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -68,8 +68,8 @@
     "code": "64004",
     "name": "FIN PIG MAHAGONY/MOGANO - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -77,8 +77,8 @@
     "code": "64008",
     "name": "FIN PIG N.3 DARK BROWN - gell boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -86,8 +86,8 @@
     "code": "64009",
     "name": "FIN PIG N.4 BROWN - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -95,8 +95,8 @@
     "code": "64010",
     "name": "FIN PIG N.5 LIGHT BROWN - gell boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -104,8 +104,8 @@
     "code": "64011",
     "name": "FIN PIG N.6 DARK BLOND - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -113,8 +113,8 @@
     "code": "64012",
     "name": "FIN PIG N.7 BLONDE - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -122,8 +122,8 @@
     "code": "64013",
     "name": "FIN PIG N.8 LIGHT BLONDE - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -131,8 +131,8 @@
     "code": "64014",
     "name": "FIN PIG N.9 VERY LIG.BLONDE - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "FINEST PIGMENTS",
@@ -140,8 +140,8 @@
     "code": "64002",
     "name": "FIN PIG RED/ROSO - gel boja za kosu",
     "volume": "280ml",
-    "vp_price": 4725.00,
-    "mp_price": 5670.00
+    "vp_price": 4725.0,
+    "mp_price": 5670.0
   },
   {
     "category": "ACTIVATOR",
@@ -149,8 +149,8 @@
     "code": "66046",
     "name": "Activator 10vol -hidrogen 3%",
     "volume": "900 ml",
-    "vp_price": 1400.00,
-    "mp_price": 1680.00
+    "vp_price": 1400.0,
+    "mp_price": 1680.0
   },
   {
     "category": "ACTIVATOR",
@@ -158,8 +158,8 @@
     "code": "66047",
     "name": "Activator 20vol - hidrogen 6%",
     "volume": "900 ml",
-    "vp_price": 1400.00,
-    "mp_price": 1680.00
+    "vp_price": 1400.0,
+    "mp_price": 1680.0
   },
   {
     "category": "ACTIVATOR",
@@ -167,8 +167,8 @@
     "code": "66048",
     "name": "Activator 30vol - hidrogen 9%",
     "volume": "900 ml",
-    "vp_price": 1400.00,
-    "mp_price": 1680.00
+    "vp_price": 1400.0,
+    "mp_price": 1680.0
   },
   {
     "category": "ACTIVATOR",
@@ -176,8 +176,8 @@
     "code": "66049",
     "name": "Activator 40vol - hidrogen 12%",
     "volume": "900 ml",
-    "vp_price": 1400.00,
-    "mp_price": 1680.00
+    "vp_price": 1400.0,
+    "mp_price": 1680.0
   },
   {
     "category": "ACTIVATOR",
@@ -185,8 +185,8 @@
     "code": "66054",
     "name": "Activator 5vol - hidrogen 1.5%",
     "volume": "900 ml",
-    "vp_price": 1400.00,
-    "mp_price": 1680.00
+    "vp_price": 1400.0,
+    "mp_price": 1680.0
   },
   {
     "category": "ACTIVATOR",
@@ -195,7 +195,7 @@
     "name": "Activator 7vol - hidrogen 1.5% (The Present Time)",
     "volume": "1000 ml",
     "vp_price": 1541.67,
-    "mp_price": 1850.00
+    "mp_price": 1850.0
   },
   {
     "category": "ACTIVATOR",
@@ -204,7 +204,7 @@
     "name": "Activator 15vol - hidrogen 1.5% (The Present Time)",
     "volume": "1000 ml",
     "vp_price": 1541.67,
-    "mp_price": 1850.00
+    "mp_price": 1850.0
   },
   {
     "category": "THE CENTURY OF LIGHT",
@@ -213,7 +213,7 @@
     "name": "MASK BLEACHING POWDER - blanš sa zaštitnim efektom",
     "volume": "500g",
     "vp_price": 4433.33,
-    "mp_price": 5320.00
+    "mp_price": 5320.0
   },
   {
     "category": "THE CENTURY OF LIGHT",
@@ -221,8 +221,8 @@
     "code": "66062",
     "name": "THE CENTURY OF LIGHT LIBERTY POWDER - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
     "volume": "450g",
-    "vp_price": 5750.00,
-    "mp_price": 6900.00
+    "vp_price": 5750.0,
+    "mp_price": 6900.0
   },
   {
     "category": "THE CENTURY OF LIGHT",
@@ -230,8 +230,8 @@
     "code": "66063",
     "name": "THE CENTURY OF LIGHT - TOLERANCE GEL LIGHTENING",
     "volume": "900ml",
-    "vp_price": 5750.00,
-    "mp_price": 6900.00
+    "vp_price": 5750.0,
+    "mp_price": 6900.0
   },
   {
     "category": "THE CENTURY OF LIGHT",
@@ -240,7 +240,7 @@
     "name": "THE CENTURY OF LIGHT PROGRESS POWDER - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
     "volume": "800g",
     "vp_price": 7691.67,
-    "mp_price": 9230.00
+    "mp_price": 9230.0
   },
   {
     "category": "THE CENTURY OF LIGHT",
@@ -249,7 +249,7 @@
     "name": "TCL PROGRESS REFILL KIT24 - višenamenski, visokokvalitetni blanš u prahu, sa HAIR PROCETITIVE BOOSTER patentiranom tehnologijom",
     "volume": "3x800g",
     "vp_price": 22916.67,
-    "mp_price": 27500.00
+    "mp_price": 27500.0
   },
   {
     "category": "BALANCE & BOUCLE",
@@ -258,7 +258,7 @@
     "name": "Balance #1",
     "volume": "500ml",
     "vp_price": 1666.67,
-    "mp_price": 2000.00
+    "mp_price": 2000.0
   },
   {
     "category": "BALANCE & BOUCLE",
@@ -267,7 +267,7 @@
     "name": "Balance #2",
     "volume": "500ml",
     "vp_price": 1666.67,
-    "mp_price": 2000.00
+    "mp_price": 2000.0
   },
   {
     "category": "BALANCE & BOUCLE",
@@ -276,7 +276,7 @@
     "name": "Balance Neutralizer",
     "volume": "1000ml",
     "vp_price": 1491.67,
-    "mp_price": 1790.00
+    "mp_price": 1790.0
   },
   {
     "category": "BALANCE & BOUCLE",
@@ -285,7 +285,7 @@
     "name": "Boucle #1",
     "volume": "100ml",
     "vp_price": 1108.33,
-    "mp_price": 1330.00
+    "mp_price": 1330.0
   },
   {
     "category": "BALANCE & BOUCLE",
@@ -294,7 +294,7 @@
     "name": "Boucle #2",
     "volume": "100ml",
     "vp_price": 1108.33,
-    "mp_price": 1330.00
+    "mp_price": 1330.0
   },
   {
     "category": "BALANCE & BOUCLE",
@@ -303,7 +303,7 @@
     "name": "Boucle Neutralizer",
     "volume": "100ml",
     "vp_price": 791.67,
-    "mp_price": 950.00
+    "mp_price": 950.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -312,7 +312,7 @@
     "name": "VOLUME BASE No.1",
     "volume": "500ml",
     "vp_price": 6333.33,
-    "mp_price": 7600.00
+    "mp_price": 7600.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -321,7 +321,7 @@
     "name": "MOISTURE BASE No.2",
     "volume": "500ml",
     "vp_price": 6333.33,
-    "mp_price": 7600.00
+    "mp_price": 7600.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -330,7 +330,7 @@
     "name": "RADIANCE BASE No.3",
     "volume": "500ml",
     "vp_price": 6333.33,
-    "mp_price": 7600.00
+    "mp_price": 7600.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -339,7 +339,7 @@
     "name": "STRENGHT BASE No.4",
     "volume": "500ml",
     "vp_price": 6333.33,
-    "mp_price": 7600.00
+    "mp_price": 7600.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -348,7 +348,7 @@
     "name": "VOLUMIZING BOOSTER No.1",
     "volume": "150ml",
     "vp_price": 5391.67,
-    "mp_price": 6470.00
+    "mp_price": 6470.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -357,7 +357,7 @@
     "name": "HYDRATING BOOSTER No.2",
     "volume": "150ml",
     "vp_price": 5391.67,
-    "mp_price": 6470.00
+    "mp_price": 6470.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -366,7 +366,7 @@
     "name": "ILLUMINATING BOOSTER No.3",
     "volume": "150ml",
     "vp_price": 5391.67,
-    "mp_price": 6470.00
+    "mp_price": 6470.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -375,7 +375,7 @@
     "name": "FORTIFYING BOOSTER No.4",
     "volume": "150ml",
     "vp_price": 5391.67,
-    "mp_price": 6470.00
+    "mp_price": 6470.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -384,7 +384,7 @@
     "name": "CONTROLLING BOOSTER No.5",
     "volume": "150ml",
     "vp_price": 5391.67,
-    "mp_price": 6470.00
+    "mp_price": 6470.0
   },
   {
     "category": "NATURALTECH TAILORING TREATMENT",
@@ -393,7 +393,7 @@
     "name": "BLONDE BRIGHT BOOSTER No.6",
     "volume": "150ml",
     "vp_price": 5391.67,
-    "mp_price": 6470.00
+    "mp_price": 6470.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -401,8 +401,8 @@
     "code": "67229",
     "name": "ALCHEMIC CONDITIONER SILVER - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -410,8 +410,8 @@
     "code": "67041",
     "name": "ALCHEMIC CONDITIONER CHOCOLATE - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -419,8 +419,8 @@
     "code": "67225",
     "name": "ALCHEMIC CONDITIONER COPPER - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -428,8 +428,8 @@
     "code": "67246",
     "name": "ALCHEMIC CONDITIONER MARINE BLUE - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -437,8 +437,8 @@
     "code": "67247",
     "name": "ALCHEMIC CONDITIONER TEAL - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -446,8 +446,8 @@
     "code": "67249",
     "name": "ALCHEMIC CONDITIONER CORAL - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -455,8 +455,8 @@
     "code": "67223",
     "name": "ALCHEMIC CONDITIONER RED - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -464,8 +464,8 @@
     "code": "67033",
     "name": "ALCHEMIC CONDITIONER GOLDEN - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -473,8 +473,8 @@
     "code": "67035",
     "name": "ALCHEMIC CONDITIONER TABACCO - regenerator za kosu",
     "volume": "250ml",
-    "vp_price": 2525.00,
-    "mp_price": 3030.00
+    "vp_price": 2525.0,
+    "mp_price": 3030.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -483,7 +483,7 @@
     "name": "ALCHEMIC SHAMPOO SILVER - kombinacija sampona i regeneratora pojačava odsjaj platinaste plave kose",
     "volume": "1000ml",
     "vp_price": 3833.33,
-    "mp_price": 4600.00
+    "mp_price": 4600.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -491,8 +491,8 @@
     "code": "67228",
     "name": "ALCHEMIC SHAMPOO SILVER - kombinacija sampona i regeneratora pojačava odsjaj platinaste plave kose",
     "volume": "280ml",
-    "vp_price": 1850.00,
-    "mp_price": 2220.00
+    "vp_price": 1850.0,
+    "mp_price": 2220.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -500,8 +500,8 @@
     "code": "67215",
     "name": "ALCHEMIC SHAMPOO CHOCOLATE - kombinacija sampona i regeneratora pojačava odsjaj tamno smeđe do crne kose.",
     "volume": "280ml",
-    "vp_price": 1850.00,
-    "mp_price": 2220.00
+    "vp_price": 1850.0,
+    "mp_price": 2220.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -509,8 +509,8 @@
     "code": "67211",
     "name": "ALCHEMIC SHAMPOO RED - kombinacija sampona i regeneratora pojačava odsjaj crvene i mahagoni tonove",
     "volume": "280ml",
-    "vp_price": 1850.00,
-    "mp_price": 2220.00
+    "vp_price": 1850.0,
+    "mp_price": 2220.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -518,8 +518,8 @@
     "code": "67220",
     "name": "ALCHEMIC SHAMPOO TABACCO - kombinacija sampona i regeneratora pojačava odsjaj srednje do svetle smeđe kose",
     "volume": "280ml",
-    "vp_price": 1850.00,
-    "mp_price": 2220.00
+    "vp_price": 1850.0,
+    "mp_price": 2220.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -527,8 +527,8 @@
     "code": "67213",
     "name": "ALCHEMIC SHAMPOO COPPER/RAME - kombinacija sampona i regeneratora pojačava odsjaj tamno plave do svetlo smeđe",
     "volume": "280ml",
-    "vp_price": 1850.00,
-    "mp_price": 2220.00
+    "vp_price": 1850.0,
+    "mp_price": 2220.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -536,8 +536,8 @@
     "code": "67218",
     "name": "ALCHEMIC SHAMPOO GOLDEN - šampon za poboljšanje boje za zlatno-plave do medeno-plave tonove.",
     "volume": "280ml",
-    "vp_price": 1850.00,
-    "mp_price": 2220.00
+    "vp_price": 1850.0,
+    "mp_price": 2220.0
   },
   {
     "category": "ALCHEMIC SYSTEM",
@@ -546,7 +546,7 @@
     "name": "ALCHEMIC CONDITIONER SILVER - regenerator za kosu",
     "volume": "1000ml",
     "vp_price": 6066.67,
-    "mp_price": 7280.00
+    "mp_price": 7280.0
   },
   {
     "category": "NATURALTECH",
@@ -555,7 +555,7 @@
     "name": "ENERGIZING SHAMPOO - šampon protiv opadanja kose",
     "volume": "250 ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -564,7 +564,7 @@
     "name": "ENERGIZING SHAMPOO - šampon protiv opadanja kose",
     "volume": "1000ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -572,8 +572,8 @@
     "code": "71256",
     "name": "ENERGIZING LOTION - ampule protiv opadanja kose",
     "volume": "12x6 ml",
-    "vp_price": 6600.00,
-    "mp_price": 7920.00
+    "vp_price": 6600.0,
+    "mp_price": 7920.0
   },
   {
     "category": "NATURALTECH",
@@ -581,8 +581,8 @@
     "code": "71182",
     "name": "ENERGIZING SUPERACTIV - tonik protiv hormonskog opadanja kose",
     "volume": "100ml",
-    "vp_price": 6500.00,
-    "mp_price": 7800.00
+    "vp_price": 6500.0,
+    "mp_price": 7800.0
   },
   {
     "category": "NATURALTECH",
@@ -591,7 +591,7 @@
     "name": "ENERGIZING SEASONAL SUPERACTIV -tonik protiv sezonskog opadanja kose",
     "volume": "100ml",
     "vp_price": 6708.33,
-    "mp_price": 8050.00
+    "mp_price": 8050.0
   },
   {
     "category": "NATURALTECH",
@@ -600,7 +600,7 @@
     "name": "ENERGIZING GEL- preventivni gel protiv opadanja kose",
     "volume": "150 ml",
     "vp_price": 2458.33,
-    "mp_price": 2950.00
+    "mp_price": 2950.0
   },
   {
     "category": "NATURALTECH",
@@ -609,7 +609,7 @@
     "name": "ENERGIZING THICKENING TONIC- povećava obim dlake i pospešuje gustinu kose već pri prvom korišćenju",
     "volume": "100ml",
     "vp_price": 3566.67,
-    "mp_price": 4280.00
+    "mp_price": 4280.0
   },
   {
     "category": "NATURALTECH",
@@ -618,7 +618,7 @@
     "name": "RENEWING SHAMPOO - šampon za dugovečnost svih tipova kose",
     "volume": "250ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -627,7 +627,7 @@
     "name": "RENEWING SHAMPOO - šampon za dugovečnost svih tipova kose",
     "volume": "1000ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -635,8 +635,8 @@
     "code": "71245",
     "name": "RENEWING CONDITIONING TREATMANT - regenerator za za dugovečnost svih tipova kose",
     "volume": "250ml",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "NATURALTECH",
@@ -645,7 +645,7 @@
     "name": "RENEWING CONDITIONING TREATMANT - regenerator za za dugovečnost svih tipova kose",
     "volume": "1000ml",
     "vp_price": 6216.67,
-    "mp_price": 7460.00
+    "mp_price": 7460.0
   },
   {
     "category": "NATURALTECH",
@@ -653,8 +653,8 @@
     "code": "71308",
     "name": "NOURISHING HAIR BUILDING PAK - pakovanje za oštećenu i rascvetalu kosu",
     "volume": "250 ml",
-    "vp_price": 3025.00,
-    "mp_price": 3630.00
+    "vp_price": 3025.0,
+    "mp_price": 3630.0
   },
   {
     "category": "NATURALTECH",
@@ -663,7 +663,7 @@
     "name": "NOURISHING SHAMPOO - šampon za izuzetno suvu i oštećenu kosu",
     "volume": "250ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -672,7 +672,7 @@
     "name": "NOURISHING SHAMPOO - šampon za izuzetno suvu i oštećenu kosu",
     "volume": "1000ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -680,8 +680,8 @@
     "code": "71181",
     "name": "NOURISHING SUPERACTIV HRJ - ampule multiaktivnog kompleksa minerala",
     "volume": "6x8ml",
-    "vp_price": 8225.00,
-    "mp_price": 9870.00
+    "vp_price": 8225.0,
+    "mp_price": 9870.0
   },
   {
     "category": "NATURALTECH",
@@ -690,7 +690,7 @@
     "name": "NOURISHING VEGET.MASKA - ekstra hidrantna i hranljiva maska za gustu i oštećenu kosu",
     "volume": "250ml",
     "vp_price": 2808.33,
-    "mp_price": 3370.00
+    "mp_price": 3370.0
   },
   {
     "category": "NATURALTECH",
@@ -699,7 +699,7 @@
     "name": "NOURISHING VEGET.MASKA - ekstra hidrantna i hranljiva maska za gustu i oštećenu kosu",
     "volume": "1000ml",
     "vp_price": 7608.33,
-    "mp_price": 9130.00
+    "mp_price": 9130.0
   },
   {
     "category": "NATURALTECH",
@@ -708,7 +708,7 @@
     "name": "NOURISHING VEGETERIAN MIRACLE - krem regenerator za izuzetno suvu i oštećenu kosu",
     "volume": "250ml",
     "vp_price": 2558.33,
-    "mp_price": 3070.00
+    "mp_price": 3070.0
   },
   {
     "category": "NATURALTECH",
@@ -717,7 +717,7 @@
     "name": "NOURISHING VEGETERIAN MIRACLE - krem regenerator za izuzetno suvu i oštećenu kosu",
     "volume": "1000ml",
     "vp_price": 6691.67,
-    "mp_price": 8030.00
+    "mp_price": 8030.0
   },
   {
     "category": "NATURALTECH",
@@ -726,7 +726,7 @@
     "name": "NOURISHING RESTRUCTURING MIRACLE - rekonstruk.serum za obnavljanje jako oštećene kose",
     "volume": "1000ml",
     "vp_price": 6741.67,
-    "mp_price": 8090.00
+    "mp_price": 8090.0
   },
   {
     "category": "NATURALTECH",
@@ -735,7 +735,7 @@
     "name": "NOURISHING SEALER - hranljiva i zaštitna tečnost koja se ne ispira",
     "volume": "100ml",
     "vp_price": 2458.33,
-    "mp_price": 2950.00
+    "mp_price": 2950.0
   },
   {
     "category": "NATURALTECH",
@@ -744,7 +744,7 @@
     "name": "NOURISHING KERATIN - profesionalni tretman za rekonstrukciju oštećene kose",
     "volume": "1000ml",
     "vp_price": 8283.33,
-    "mp_price": 9940.00
+    "mp_price": 9940.0
   },
   {
     "category": "NATURALTECH",
@@ -753,7 +753,7 @@
     "name": "NOURISHING BOOSTER - hranljivi aditiv za teško oštećenu kosu",
     "volume": "100ml",
     "vp_price": 4683.33,
-    "mp_price": 5620.00
+    "mp_price": 5620.0
   },
   {
     "category": "NATURALTECH",
@@ -762,7 +762,7 @@
     "name": "PURIFYNG SHAMPOO - šampon protiv peruti",
     "volume": "250ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -771,7 +771,7 @@
     "name": "PURIFYNG SHAMPOO - šampon protiv peruti",
     "volume": "1000ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -780,7 +780,7 @@
     "name": "PURIFYNG GEL- gel protiv peruti",
     "volume": "150 ml",
     "vp_price": 2391.67,
-    "mp_price": 2870.00
+    "mp_price": 2870.0
   },
   {
     "category": "NATURALTECH",
@@ -789,7 +789,7 @@
     "name": "REBALANCING SHAMPOO - normalizuje proizvodnju sebuma čisteći kožu bez stimulacije",
     "volume": "250ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -798,7 +798,7 @@
     "name": "REBALANCING SHAMPOO - normalizuje proizvodnju sebuma čisteći kožu bez stimulacije",
     "volume": "1000ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -807,7 +807,7 @@
     "name": "REBALANCING CLENAS.TRETMAN - tečni tretman za masno teme i tešku kosu",
     "volume": "250ml",
     "vp_price": 2183.33,
-    "mp_price": 2620.00
+    "mp_price": 2620.0
   },
   {
     "category": "NATURALTECH",
@@ -816,7 +816,7 @@
     "name": "WELLBEING SHAMPOO - šampon za svaki dan",
     "volume": "250ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -825,7 +825,7 @@
     "name": "WELLBEING SHAMPOO - šampon za svaki dan",
     "volume": "1000ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -834,7 +834,7 @@
     "name": "WELLBEING CONDITIONER - hidrantni regenerator za svaki dan",
     "volume": "150ml",
     "vp_price": 1733.33,
-    "mp_price": 2080.00
+    "mp_price": 2080.0
   },
   {
     "category": "NATURALTECH",
@@ -842,8 +842,8 @@
     "code": "71175",
     "name": "WELLBEING CONDITIONER - hidrantni regenerator za svaki dan",
     "volume": "1000ml",
-    "vp_price": 5250.00,
-    "mp_price": 6300.00
+    "vp_price": 5250.0,
+    "mp_price": 6300.0
   },
   {
     "category": "NATURALTECH",
@@ -852,7 +852,7 @@
     "name": "DETOXIFYING SCRUB SHAMPOO - šampon za čišćenje kose i koze glave",
     "volume": "250ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -861,7 +861,7 @@
     "name": "DETOXIFYING SCRUB SHAMPOO - šampon za čišćenje kose i koze glave",
     "volume": "1000ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -870,7 +870,7 @@
     "name": "CALMING SHAMPOO - šampon za nežno čišćenje kose.Smiruje osetljivu kožu glave",
     "volume": "250 ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -879,7 +879,7 @@
     "name": "CALMING SHAMPOO - šampon za nežno čišćenje kose.Smiruje osetljivu kožu glave",
     "volume": "1000 ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -888,7 +888,7 @@
     "name": "CALMING SUPERACTIVE - losion za brzo uklanjane iritacija i svraba koze glave kao i suvog skalpa",
     "volume": "100 ml",
     "vp_price": 3416.67,
-    "mp_price": 4100.00
+    "mp_price": 4100.0
   },
   {
     "category": "NATURALTECH",
@@ -897,7 +897,7 @@
     "name": "REPLUMPING SHAMPOO - šampon daje elastičnost,vlaznost i štiti ćelije skalpa od starenja",
     "volume": "250 ml",
     "vp_price": 1883.33,
-    "mp_price": 2260.00
+    "mp_price": 2260.0
   },
   {
     "category": "NATURALTECH",
@@ -906,7 +906,7 @@
     "name": "REPLUMPING SHAMPOO - šampon daje elastičnost,vlaznost i štiti ćelije skalpa od starenja",
     "volume": "1000 ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "NATURALTECH",
@@ -915,7 +915,7 @@
     "name": "REPLUMPING CONDITIONER- formulisan da rasplete, daje kompaktnost i elasticnost kosi",
     "volume": "150 ml",
     "vp_price": 1733.33,
-    "mp_price": 2080.00
+    "mp_price": 2080.0
   },
   {
     "category": "NATURALTECH",
@@ -923,8 +923,8 @@
     "code": "71221",
     "name": "REPLUMPING CONDITIONER- formulisan da rasplete, daje kompaktnost i elasticnost kosi",
     "volume": "1000 ml",
-    "vp_price": 5250.00,
-    "mp_price": 6300.00
+    "vp_price": 5250.0,
+    "mp_price": 6300.0
   },
   {
     "category": "NATURALTECH",
@@ -932,8 +932,8 @@
     "code": "71337",
     "name": "REPLUMPING HAIR FILLER SUPERACTIVE-čini kosu ravnom i glatkom",
     "volume": "100ml",
-    "vp_price": 2975.00,
-    "mp_price": 3570.00
+    "vp_price": 2975.0,
+    "mp_price": 3570.0
   },
   {
     "category": "NATURALTECH",
@@ -941,8 +941,8 @@
     "code": "71329",
     "name": "ELEVATING CLAY SUPERCLEANSER - tretman za osetljivu i dehidriranu kožu glave koji smanjuje svrab i crvenilo",
     "volume": "120gr",
-    "vp_price": 8975.00,
-    "mp_price": 10770.00
+    "vp_price": 8975.0,
+    "mp_price": 10770.0
   },
   {
     "category": "NATURALTECH",
@@ -951,7 +951,7 @@
     "name": "ELEVATING MASSAGE OIL - poboljašava mikrocirkulaciju kože glave zahvaljujući masaži i pogodno je i za masažu ruku",
     "volume": "100ml",
     "vp_price": 4116.67,
-    "mp_price": 4940.00
+    "mp_price": 4940.0
   },
   {
     "category": "NATURALTECH",
@@ -960,7 +960,7 @@
     "name": "ELEVATING SCALP RECOVERY TRETMAN - tretman za osetljivu i dehidriranu kožu glave koji smanjuje svrab i crvenilo",
     "volume": "100ml",
     "vp_price": 4116.67,
-    "mp_price": 4940.00
+    "mp_price": 4940.0
   },
   {
     "category": "NATURALTECH",
@@ -969,7 +969,7 @@
     "name": "ELEVATING AMB SPRAY - miris koji osvežava prostor i tkanine",
     "volume": "250ml",
     "vp_price": 4333.33,
-    "mp_price": 5200.00
+    "mp_price": 5200.0
   },
   {
     "category": "OI",
@@ -978,7 +978,7 @@
     "name": "OI/ BODY WASH -gel za tuširanje koji nežno čisti kožu, dajući joj mekoću i hidrataciju",
     "volume": "280ml",
     "vp_price": 1733.33,
-    "mp_price": 2080.00
+    "mp_price": 2080.0
   },
   {
     "category": "OI",
@@ -987,7 +987,7 @@
     "name": "OI/OIL- hranljivo ulje negu, ekstra mekocu i sjaj kose.",
     "volume": "135ml",
     "vp_price": 4083.33,
-    "mp_price": 4900.00
+    "mp_price": 4900.0
   },
   {
     "category": "OI",
@@ -996,7 +996,7 @@
     "name": "OI/OIL- hranljivo ulje negu, ekstra mekocu i sjaj kose.",
     "volume": "50ml",
     "vp_price": 2191.67,
-    "mp_price": 2630.00
+    "mp_price": 2630.0
   },
   {
     "category": "OI",
@@ -1004,8 +1004,8 @@
     "code": "76043",
     "name": "OI CONDITIONER- krem regenerator za negu, mekocu, sjaj i volumen",
     "volume": "250ml",
-    "vp_price": 2350.00,
-    "mp_price": 2820.00
+    "vp_price": 2350.0,
+    "mp_price": 2820.0
   },
   {
     "category": "OI",
@@ -1014,7 +1014,7 @@
     "name": "OI CONDITIONER- krem regenerator za negu, mekocu, sjaj i volumen",
     "volume": "1000ml",
     "vp_price": 6983.33,
-    "mp_price": 8380.00
+    "mp_price": 8380.0
   },
   {
     "category": "OI",
@@ -1022,8 +1022,8 @@
     "code": "76005",
     "name": "OI/SHAMPOO -šampon za negu, mekocu, sjaj i volumen",
     "volume": "1000ml",
-    "vp_price": 5200.00,
-    "mp_price": 6240.00
+    "vp_price": 5200.0,
+    "mp_price": 6240.0
   },
   {
     "category": "OI",
@@ -1032,7 +1032,7 @@
     "name": "OI/SHAMPOO -šampon za negu, mekocu, sjaj i volumen",
     "volume": "280ml",
     "vp_price": 2041.67,
-    "mp_price": 2450.00
+    "mp_price": 2450.0
   },
   {
     "category": "OI",
@@ -1041,7 +1041,7 @@
     "name": "OI/SHAMPOO Refill-Šampon za negu, mekocu, sjaj i volumen",
     "volume": "500ml",
     "vp_price": 3241.67,
-    "mp_price": 3890.00
+    "mp_price": 3890.0
   },
   {
     "category": "OI",
@@ -1049,8 +1049,8 @@
     "code": "76037",
     "name": "OI HAIR BUTTER-antioksidativni hranljivi puter",
     "volume": "1000ml",
-    "vp_price": 8750.00,
-    "mp_price": 10500.00
+    "vp_price": 8750.0,
+    "mp_price": 10500.0
   },
   {
     "category": "OI",
@@ -1058,8 +1058,8 @@
     "code": "76038",
     "name": "OI HAIR BUTTER-antioksidativni hranljivi puter",
     "volume": "250ml",
-    "vp_price": 2975.00,
-    "mp_price": 3570.00
+    "vp_price": 2975.0,
+    "mp_price": 3570.0
   },
   {
     "category": "OI",
@@ -1068,7 +1068,7 @@
     "name": "OI LIQUID LUSTER - instant tretman za sjaj i mekoću",
     "volume": "300ml",
     "vp_price": 3308.33,
-    "mp_price": 3970.00
+    "mp_price": 3970.0
   },
   {
     "category": "OI",
@@ -1077,7 +1077,7 @@
     "name": "OI/ALL IN ONE MILK - višenamenski tretman u spreju koji omekšava, raspetljava, kontroliše kovrdžanje i štiti kosu od toplote",
     "volume": "135ml",
     "vp_price": 2558.33,
-    "mp_price": 3070.00
+    "mp_price": 3070.0
   },
   {
     "category": "OI",
@@ -1086,7 +1086,7 @@
     "name": "OI/ALL IN ONE MILK - višenamenski tretman u spreju koji omekšava, raspetljava, kontroliše kovrdžanje i štiti kosu od toplote",
     "volume": "50ml",
     "vp_price": 1066.67,
-    "mp_price": 1280.00
+    "mp_price": 1280.0
   },
   {
     "category": "OI",
@@ -1095,7 +1095,7 @@
     "name": "OI SOUFFLE - pena sa Roucou uljem i ekstraktom korena cikorije, ova pena pruža svilenkasti, lagani efekat tela koji čini da vaša kosa izgleda vidljivo punije i sjajnije",
     "volume": "125ml",
     "vp_price": 2583.33,
-    "mp_price": 3100.00
+    "mp_price": 3100.0
   },
   {
     "category": "OI",
@@ -1104,7 +1104,7 @@
     "name": "OI HAND BALM - krema za ruke",
     "volume": "75ml",
     "vp_price": 2033.33,
-    "mp_price": 2440.00
+    "mp_price": 2440.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1112,8 +1112,8 @@
     "code": "72006",
     "name": "INTENSE TREATMENT - ojačavajući, blistavi tretman za sve tipove plave kose, prirodne ili kozmetički tretirane kose",
     "volume": "150ml",
-    "vp_price": 2325.00,
-    "mp_price": 2790.00
+    "vp_price": 2325.0,
+    "mp_price": 2790.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1122,7 +1122,7 @@
     "name": "INTENSE TREATMENT - ojačavajući, blistavi tretman za sve tipove plave kose, prirodne ili kozmetički tretirane kose",
     "volume": "750ml",
     "vp_price": 6458.33,
-    "mp_price": 7750.00
+    "mp_price": 7750.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1130,8 +1130,8 @@
     "code": "72003",
     "name": "RICH CONDICIONER - regenerator za prirodu i kozmetički tretiranu plavu kosu",
     "volume": "250ml",
-    "vp_price": 2600.00,
-    "mp_price": 3120.00
+    "vp_price": 2600.0,
+    "mp_price": 3120.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1140,7 +1140,7 @@
     "name": "RICH CONDICIONER - regenerator za prirodu i kozmetički tretiranu plavu kosu",
     "volume": "1000ml",
     "vp_price": 6983.33,
-    "mp_price": 8380.00
+    "mp_price": 8380.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1148,8 +1148,8 @@
     "code": "72008",
     "name": "SHEER GLAZE - termičko zaštitno sredstvo formulisano za plavu kosu",
     "volume": "150ml",
-    "vp_price": 2325.00,
-    "mp_price": 2790.00
+    "vp_price": 2325.0,
+    "mp_price": 2790.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1157,8 +1157,8 @@
     "code": "72000",
     "name": "SILKENING SHAMPOO - nežni šampon za sve tipove plave kose koji pruža ishranu prirodnoj i kozmetički tretiranoj kosi",
     "volume": "250ml",
-    "vp_price": 2125.00,
-    "mp_price": 2550.00
+    "vp_price": 2125.0,
+    "mp_price": 2550.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1167,7 +1167,7 @@
     "name": "SILKENING SHAMPOO - nežni šampon za sve tipove plave kose koji pruža ishranu prirodnoj i kozmetički tretiranoj kosi",
     "volume": "1000ml",
     "vp_price": 5391.67,
-    "mp_price": 6470.00
+    "mp_price": 6470.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1175,8 +1175,8 @@
     "code": "72018",
     "name": "INSTANT BONDING GLOW - brzo delujući serum za jačanje plave kose",
     "volume": "300ml",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1185,7 +1185,7 @@
     "name": "Leave in maska - za regeneraciju bez ispiranja",
     "volume": "150ml",
     "vp_price": 3541.67,
-    "mp_price": 4250.00
+    "mp_price": 4250.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1193,8 +1193,8 @@
     "code": "72022",
     "name": "Leave in maska - za regeneraciju bez ispiranja",
     "volume": "90ml",
-    "vp_price": 2000.00,
-    "mp_price": 2400.00
+    "vp_price": 2000.0,
+    "mp_price": 2400.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1202,8 +1202,8 @@
     "code": "72024",
     "name": "Treatment - detoksikacioni tretman za farbanu kosu",
     "volume": "400ml",
-    "vp_price": 4000.00,
-    "mp_price": 4800.00
+    "vp_price": 4000.0,
+    "mp_price": 4800.0
   },
   {
     "category": "THERE MUST BE AN ANGEL",
@@ -1212,7 +1212,7 @@
     "name": "Shampoo - profesionalni šamopn za tretiranu kosu",
     "volume": "1000ml",
     "vp_price": 4666.67,
-    "mp_price": 5600.00
+    "mp_price": 5600.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1221,7 +1221,7 @@
     "name": "Pasta & Love SOFTENING SHAVING gel - od gela do pene, za nežno brijanje sa umirujućim efektom za kožu lica",
     "volume": "200ml",
     "vp_price": 2166.67,
-    "mp_price": 2600.00
+    "mp_price": 2600.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1230,7 +1230,7 @@
     "name": "Pasta & Love AFTERSHAVE&MOISTURIZING cream - umirujuća krema za smanjenje crvenila Nakon brijanja ili kao dnevna krema",
     "volume": "100ml",
     "vp_price": 2166.67,
-    "mp_price": 2600.00
+    "mp_price": 2600.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1239,7 +1239,7 @@
     "name": "Pasta & Love PRE-SHAVING&BEARD oil - multifunkcionalna formula ulja,priprema bradu za brijanje ili omekšava i oblikuje suvu bradu",
     "volume": "50ml",
     "vp_price": 2166.67,
-    "mp_price": 2600.00
+    "mp_price": 2600.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1248,7 +1248,7 @@
     "name": "Pasta & Love SHAVING GEL - omekšavajući gel moze se koristiti za brijanje pune brade ili za precizno brijanje oko brade.Ne zahteva četkicu",
     "volume": "150ml",
     "vp_price": 2166.67,
-    "mp_price": 2600.00
+    "mp_price": 2600.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1257,7 +1257,7 @@
     "name": "Pasta & Love STYLING PASTE - pasta za stilizovanje, za fleksibilne i raznovrsne stilove",
     "volume": "125ml",
     "vp_price": 2166.67,
-    "mp_price": 2600.00
+    "mp_price": 2600.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1266,7 +1266,7 @@
     "name": "Pasta & Love STYLING CLAY - mat glina za oblikovanje, dodaje tekturu i definiciju sa jakim izdrživim dejstvom",
     "volume": "50ml",
     "vp_price": 2166.67,
-    "mp_price": 2600.00
+    "mp_price": 2600.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1274,8 +1274,8 @@
     "code": "93015",
     "name": "Pasta & Love HAIR BEARD&BODY WASH - višenamenski proizvod za čišćenje kose ,brade i tela",
     "volume": "300ml",
-    "vp_price": 2225.00,
-    "mp_price": 2670.00
+    "vp_price": 2225.0,
+    "mp_price": 2670.0
   },
   {
     "category": "PASTA & LOVE",
@@ -1284,7 +1284,7 @@
     "name": "Pasta & Love MEDIUM FIBER CREAM - krema za stilizovanje , za sve tipove kose",
     "volume": "50ml",
     "vp_price": 2166.67,
-    "mp_price": 2600.00
+    "mp_price": 2600.0
   },
   {
     "category": "DAVINES AUTHENTIC FORMULAS",
@@ -1293,7 +1293,7 @@
     "name": "AUTHENTIC nectar shampoo - organic sampon za kosu i telo",
     "volume": "280ml",
     "vp_price": 2116.67,
-    "mp_price": 2540.00
+    "mp_price": 2540.0
   },
   {
     "category": "DAVINES AUTHENTIC FORMULAS",
@@ -1301,8 +1301,8 @@
     "code": "74011",
     "name": "AUTHENTIC balm - organic balsam za kosu, telo i lice",
     "volume": "150ml",
-    "vp_price": 2000.00,
-    "mp_price": 2400.00
+    "vp_price": 2000.0,
+    "mp_price": 2400.0
   },
   {
     "category": "DAVINES AUTHENTIC FORMULAS",
@@ -1311,7 +1311,7 @@
     "name": "AUTHENTIC OIL - organic ulje za kosu, telo i lice",
     "volume": "140ml",
     "vp_price": 3666.67,
-    "mp_price": 4400.00
+    "mp_price": 4400.0
   },
   {
     "category": "DAVINES AUTHENTIC FORMULAS",
@@ -1320,7 +1320,7 @@
     "name": "AUTHENTIC buter - organic krema za kosu, telo i lice",
     "volume": "200ml",
     "vp_price": 2733.33,
-    "mp_price": 3280.00
+    "mp_price": 3280.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1328,8 +1328,8 @@
     "code": "77016",
     "name": "RESTLESS CIRCLE- maska koja štiti od mehaničkih oštećenja",
     "volume": "50ml",
-    "vp_price": 750.00,
-    "mp_price": 900.00
+    "vp_price": 750.0,
+    "mp_price": 900.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1337,8 +1337,8 @@
     "code": "77000",
     "name": "SPOTLIGHT CIRCLE - maska koja povećava sjaj kose",
     "volume": "50ml",
-    "vp_price": 750.00,
-    "mp_price": 900.00
+    "vp_price": 750.0,
+    "mp_price": 900.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1346,8 +1346,8 @@
     "code": "77002",
     "name": "PURITY CIRCLE -maska koja otkljanja nečistoće od zagadjenja",
     "volume": "50ml",
-    "vp_price": 750.00,
-    "mp_price": 900.00
+    "vp_price": 750.0,
+    "mp_price": 900.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1355,8 +1355,8 @@
     "code": "77004",
     "name": "WAKE-UP CIRCLE- maska za oporavka kose nakon stresnih situacija",
     "volume": "50ml",
-    "vp_price": 750.00,
-    "mp_price": 900.00
+    "vp_price": 750.0,
+    "mp_price": 900.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1364,8 +1364,8 @@
     "code": "77006",
     "name": "QUICK FIX CIRCLE - maska koja hidrira i sprečava mršenje kose",
     "volume": "50ml",
-    "vp_price": 750.00,
-    "mp_price": 900.00
+    "vp_price": 750.0,
+    "mp_price": 900.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1373,8 +1373,8 @@
     "code": "77008",
     "name": "RENAISSANCE CIRCLE - maska za oporavak oštećenje kose",
     "volume": "50ml",
-    "vp_price": 750.00,
-    "mp_price": 900.00
+    "vp_price": 750.0,
+    "mp_price": 900.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1382,8 +1382,8 @@
     "code": "77012",
     "name": "TO LET IT GO CIRCLE - maska z akosu kojoj treba odmor od uzurbanog života",
     "volume": "50ml",
-    "vp_price": 750.00,
-    "mp_price": 900.00
+    "vp_price": 750.0,
+    "mp_price": 900.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1392,7 +1392,7 @@
     "name": "SPOTLIGHT CIRCLE - maska koja povećava sjaj kose",
     "volume": "750ml",
     "vp_price": 5541.67,
-    "mp_price": 6650.00
+    "mp_price": 6650.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1401,7 +1401,7 @@
     "name": "PURITY CIRCLE - maska koja otkljanja nečistoće od zagadjenja",
     "volume": "750ml",
     "vp_price": 5541.67,
-    "mp_price": 6650.00
+    "mp_price": 6650.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1410,7 +1410,7 @@
     "name": "WAKE-UP CIRCLE- maska za oporavka kose nakon stresnih situacija",
     "volume": "750ml",
     "vp_price": 5541.67,
-    "mp_price": 6650.00
+    "mp_price": 6650.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1419,7 +1419,7 @@
     "name": "QUICK FIX CIRCLE - maska koja hidrira i sprečava mršenje kose",
     "volume": "750ml",
     "vp_price": 5541.67,
-    "mp_price": 6650.00
+    "mp_price": 6650.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1428,7 +1428,7 @@
     "name": "RENAISSANCE CIRCLE - maska za oporavak oštećenje kose",
     "volume": "750ml",
     "vp_price": 5541.67,
-    "mp_price": 6650.00
+    "mp_price": 6650.0
   },
   {
     "category": "THE CIRCLE CHRONICLES",
@@ -1437,7 +1437,7 @@
     "name": "TO LET IT GO CIRCLE - maska za kosu kojoj treba odmor od užurbanog života",
     "volume": "750ml",
     "vp_price": 5541.67,
-    "mp_price": 6650.00
+    "mp_price": 6650.0
   },
   {
     "category": "LIQUID SPELL",
@@ -1446,7 +1446,7 @@
     "name": "LIQUID SPELL FLUID - fluid za ojačanje tanke i oštećenje kose",
     "volume": "125ml",
     "vp_price": 2933.33,
-    "mp_price": 3520.00
+    "mp_price": 3520.0
   },
   {
     "category": "LIQUID SPELL",
@@ -1454,8 +1454,8 @@
     "code": "79007",
     "name": "LIQUID SPELL FLUID - fluid za ojačanje tanke i oštećenje kose",
     "volume": "50ml",
-    "vp_price": 1475.00,
-    "mp_price": 1770.00
+    "vp_price": 1475.0,
+    "mp_price": 1770.0
   },
   {
     "category": "MORE INSIDE",
@@ -1464,7 +1464,7 @@
     "name": "OIL NON OIL - tečni gel bez učvršćivača. Daje mokar efekat na kosi",
     "volume": "250ml",
     "vp_price": 1941.67,
-    "mp_price": 2330.00
+    "mp_price": 2330.0
   },
   {
     "category": "MORE INSIDE",
@@ -1473,7 +1473,7 @@
     "name": "CURL BILDING SERUM - serum za definiciju lokni",
     "volume": "250ml",
     "vp_price": 2033.33,
-    "mp_price": 2440.00
+    "mp_price": 2440.0
   },
   {
     "category": "MORE INSIDE",
@@ -1482,7 +1482,7 @@
     "name": "SEA SALT SPRAY- sprej na bazi morske soli za teksturu i volumen kose sa mat efektom",
     "volume": "250ml",
     "vp_price": 2108.33,
-    "mp_price": 2530.00
+    "mp_price": 2530.0
   },
   {
     "category": "MORE INSIDE",
@@ -1490,8 +1490,8 @@
     "code": "87007",
     "name": "MEDIUM HOLD PLIABLE PASTE - pasta srednje jačine za konrolisano oblikovanje kose sa nevidljivim efekatom",
     "volume": "125 ml",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "MORE INSIDE",
@@ -1500,7 +1500,7 @@
     "name": "MEDIUM HOLD MODELING GEL - gel srednje čvrstine za volimen kose i vlazan izgled",
     "volume": "250 ml",
     "vp_price": 1941.67,
-    "mp_price": 2330.00
+    "mp_price": 2330.0
   },
   {
     "category": "MORE INSIDE",
@@ -1509,7 +1509,7 @@
     "name": "INVISIBLE SERUM - nevidljivi serum za svilenkasti izgled",
     "volume": "50 ml",
     "vp_price": 2033.33,
-    "mp_price": 2440.00
+    "mp_price": 2440.0
   },
   {
     "category": "MORE INSIDE",
@@ -1518,7 +1518,7 @@
     "name": "RELAXING MOISTURIZING FLUID - fluid za ispravljanje kose i prirodan sjaj koji štiti kosu",
     "volume": "125ml",
     "vp_price": 1666.67,
-    "mp_price": 2000.00
+    "mp_price": 2000.0
   },
   {
     "category": "MORE INSIDE",
@@ -1526,8 +1526,8 @@
     "code": "87054",
     "name": "RELAXING MOISTURIZING FLUID - fluid za ispravljanje kose i prirodan sjaj koji štiti kosu",
     "volume": "50ml",
-    "vp_price": 725.00,
-    "mp_price": 870.00
+    "vp_price": 725.0,
+    "mp_price": 870.0
   },
   {
     "category": "MORE INSIDE",
@@ -1536,7 +1536,7 @@
     "name": "DRY SHAMPOO - šampon za suvo pranje",
     "volume": "250ml",
     "vp_price": 2741.67,
-    "mp_price": 3290.00
+    "mp_price": 3290.0
   },
   {
     "category": "MORE INSIDE",
@@ -1544,8 +1544,8 @@
     "code": "87013",
     "name": "STRONG HOLD CREAM GEL - krem gel jake cvrstine sa bisernim sjajem",
     "volume": "125ml",
-    "vp_price": 1750.00,
-    "mp_price": 2100.00
+    "vp_price": 1750.0,
+    "mp_price": 2100.0
   },
   {
     "category": "MORE INSIDE",
@@ -1553,8 +1553,8 @@
     "code": "87017",
     "name": "TEXTURIZING DUST -prasina za extra volumen i teksturu kose",
     "volume": "8gr",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "MORE INSIDE",
@@ -1562,8 +1562,8 @@
     "code": "87051",
     "name": "MOUSSE VOLUME - za volumen i za sve sve vrste kose",
     "volume": "250ml",
-    "vp_price": 2125.00,
-    "mp_price": 2550.00
+    "vp_price": 2125.0,
+    "mp_price": 2550.0
   },
   {
     "category": "MORE INSIDE",
@@ -1572,7 +1572,7 @@
     "name": "MOISTURIZING MOUSSE - hidrantna i definsiana pena za kovrdže",
     "volume": "250ml",
     "vp_price": 2083.33,
-    "mp_price": 2500.00
+    "mp_price": 2500.0
   },
   {
     "category": "MORE INSIDE",
@@ -1580,8 +1580,8 @@
     "code": "87055",
     "name": "THIS IS A SHINE WAX IT'S FOR A POLISHED FINISH/cera illuminate - za kreiarnje sjajnih stilova",
     "volume": "75ml",
-    "vp_price": 2125.00,
-    "mp_price": 2550.00
+    "vp_price": 2125.0,
+    "mp_price": 2550.0
   },
   {
     "category": "MORE INSIDE",
@@ -1590,7 +1590,7 @@
     "name": "SPRAY TEXTURIZZANTE/DRY TEXTURIZER - za definisanu teksturu i držanje",
     "volume": "250ml",
     "vp_price": 2366.67,
-    "mp_price": 2840.00
+    "mp_price": 2840.0
   },
   {
     "category": "MORE INSIDE",
@@ -1598,8 +1598,8 @@
     "code": "87057",
     "name": "MI FORMING POMADE - krema za teksturiranu kratku kose",
     "volume": "75ml",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "MORE INSIDE",
@@ -1607,8 +1607,8 @@
     "code": "87066",
     "name": "MI MEDIUM HOLD FINISHING GUM/gomma textura media - guma za obikovanje, za ugladjene stilove",
     "volume": "75ml",
-    "vp_price": 2000.00,
-    "mp_price": 2400.00
+    "vp_price": 2000.0,
+    "mp_price": 2400.0
   },
   {
     "category": "MORE INSIDE",
@@ -1617,7 +1617,7 @@
     "name": "MI STRONG DRY WAX /cera forte - snažan suvi vosak za oblikovanje",
     "volume": "75ml",
     "vp_price": 2183.33,
-    "mp_price": 2620.00
+    "mp_price": 2620.0
   },
   {
     "category": "MORE INSIDE",
@@ -1625,8 +1625,8 @@
     "code": "87068",
     "name": "MI STRONG MOULDING CLAY - glina za mat glatku fiksaciju",
     "volume": "75ml",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "MORE INSIDE",
@@ -1634,8 +1634,8 @@
     "code": "87069",
     "name": "MI MIDIUM HAIRSPRAY/LACCA MEDIA - lak za kosu srednje jacine",
     "volume": "400ml",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "MORE INSIDE",
@@ -1643,8 +1643,8 @@
     "code": "87070",
     "name": "MI STRONG HAIRSPRAY - lak za kosu jak",
     "volume": "400ml",
-    "vp_price": 2275.00,
-    "mp_price": 2730.00
+    "vp_price": 2275.0,
+    "mp_price": 2730.0
   },
   {
     "category": "MORE INSIDE",
@@ -1653,7 +1653,7 @@
     "name": "MI EXTRA STRONG HAIRSPRAY - ekstra jak lak, ne ostavlja ostatke , niti lepljivost",
     "volume": "400ml",
     "vp_price": 2433.33,
-    "mp_price": 2920.00
+    "mp_price": 2920.0
   },
   {
     "category": "MORE INSIDE",
@@ -1661,8 +1661,8 @@
     "code": "87071",
     "name": "THIS IS AN INVISIBLE NO GASSPRAY IT'S FOR SHAPE FORMING - lak bez gasa otporan na vlagu",
     "volume": "250ml",
-    "vp_price": 2125.00,
-    "mp_price": 2550.00
+    "vp_price": 2125.0,
+    "mp_price": 2550.0
   },
   {
     "category": "MORE INSIDE",
@@ -1671,7 +1671,7 @@
     "name": "MI SHIMMERING MIST - za baršunastu kosu,bori se protiv kovrdzanja bez otežavanja kose",
     "volume": "200ml",
     "vp_price": 1991.67,
-    "mp_price": 2390.00
+    "mp_price": 2390.0
   },
   {
     "category": "MORE INSIDE",
@@ -1680,7 +1680,7 @@
     "name": "BLOW DRY PRIMER -sprej za zaštitu od toplote",
     "volume": "250ml",
     "vp_price": 2291.67,
-    "mp_price": 2750.00
+    "mp_price": 2750.0
   },
   {
     "category": "MORE INSIDE",
@@ -1688,8 +1688,8 @@
     "code": "87094",
     "name": "TEXTURIZING SERUM -serum za kosu koji vam omogućava da postignete efekat teksture bez odustajanja od mekoće ili obradivosti",
     "volume": "150ml",
-    "vp_price": 1550.00,
-    "mp_price": 1860.00
+    "vp_price": 1550.0,
+    "mp_price": 1860.0
   },
   {
     "category": "MORE INSIDE",
@@ -1698,7 +1698,7 @@
     "name": "DRY WAX SPRAY-sprej za satenski mat finiš",
     "volume": "200ml",
     "vp_price": 2083.33,
-    "mp_price": 2500.00
+    "mp_price": 2500.0
   },
   {
     "category": "SU",
@@ -1707,7 +1707,7 @@
     "name": "SU HAIR MASK - maska za obnavljanje hidratacije kose oštećene suncem",
     "volume": "150ml",
     "vp_price": 2133.33,
-    "mp_price": 2560.00
+    "mp_price": 2560.0
   },
   {
     "category": "SU",
@@ -1716,7 +1716,7 @@
     "name": "SU HAIR MILK - štite kozmetičku boju i hidrataciju tokom izlaganja suncu",
     "volume": "135ml",
     "vp_price": 2558.33,
-    "mp_price": 3070.00
+    "mp_price": 3070.0
   },
   {
     "category": "SU",
@@ -1724,8 +1724,8 @@
     "code": "90145",
     "name": "SU HAIR MILK - štite kozmetičku boju i hidrataciju tokom izlaganja suncu",
     "volume": "50ml",
-    "vp_price": 875.00,
-    "mp_price": 1050.00
+    "vp_price": 875.0,
+    "mp_price": 1050.0
   },
   {
     "category": "SU",
@@ -1734,7 +1734,7 @@
     "name": "SU HAIR&BODY WASH - višekorisni šampon za tuširanje za kosu i kožu izloženu suncu",
     "volume": "250ml",
     "vp_price": 1666.67,
-    "mp_price": 2000.00
+    "mp_price": 2000.0
   },
   {
     "category": "SU",
@@ -1742,8 +1742,8 @@
     "code": "90156",
     "name": "SU HAIR&BODY WASH - višekorisni šampon za tuširanje za kosu i kožu izloženu suncu",
     "volume": "500ml",
-    "vp_price": 2825.00,
-    "mp_price": 3390.00
+    "vp_price": 2825.0,
+    "mp_price": 3390.0
   },
   {
     "category": "SU",
@@ -1752,7 +1752,7 @@
     "name": "SU HAIR&BODY WASH - višekorisni šampon za tuširanje za kosu i kožu izloženu suncu",
     "volume": "75ml",
     "vp_price": 658.33,
-    "mp_price": 790.00
+    "mp_price": 790.0
   },
   {
     "category": "SU",
@@ -1761,7 +1761,7 @@
     "name": "SU PROTECTIVE CREAM SPF 30 - krema za zaštitu od sunca",
     "volume": "100ml",
     "vp_price": 2308.33,
-    "mp_price": 2770.00
+    "mp_price": 2770.0
   },
   {
     "category": "SU",
@@ -1769,8 +1769,8 @@
     "code": "90158",
     "name": "SU/AFTERSUN - krema za tretiranje kože posle sunčanja",
     "volume": "150ml",
-    "vp_price": 2650.00,
-    "mp_price": 3180.00
+    "vp_price": 2650.0,
+    "mp_price": 3180.0
   },
   {
     "category": "SU",
@@ -1778,8 +1778,8 @@
     "code": "90160",
     "name": "SU /TAN MAXIMIZER - krema za pripremu koze za izlaganje suncu",
     "volume": "150ml",
-    "vp_price": 2400.00,
-    "mp_price": 2880.00
+    "vp_price": 2400.0,
+    "mp_price": 2880.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1788,7 +1788,7 @@
     "name": "OI shampoo -šampon za negu, mekocu, sjaj i volumen.",
     "volume": "90ml",
     "vp_price": 1208.33,
-    "mp_price": 1450.00
+    "mp_price": 1450.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1797,7 +1797,7 @@
     "name": "OI conditioner - krem regenerator za negu, mekocu, sjaj i volumen",
     "volume": "75ml",
     "vp_price": 1208.33,
-    "mp_price": 1450.00
+    "mp_price": 1450.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1806,7 +1806,7 @@
     "name": "OI hair buter -antioksidativni hranljivi puter",
     "volume": "75ml",
     "vp_price": 1208.33,
-    "mp_price": 1450.00
+    "mp_price": 1450.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1814,8 +1814,8 @@
     "code": "76090",
     "name": "OI liquid luster - instant tretman za sjaj i mekoću",
     "volume": "100ml",
-    "vp_price": 1325.00,
-    "mp_price": 1590.00
+    "vp_price": 1325.0,
+    "mp_price": 1590.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1824,7 +1824,7 @@
     "name": "OI soufle - pena sa Roucou uljem i ekstraktom korena cikorije, ova pena pruža svilenkasti, lagani efekat tela koji čini da vaša kosa izgleda vidljivo punije i sjajnije",
     "volume": "50 ml",
     "vp_price": 1083.33,
-    "mp_price": 1300.00
+    "mp_price": 1300.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1833,7 +1833,7 @@
     "name": "WELLBEING shampoo - šampon za svaki dan",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1842,7 +1842,7 @@
     "name": "WELLBEING conditioner - hidrantni regenerator za svaki dan",
     "volume": "60ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1851,7 +1851,7 @@
     "name": "PURIFYING shampoo - šampon protiv peruti",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1860,7 +1860,7 @@
     "name": "REPLUMPING shampoo - šampon daje elastičnost,vlaznost i štiti ćelije skalpa od starenja",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1869,7 +1869,7 @@
     "name": "REPLUMPING conditioner - formulisan da rasplete, daje kompaktnost i elasticnost kosi",
     "volume": "60ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1878,7 +1878,7 @@
     "name": "ENERGIZING shampoo - šampon protiv opadanja kose",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1887,7 +1887,7 @@
     "name": "RENEWING shampoo - šampon za dugovečnost svih tipova kose",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1896,16 +1896,16 @@
     "name": "RENEWING conditioner - regenerator za za dugovečnost svih tipova kose",
     "volume": "60ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
     "sub_category": "Travel Size / NaturalTech",
-    "code": "71282-CALM",
+    "code": "71282",
     "name": "CALMING shampoo - šampon za nežno čišćenje kose.Smiruje osetljivu kožu glave",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1914,16 +1914,16 @@
     "name": "DETOXIFYING shampoo - šampon za čišćenje kose i koze glave",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
     "sub_category": "Travel Size / NaturalTech",
-    "code": "71282-REBAL",
+    "code": "71284",
     "name": "REBALANCING shampoo - normalizuje proizvodnju sebuma čisteći kožu bez stimulacije",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1932,7 +1932,7 @@
     "name": "NOURISHING shampoo - šampon za izuzetno suvu i oštećenu kosu",
     "volume": "100ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1941,7 +1941,7 @@
     "name": "NOURISHING hair building pak - pakovanje za oštećenu i rascvetalu kosu",
     "volume": "60ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1950,7 +1950,7 @@
     "name": "NOURISHING vegetarian miricle conditioner - krem regenerator za izuzetno suvu i oštećenu kosu",
     "volume": "60ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1959,7 +1959,7 @@
     "name": "NOURISHING vegetarian miricle mask - ekstra hidrantna i hranljiva maska za gustu i oštećenu kosu",
     "volume": "60ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1967,8 +1967,8 @@
     "code": "87065",
     "name": "MORE INSIDE strong hair spray - lak za kosu jak",
     "volume": "100ml",
-    "vp_price": 1375.00,
-    "mp_price": 1650.00
+    "vp_price": 1375.0,
+    "mp_price": 1650.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1977,7 +1977,7 @@
     "name": "MORE INSIDE sea salt spray - sprej na bazi morske soli za teksturu i volumen kose sa mat efektom",
     "volume": "100ml",
     "vp_price": 1133.33,
-    "mp_price": 1360.00
+    "mp_price": 1360.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1986,7 +1986,7 @@
     "name": "MORE INSIDE dry shampoo - šampon za suvo pranje",
     "volume": "100ml",
     "vp_price": 1383.33,
-    "mp_price": 1660.00
+    "mp_price": 1660.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -1994,8 +1994,8 @@
     "code": "87139",
     "name": "MORE INSIDE curl build serum - serum za definiciju lokni",
     "volume": "100ml",
-    "vp_price": 1450.00,
-    "mp_price": 1740.00
+    "vp_price": 1450.0,
+    "mp_price": 1740.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -2003,8 +2003,8 @@
     "code": "87150",
     "name": "MORE INSIDE primer - sprej za zaštitu od toplote",
     "volume": "100ml",
-    "vp_price": 1325.00,
-    "mp_price": 1590.00
+    "vp_price": 1325.0,
+    "mp_price": 1590.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -2013,7 +2013,7 @@
     "name": "SU hair&body wash - višekorisni šampon za tuširanje za kosu i kožu izloženu suncu",
     "volume": "75ml",
     "vp_price": 658.33,
-    "mp_price": 790.00
+    "mp_price": 790.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -2021,8 +2021,8 @@
     "code": "90145-TS",
     "name": "SU hair milk - štite kozmetičku boju i hidrataciju tokom izlaganja suncu",
     "volume": "50ml",
-    "vp_price": 875.00,
-    "mp_price": 1050.00
+    "vp_price": 875.0,
+    "mp_price": 1050.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -2031,7 +2031,7 @@
     "name": "HEART OF GLASS shampoo - nežni šampon za sve tipove plave kose koji pruža ishranu prirodnoj i kozmetički tretiranoj kosi",
     "volume": "90ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   },
   {
     "category": "TRAVEL SIZE",
@@ -2040,6 +2040,6 @@
     "name": "HEART OF GLASS rich conditioner - regenerator za prirodu i kozmetički tretiranu plavu kosu",
     "volume": "90ml",
     "vp_price": 1141.67,
-    "mp_price": 1370.00
+    "mp_price": 1370.0
   }
 ]

@@ -158,6 +158,44 @@
     }
   };
 
+  // 1.1 Subcategory Translations
+  const SUBCATEGORY_I18N = {
+    ru: {
+      "Красители (Mask, View, TPT)": "Красители (Mask, View, TPT)",
+      "Century of Light (Пудры)": "Century of Light (Пудры)",
+      "Activator (Окислители)": "Activator (Окислители)",
+      "Finest Pigments": "Finest Pigments",
+      "Завивка": "Завивка (перманент)",
+      "Za profesionalnu i kućnu upotrebu": "Профессиональный и домашний уход",
+      "Tailoring Treatment": "Tailoring Treatment (Концентраты)",
+      "Authentic Formulas": "Authentic Formulas (Органика)",
+      "Liquid Spell": "Liquid Spell (Флюид)",
+      "Beautiful Things": "Beautiful Things",
+      "SU Sun Care": "SU (Защита от солнца)"
+    },
+    sr: {
+      "Красители (Mask, View, TPT)": "Boje (Mask, View, TPT)",
+      "Century of Light (Пудры)": "Century of Light (Blanš / Puderi)",
+      "Activator (Окислители)": "Activator (Hidrogeni)",
+      "Finest Pigments": "Finest Pigments",
+      "Завивка": "Minival (Trajna ondulacija)",
+      "Za profesionalnu i kućnu upotrebu": "Za profesionalnu i kućnu upotrebu",
+      "Tailoring Treatment": "Tailoring Treatment",
+      "Authentic Formulas": "Authentic Formulas",
+      "Liquid Spell": "Liquid Spell",
+      "Beautiful Things": "Beautiful Things",
+      "SU Sun Care": "SU (Nega na suncu)"
+    }
+  };
+
+  function getSubcategoryTitle(sub) {
+    if (!sub) return "";
+    if (SUBCATEGORY_I18N[state.lang] && SUBCATEGORY_I18N[state.lang][sub]) {
+      return SUBCATEGORY_I18N[state.lang][sub];
+    }
+    return sub;
+  }
+
   // 2. High-level category grouping definition
   const CATEGORY_MAP = {
     "COLORING": {
@@ -407,9 +445,13 @@
     return Math.round(retailPrice * (1 - (disc / 100)));
   }
 
-  function getCleanProductName(fullName) {
-    if (!fullName) return "";
-    const parts = fullName.split(/\s*[-—]\s*/);
+  function getCleanProductName(productOrName) {
+    if (!productOrName) return "";
+    if (typeof productOrName === 'object') {
+      if (productOrName.name_clean) return productOrName.name_clean;
+      productOrName = productOrName.name || "";
+    }
+    const parts = String(productOrName).split(/\s*[-—]\s*/);
     return parts[0].trim();
   }
 
@@ -614,7 +656,7 @@
       const count = items.filter(i => i.sub_category === sub).length;
       const pill = document.createElement('div');
       pill.className = `subcat-pill ${state.activeSubcat === sub ? 'active' : ''}`;
-      pill.textContent = `${sub} (${count})`;
+      pill.textContent = `${getSubcategoryTitle(sub)} (${count})`;
       pill.addEventListener('click', () => {
         state.activeSubcat = sub;
         triggerHaptic('light');
@@ -646,10 +688,15 @@
       items = items.filter(item => {
         const codeMatch = item.code && item.code.toLowerCase().includes(q);
         const nameMatch = item.name && item.name.toLowerCase().includes(q);
+        const cleanMatch = item.name_clean && item.name_clean.toLowerCase().includes(q);
         const catMatch = item.category && item.category.toLowerCase().includes(q);
         const subMatch = item.sub_category && item.sub_category.toLowerCase().includes(q);
+        const subI18n = getSubcategoryTitle(item.sub_category).toLowerCase();
+        const subI18nMatch = subI18n && subI18n.includes(q);
         const volMatch = item.volume && item.volume.toLowerCase().includes(q);
-        return codeMatch || nameMatch || catMatch || subMatch || volMatch;
+        const descRuMatch = item.desc_ru && item.desc_ru.toLowerCase().includes(q);
+        const descSrMatch = item.desc_sr && item.desc_sr.toLowerCase().includes(q);
+        return codeMatch || nameMatch || cleanMatch || catMatch || subMatch || subI18nMatch || volMatch || descRuMatch || descSrMatch;
       });
     }
 
@@ -695,22 +742,18 @@
     const card = document.createElement('div');
     card.className = 'product-card';
 
-    // Parse title & description
-    let title = item.name;
-    let desc = "";
-    if (item.name.includes(" - ")) {
-      const parts = item.name.split(" - ");
-      title = parts[0];
-      desc = parts.slice(1).join(" - ");
-    }
+    // Title & description in chosen language (RU / SR)
+    const title = item.name_clean || getCleanProductName(item.name);
+    const desc = (state.lang === 'ru' ? (item.desc_ru || item.desc_sr) : (item.desc_sr || item.desc_ru)) || '';
 
     const discRate = getDiscountRate();
     const discPrice = getDiscountedPrice(item.mp_price);
+    const subTitle = getSubcategoryTitle(item.sub_category) || item.category;
 
     card.innerHTML = `
       <div>
         <div class="card-header">
-          <span class="card-family-tag">${item.sub_category || item.category}</span>
+          <span class="card-family-tag">${subTitle}</span>
           <span class="card-code">#${item.code}</span>
         </div>
         <div class="product-title">${title}</div>
@@ -893,11 +936,12 @@
         orderedList.push({
           product: {
             code: `${lineKey}-${shade}`,
-            name: `${lineInfo.name} (тон ${shade})`,
+            name: `${lineInfo.name} (${state.lang === 'ru' ? 'тон' : 'nijansa'} ${shade})`,
+            name_clean: `${lineInfo.name} (${shade})`,
             volume: lineInfo.volume,
             mp_price: lineInfo.price_mp,
             category: "BOJE",
-            sub_category: "Красители (оттенки)"
+            sub_category: state.lang === 'ru' ? "Красители (оттенки)" : "Boje (nijanse)"
           },
           isShade: true,
           lineKey: lineKey,
@@ -1048,7 +1092,7 @@
         else if (item.lineKey === 'THE_PRESENT_TIME') brandPrefix = "The Present Time";
         itemTitle = `${brandPrefix} (${escapeHtml(item.shade)})`;
       } else {
-        const clean = getCleanProductName(item.product.name);
+        const clean = item.product.name_clean || getCleanProductName(item.product.name);
         const vol = item.product.volume || '';
         const volPart = (vol && !clean.toLowerCase().includes(vol.toLowerCase())) ? ` ${vol}` : '';
         itemTitle = `(${escapeHtml(item.product.code)}) ${escapeHtml(clean)}${escapeHtml(volPart)}`;
@@ -1100,7 +1144,7 @@
         else if (item.lineKey === 'THE_PRESENT_TIME') brandPrefix = "The Present Time";
         itemTitle = `${brandPrefix} (${item.shade})`;
       } else {
-        const clean = getCleanProductName(item.product.name);
+        const clean = item.product.name_clean || getCleanProductName(item.product.name);
         const vol = item.product.volume || '';
         const volPart = (vol && !clean.toLowerCase().includes(vol.toLowerCase())) ? ` ${vol}` : '';
         itemTitle = `(${item.product.code}) ${clean}${volPart}`;
@@ -1524,17 +1568,17 @@
 
     if (lineKey === 'MASK_VIBRACHROM') {
       tabs.push(
-        { key: 'NAT', label: '.0 Базы' },
+        { key: 'NAT', label: state.lang === 'ru' ? '.0 Базы' : '.0 Baze' },
         { key: '1-4', label: '1 - 4' },
         { key: '5-6', label: '5 - 6' },
         { key: '7-8', label: '7 - 8' },
         { key: '9-10', label: '9 - 10' },
-        { key: '12', label: '12 Блонды' },
-        { key: '0.xx', label: '0.xx Микстона' }
+        { key: '12', label: state.lang === 'ru' ? '12 Блонды' : '12 Plave' },
+        { key: '0.xx', label: state.lang === 'ru' ? '0.xx Микстона' : '0.xx Mikstoni' }
       );
     } else if (lineKey === 'VIEW_COLOR') {
       tabs.push(
-        { key: 'TONERS', label: 'Тонеры / Gloss' },
+        { key: 'TONERS', label: state.lang === 'ru' ? 'Тонеры / Gloss' : 'Toneri / Gloss' },
         { key: '2-4', label: '2 - 4' },
         { key: '5-6', label: '5 - 6' },
         { key: '7-8', label: '7 - 8' },
