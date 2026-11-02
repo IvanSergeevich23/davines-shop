@@ -49,11 +49,11 @@
       clearCart: "Очистить",
       addBtn: "В корзину",
       orderSuccess: "Заказ успешно отправлен!",
-      orderSuccessSub: "Список заказа передан представителю Davines",
+      orderSuccessSub: "Заказ успешно отправлен",
       orderSuccessTitle: "✅ Заказ успешно отправлен!",
-      orderSuccessDesc: "Ваш заказ передан торговому представителю Davines (Иван). Мы свяжемся с вами в Telegram для подтверждения и согласования доставки!",
+      orderSuccessDesc: "",
       orderSuccessDone: "✓ Отлично, спасибо",
-      btnOpenTg: "💬 Чат с Иваном",
+      btnOpenTg: "💬 Чат",
       btnCopy: "📋 Скопировать",
       btnClose: "Закрыть",
       allSubcats: "Все",
@@ -125,11 +125,11 @@
       clearCart: "Isprazni",
       addBtn: "U korpu",
       orderSuccess: "Porudžbina je uspešno poslata!",
-      orderSuccessSub: "Spisak porudžbine je poslat predstavniku Davinesa",
+      orderSuccessSub: "Porudžbina je uspešno poslata",
       orderSuccessTitle: "✅ Porudžbina je poslata!",
-      orderSuccessDesc: "Vaša porudžbina je preneta prodajnom predstavniku Davinesa (Ivan). Javićemo vam se na Telegramu radi potvrde i isporuke!",
+      orderSuccessDesc: "",
       orderSuccessDone: "✓ U redu, hvala",
-      btnOpenTg: "💬 Chat sa Ivanom",
+      btnOpenTg: "💬 Chat",
       btnCopy: "📋 Kopiraj",
       btnClose: "Zatvori",
       allSubcats: "Sve",
@@ -517,9 +517,13 @@
 
     // Order Success Modal labels
     if (dom.orderSuccessModalTitle) dom.orderSuccessModalTitle.textContent = t.orderSuccessTitle;
-    if (dom.orderSuccessModalDesc) dom.orderSuccessModalDesc.textContent = t.orderSuccessDesc;
+    if (dom.orderSuccessModalDesc) {
+      dom.orderSuccessModalDesc.textContent = t.orderSuccessDesc || "";
+      dom.orderSuccessModalDesc.style.display = t.orderSuccessDesc ? "block" : "none";
+    }
     if (dom.btnCloseSuccessModalText) dom.btnCloseSuccessModalText.textContent = t.orderSuccessDone;
     if (dom.btnOpenTgDirectText) dom.btnOpenTgDirectText.textContent = t.btnOpenTg;
+    else if (dom.btnOpenTgDirect) dom.btnOpenTgDirect.textContent = t.btnOpenTg;
     if (dom.btnCopySuccessOrder) dom.btnCopySuccessOrder.textContent = t.btnCopy;
 
     // Comment Modal labels
@@ -1270,7 +1274,7 @@
       const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
       const clientChatId = clientUser ? clientUser.id : null;
       if (clientChatId && String(clientChatId) !== String(managerChatId)) {
-        const clientConfirmMsg = `✅ <b>Ваш заказ успешно принят! / Porudžbina je primljena!</b>\n\n💈 Салон: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Позиций: <b>${totalItems} шт</b>\n💰 Сумма: <b>${formatMoney(totalPriceDiscounted)}</b>\n\nТорговый представитель Davines (Иван) свяжется с вами для подтверждения доставки. Спасибо!`;
+        const clientConfirmMsg = `✅ <b>Ваш заказ успешно принят! / Porudžbina je primljena!</b>\n\n💈 Салон: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Позиций: <b>${totalItems} шт</b>\n💰 Сумма: <b>${formatMoney(totalPriceDiscounted)}</b>\n\nСпасибо за заказ! / Hvala na porudžbini!`;
         sendTelegramMessageViaBot(clientChatId, clientConfirmMsg, "HTML");
       }
 
