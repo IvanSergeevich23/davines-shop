@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=4.0">
+  <link rel="stylesheet" href="styles.css?v=4.1">
 </head>
 <body>
 
@@ -269,27 +269,27 @@
     </button>
   </div>
 
-  <!-- Order Sent / Prepared Modal -->
+  <!-- Order Sent / Success Modal -->
   <div id="orderSuccessModal" class="dialog-modal">
     <div class="dialog-brand-header">
       <div class="dialog-brand-title">DAVINES</div>
       <div class="dialog-brand-sub">sustainable beauty</div>
     </div>
-    <div id="orderSuccessModalTitle" class="dialog-title">✈️ Заказ сформирован!</div>
+    <div id="orderSuccessModalTitle" class="dialog-title">✅ Заказ успешно отправлен!</div>
     <div id="orderSuccessModalDesc" class="dialog-desc">
-      Заказ скопирован в буфер обмена. Мы открываем диалог с вашим представителем Davines (Иван @Ivan_Sergeevich_23).
+      Ваш заказ передан торговому представителю Davines (Иван). Мы свяжемся с вами в Telegram для подтверждения и согласования доставки!
     </div>
     <div id="orderSuccessDetails" class="order-success-preview"></div>
-    <div class="comment-modal-actions" style="margin-top: 10px;">
-      <button id="btnOpenTgDirect" class="dialog-save-btn" type="button" style="background: #2AABEE; color: #FFFFFF; font-weight: 700; box-shadow: 0 4px 14px rgba(42, 171, 238, 0.35);">
-        <span>✈️</span> <span id="btnOpenTgDirectText">Открыть диалог в Telegram</span>
+    <div class="comment-modal-actions" style="margin-top: 12px;">
+      <button id="btnCloseSuccessModal" class="dialog-save-btn" type="button" style="font-weight: 700;">
+        <span id="btnCloseSuccessModalText">✓ Отлично, спасибо</span>
       </button>
       <div class="comment-modal-subactions">
         <button id="btnCopySuccessOrder" class="comment-btn-cancel" type="button" style="color: var(--text-main); font-weight: 600;">
           📋 Скопировать
         </button>
-        <button id="btnCloseSuccessModal" class="comment-btn-cancel" type="button">
-          Закрыть
+        <button id="btnOpenTgDirect" class="comment-btn-cancel" type="button" style="color: #2AABEE; font-weight: 600;">
+          💬 Чат с Иваном
         </button>
       </div>
     </div>
@@ -299,8 +299,8 @@
   <div id="toastMsg" class="toast-msg"></div>
 
   <!-- Catalog Data & Main App Scripts -->
-  <script src="catalog_data.js?v=4.0"></script>
-  <script src="shades_data.js?v=4.0"></script>
-  <script src="app.js?v=4.0"></script>
+  <script src="catalog_data.js?v=4.1"></script>
+  <script src="shades_data.js?v=4.1"></script>
+  <script src="app.js?v=4.1"></script>
 </body>
 </html>

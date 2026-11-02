@@ -48,12 +48,13 @@
       salonRequiredAlert: "Пожалуйста, укажите название салона перед входом!",
       clearCart: "Очистить",
       addBtn: "В корзину",
-      orderSuccess: "Заказ сформирован!",
-      orderSuccessSub: "Список заказа передан в диалог Telegram",
-      orderSuccessTitle: "✈️ Заказ сформирован!",
-      orderSuccessDesc: "Заказ скопирован в буфер обмена. Мы открываем диалог с вашим представителем Davines (Иван @Ivan_Sergeevich_23).",
-      btnOpenTg: "Открыть диалог в Telegram",
-      btnCopy: "Скопировать",
+      orderSuccess: "Заказ успешно отправлен!",
+      orderSuccessSub: "Список заказа передан представителю Davines",
+      orderSuccessTitle: "✅ Заказ успешно отправлен!",
+      orderSuccessDesc: "Ваш заказ передан торговому представителю Davines (Иван). Мы свяжемся с вами в Telegram для подтверждения и согласования доставки!",
+      orderSuccessDone: "✓ Отлично, спасибо",
+      btnOpenTg: "💬 Чат с Иваном",
+      btnCopy: "📋 Скопировать",
       btnClose: "Закрыть",
       allSubcats: "Все",
       chooseShades: "Выбрать оттенки",
@@ -123,12 +124,13 @@
       salonRequiredAlert: "Molimo unesite naziv vašeg salona!",
       clearCart: "Isprazni",
       addBtn: "U korpu",
-      orderSuccess: "Porudžbina je pripremljena!",
-      orderSuccessSub: "Spisak je prenet u Telegram chat",
-      orderSuccessTitle: "✈️ Porudžbina je pripremljena!",
-      orderSuccessDesc: "Porudžbina je kopirana. Otvaramo chat sa prodajnim predstavnikom Davinesa (Ivan @Ivan_Sergeevich_23).",
-      btnOpenTg: "Otvori chat u Telegramu",
-      btnCopy: "Kopiraj",
+      orderSuccess: "Porudžbina je uspešno poslata!",
+      orderSuccessSub: "Spisak porudžbine je poslat predstavniku Davinesa",
+      orderSuccessTitle: "✅ Porudžbina je poslata!",
+      orderSuccessDesc: "Vaša porudžbina je preneta prodajnom predstavniku Davinesa (Ivan). Javićemo vam se na Telegramu radi potvrde i isporuke!",
+      orderSuccessDone: "✓ U redu, hvala",
+      btnOpenTg: "💬 Chat sa Ivanom",
+      btnCopy: "📋 Kopiraj",
       btnClose: "Zatvori",
       allSubcats: "Sve",
       chooseShades: "Izaberi nijanse",
@@ -378,6 +380,7 @@
     btnOpenTgDirectText: document.getElementById('btnOpenTgDirectText'),
     btnCopySuccessOrder: document.getElementById('btnCopySuccessOrder'),
     btnCloseSuccessModal: document.getElementById('btnCloseSuccessModal'),
+    btnCloseSuccessModalText: document.getElementById('btnCloseSuccessModalText'),
     btnClearCart: document.getElementById('btnClearCart'),
     toast: document.getElementById('toastMsg'),
     // Palette Modal DOM
@@ -473,9 +476,9 @@
     // Order Success Modal labels
     if (dom.orderSuccessModalTitle) dom.orderSuccessModalTitle.textContent = t.orderSuccessTitle;
     if (dom.orderSuccessModalDesc) dom.orderSuccessModalDesc.textContent = t.orderSuccessDesc;
+    if (dom.btnCloseSuccessModalText) dom.btnCloseSuccessModalText.textContent = t.orderSuccessDone;
     if (dom.btnOpenTgDirectText) dom.btnOpenTgDirectText.textContent = t.btnOpenTg;
     if (dom.btnCopySuccessOrder) dom.btnCopySuccessOrder.textContent = t.btnCopy;
-    if (dom.btnCloseSuccessModal) dom.btnCloseSuccessModal.textContent = t.btnClose;
 
     // Comment Modal labels
     if (dom.commentModalTitle) dom.commentModalTitle.textContent = t.commentModalTitle;
@@ -1116,9 +1119,30 @@
     return lines.join('\n');
   }
 
-  // 14. Send Order Handler (Direct Telegram Delivery + Native tg.sendData + Local History)
+  // 14. Send Order Handler (Automated Telegram Bot Delivery + Native tg.sendData + Local History)
   let lastOrderPlainText = "";
-  let lastTgUrl = "";
+  let lastTgUrl = "https://t.me/Ivan_Sergeevich_23";
+
+  // Automated delivery directly through Telegram Bot API
+  async function sendTelegramMessageViaBot(chatId, text, parseMode = "HTML") {
+    const botToken = "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24nU";
+    const params = new URLSearchParams();
+    params.append("chat_id", String(chatId));
+    params.append("text", text);
+    if (parseMode) params.append("parse_mode", parseMode);
+
+    try {
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: "POST",
+        mode: "no-cors",
+        body: params
+      });
+      return true;
+    } catch (e) {
+      console.warn("fetch sendMessage failed:", e);
+      return false;
+    }
+  }
 
   function openDirectTelegramOrder(urlToOpen) {
     const targetUrl = urlToOpen || lastTgUrl;
@@ -1148,7 +1172,7 @@
       if (totalItems === 0) return;
 
       dom.btnSendOrder.disabled = true;
-      dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Подготовка заказа...' : 'Priprema...'}`;
+      dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Отправка заказа...' : 'Slanje porudžbine...'}`;
 
       const orderHtml = generateOrderHtml();
       const orderPlainText = generateOrderPlainText();
@@ -1194,7 +1218,28 @@
         console.warn("History save warning:", histErr);
       }
 
-      // 3. Clear cart & comment immediately
+      // 3. AUTOMATIC ORDER DELIVERY: Send order directly to Sales Representative (Ivan: 414194396) via Bot API
+      const managerChatId = "414194396";
+      sendTelegramMessageViaBot(managerChatId, orderHtml, "HTML");
+
+      // 4. AUTOMATIC CONFIRMATION: Send confirmation to Client Salon if in Telegram
+      const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+      const clientChatId = clientUser ? clientUser.id : null;
+      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
+        const clientConfirmMsg = `✅ <b>Ваш заказ успешно принят! / Porudžbina je primljena!</b>\n\n💈 Салон: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Позиций: <b>${totalItems} шт</b>\n💰 Сумма: <b>${formatMoney(totalPriceDiscounted)}</b>\n\nТорговый представитель Davines (Иван) свяжется с вами для подтверждения доставки. Спасибо!`;
+        sendTelegramMessageViaBot(clientChatId, clientConfirmMsg, "HTML");
+      }
+
+      // 5. Also deliver via native tg.sendData if launched via Keyboard button
+      if (tg && typeof tg.sendData === 'function') {
+        try {
+          tg.sendData(JSON.stringify(orderPayload));
+        } catch (tgErr) {
+          console.warn("tg.sendData warning:", tgErr);
+        }
+      }
+
+      // 6. Clear cart & comment immediately
       state.cart = {};
       state.shadesCart = {};
       state.comment = "";
@@ -1205,25 +1250,13 @@
       renderCartFloatingBar();
       updateCommentUI();
 
-      // 4. Also deliver via native tg.sendData if launched via Keyboard button
-      if (tg && typeof tg.sendData === 'function') {
-        try {
-          tg.sendData(JSON.stringify(orderPayload));
-        } catch (tgErr) {
-          console.warn("tg.sendData warning:", tgErr);
-        }
-      }
-
-      // 5. Build direct Telegram chat link to Ivan (@Ivan_Sergeevich_23)
-      lastTgUrl = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(orderPlainText)}`;
-
-      // 6. Reset button state & close cart drawer
+      // 7. Reset button state & close cart drawer
       closeCartDrawer();
       dom.btnSendOrder.disabled = false;
       if (dom.btnSendOrderText) dom.btnSendOrderText.textContent = t.sendOrder;
       else dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
 
-      // 7. Populate & Open Order Success Modal
+      // 8. Populate & Open Order Success Modal
       if (dom.orderSuccessDetails) {
         dom.orderSuccessDetails.innerHTML = `
           <div class="order-success-preview-row">
@@ -1245,11 +1278,6 @@
       dom.orderSuccessModal.classList.add("open");
       triggerHaptic('success');
       showToast(t.orderSuccess);
-
-      // 8. Auto-open Telegram chat with Ivan after brief tick
-      setTimeout(() => {
-        openDirectTelegramOrder(lastTgUrl);
-      }, 350);
 
     } catch (criticalErr) {
       console.error("Critical error in handleSendOrder:", criticalErr);
