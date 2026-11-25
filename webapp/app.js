@@ -1167,27 +1167,28 @@
     return lines.join('\n');
   }
 
-  // 14. Send Order Handler (Automated Telegram Bot Delivery + Native tg.sendData + Local History)
+  // 14. Send Order Handler (Native tg.sendData + Optional Secure Proxy + Direct Chat Fallback)
   let lastOrderPlainText = "";
   let lastTgUrl = "https://t.me/Ivan_Sergeevich_23";
+  // Optional HTTPS endpoint (e.g. Cloudflare Worker) if Menu Button direct delivery is enabled later.
+  // Never put a Telegram BOT_TOKEN in frontend JavaScript!
+  const ORDER_PROXY_URL = "";
 
-  // Automated delivery directly through Telegram Bot API
-  async function sendTelegramMessageViaBot(chatId, text, parseMode = "HTML") {
-    const botToken = "9127736042:AAGHWTb70DEQY9WgJYppJxlqFamJ8XC24nU";
-    const params = new URLSearchParams();
-    params.append("chat_id", String(chatId));
-    params.append("text", text);
-    if (parseMode) params.append("parse_mode", parseMode);
-
+  async function sendOrderViaProxy(orderPayload, orderHtml) {
+    if (!ORDER_PROXY_URL) return false;
     try {
-      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      const resp = await fetch(ORDER_PROXY_URL, {
         method: "POST",
-        mode: "no-cors",
-        body: params
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          initData: (tg && tg.initData) || "",
+          orderHtml,
+          orderPayload
+        })
       });
-      return true;
+      return resp.ok;
     } catch (e) {
-      console.warn("fetch sendMessage failed:", e);
+      console.warn("Order proxy delivery failed:", e);
       return false;
     }
   }
@@ -1206,7 +1207,7 @@
     window.open(targetUrl, '_blank');
   }
 
-  function handleSendOrder() {
+  async function handleSendOrder() {
     try {
       const t = I18N[state.lang];
       if (!state.salonName || !state.salonName.trim()) {
@@ -1216,18 +1217,22 @@
       }
 
       const discRate = getDiscountRate();
-      const { totalItems, totalPriceDiscounted, totalPriceRetail, orderedList } = getCartSummary();
+      const { totalItems, totalPriceDiscounted, orderedList } = getCartSummary();
       if (totalItems === 0) return;
 
       dom.btnSendOrder.disabled = true;
-      dom.btnSendOrder.innerHTML = `<span>⏳</span> ${state.lang === 'ru' ? 'Отправка заказа...' : 'Slanje porudžbine...'}`;
+      if (dom.btnSendOrderText) {
+        dom.btnSendOrderText.textContent = state.lang === 'ru' ? 'Отправка заказа...' : 'Slanje porudžbine...';
+      }
 
       const orderHtml = generateOrderHtml();
       const orderPlainText = generateOrderPlainText();
       const currentComment = state.comment ? state.comment.trim() : "";
       lastOrderPlainText = orderPlainText;
+      lastTgUrl = `https://t.me/Ivan_Sergeevich_23?text=${encodeURIComponent(orderPlainText)}`;
 
-      const orderPayload = {
+      // Compact payload stays well under Telegram tg.sendData's 4096-byte limit
+      const compactPayload = {
         action: "davines_order",
         salon_name: state.salonName,
         discount: discRate,
@@ -1235,15 +1240,14 @@
         total_price_mp: totalPriceDiscounted,
         comment: currentComment,
         items: orderedList.map(item => ({
-          code: item.product.code,
-          name: item.isShade ? `${item.lineKey} (${item.shade})` : item.product.name,
-          volume: item.product.volume || '',
-          qty: item.qty,
-          price_mp: item.product.mp_price,
-          disc_price: item.discPrice
-        })),
-        formatted_html: orderHtml,
-        formatted_text: orderPlainText
+          c: item.product.code,
+          n: item.isShade
+            ? `${item.lineKey === 'MASK_VIBRACHROM' ? 'Mask' : (item.lineKey === 'THE_PRESENT_TIME' ? 'The Present Time' : 'View')} (${item.shade})`
+            : (item.product.name_clean || getCleanProductName(item.product.name)),
+          v: item.isShade ? '' : (item.product.volume || ''),
+          q: item.qty,
+          s: item.isShade ? 1 : 0
+        }))
       };
 
       // 1. Copy formatted plain-text order to clipboard immediately
@@ -1260,34 +1264,39 @@
           total_price_mp: totalPriceDiscounted,
           comment: currentComment,
           formatted_text: orderPlainText,
-          items: orderPayload.items
+          items: orderedList.map(item => ({
+            code: item.product.code,
+            name: item.isShade ? `${item.lineKey} (${item.shade})` : item.product.name,
+            volume: item.product.volume || '',
+            qty: item.qty,
+            price_mp: item.product.mp_price,
+            disc_price: item.discPrice
+          }))
         });
       } catch (histErr) {
         console.warn("History save warning:", histErr);
       }
 
-      // 3. AUTOMATIC ORDER DELIVERY: Send order directly to Sales Representative (Ivan: 414194396) via Bot API
-      const managerChatId = "414194396";
-      sendTelegramMessageViaBot(managerChatId, orderHtml, "HTML");
+      // 3. Deliver order:
+      //    a) Native tg.sendData works when launched from the bot's Reply Keyboard button (tg.initData is empty)
+      //    b) Optional secure proxy URL if configured for Menu Button launches
+      let deliveredAutomatically = false;
+      const canUseSendData = Boolean(tg && typeof tg.sendData === 'function' && !tg.initData);
 
-      // 4. AUTOMATIC CONFIRMATION: Send confirmation to Client Salon if in Telegram
-      const clientUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
-      const clientChatId = clientUser ? clientUser.id : null;
-      if (clientChatId && String(clientChatId) !== String(managerChatId)) {
-        const clientConfirmMsg = `✅ <b>Ваш заказ успешно принят! / Porudžbina je primljena!</b>\n\n💈 Салон: <b>${escapeHtml(state.salonName)}</b> (-${discRate}%)\n📦 Позиций: <b>${totalItems} шт</b>\n💰 Сумма: <b>${formatMoney(totalPriceDiscounted)}</b>\n\nСпасибо за заказ! / Hvala na porudžbini!`;
-        sendTelegramMessageViaBot(clientChatId, clientConfirmMsg, "HTML");
+      if (ORDER_PROXY_URL) {
+        deliveredAutomatically = await sendOrderViaProxy(compactPayload, orderHtml);
       }
 
-      // 5. Also deliver via native tg.sendData if launched via Keyboard button
-      if (tg && typeof tg.sendData === 'function') {
+      if (!deliveredAutomatically && canUseSendData) {
         try {
-          tg.sendData(JSON.stringify(orderPayload));
+          tg.sendData(JSON.stringify(compactPayload));
+          deliveredAutomatically = true;
         } catch (tgErr) {
           console.warn("tg.sendData warning:", tgErr);
         }
       }
 
-      // 6. Clear cart & comment immediately
+      // 4. Clear cart & comment
       state.cart = {};
       state.shadesCart = {};
       state.comment = "";
@@ -1298,13 +1307,17 @@
       renderCartFloatingBar();
       updateCommentUI();
 
-      // 7. Reset button state & close cart drawer
+      // 5. Reset button state & close cart drawer
       closeCartDrawer();
       dom.btnSendOrder.disabled = false;
       if (dom.btnSendOrderText) dom.btnSendOrderText.textContent = t.sendOrder;
-      else dom.btnSendOrder.innerHTML = `<span>✈️</span> ${t.sendOrder}`;
 
-      // 8. Populate & Open Order Success Modal
+      // 6. If launched outside Reply Keyboard without a proxy, open pre-filled Telegram chat so order isn't lost
+      if (!deliveredAutomatically) {
+        openDirectTelegramOrder(lastTgUrl);
+      }
+
+      // 7. Populate & Open Order Success Modal
       if (dom.orderSuccessDetails) {
         dom.orderSuccessDetails.innerHTML = `
           <div class="order-success-preview-row">
@@ -1325,13 +1338,12 @@
       dom.modalOverlay.classList.add("open");
       dom.orderSuccessModal.classList.add("open");
       triggerHaptic('success');
-      showToast(t.orderSuccess);
+      showToast(deliveredAutomatically ? t.orderSuccess : t.orderCopied);
 
     } catch (criticalErr) {
       console.error("Critical error in handleSendOrder:", criticalErr);
       dom.btnSendOrder.disabled = false;
       if (dom.btnSendOrderText) dom.btnSendOrderText.textContent = I18N[state.lang].sendOrder;
-      else dom.btnSendOrder.innerHTML = `<span>✈️</span> ${I18N[state.lang].sendOrder}`;
       showToast(state.lang === 'ru' ? 'Произошла ошибка, попробуйте снова' : 'Došlo je do greške, pokušajte ponovo');
     }
   }
