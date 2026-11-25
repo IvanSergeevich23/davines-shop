@@ -1172,7 +1172,7 @@
   let lastTgUrl = "https://t.me/Ivan_Sergeevich_23";
   // Optional HTTPS endpoint (e.g. Cloudflare Worker) if Menu Button direct delivery is enabled later.
   // Never put a Telegram BOT_TOKEN in frontend JavaScript!
-  const ORDER_PROXY_URL = "";
+  const ORDER_PROXY_URL = "https://davines-shop-bot.davines-rs.workers.dev/order";
 
   async function sendOrderViaProxy(orderPayload, orderHtml) {
     if (!ORDER_PROXY_URL) return false;
@@ -1279,21 +1279,21 @@
 
       // 3. Deliver order:
       //    a) Native tg.sendData works when launched from the bot's Reply Keyboard button (tg.initData is empty)
-      //    b) Optional secure proxy URL if configured for Menu Button launches
+      //    b) Secure Cloudflare Worker proxy when launched from Menu Button / Inline Button (tg.initData present)
       let deliveredAutomatically = false;
       const canUseSendData = Boolean(tg && typeof tg.sendData === 'function' && !tg.initData);
 
-      if (ORDER_PROXY_URL) {
-        deliveredAutomatically = await sendOrderViaProxy(compactPayload, orderHtml);
-      }
-
-      if (!deliveredAutomatically && canUseSendData) {
+      if (canUseSendData) {
         try {
           tg.sendData(JSON.stringify(compactPayload));
           deliveredAutomatically = true;
         } catch (tgErr) {
           console.warn("tg.sendData warning:", tgErr);
         }
+      }
+
+      if (!deliveredAutomatically && ORDER_PROXY_URL && tg && tg.initData) {
+        deliveredAutomatically = await sendOrderViaProxy(compactPayload, orderHtml);
       }
 
       // 4. Clear cart & comment
